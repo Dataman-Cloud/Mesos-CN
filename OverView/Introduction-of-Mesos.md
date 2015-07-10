@@ -21,7 +21,7 @@ Apache Mesos是由加州大学伯克利分校的AMPLab首先开发的一款开�
 * Mesos本身包含两个组件:Master Daemon和Slave Daemon。
     * Master Daemon
         * 管理所有的Slave Daemon。
-        * 用Resource Offers实现跨应用细粒度资源共享，如cpu、内存、磁盘、网络等。
+        * 用[Resource Offers](https://github.com/Dataman-Cloud/Mesos-CN/blob/master/OverView/Mesos-of-ResourceOffer.md)实现跨应用细粒度资源共享，如cpu、内存、磁盘、网络等。
         * 限制和提供资源给应用框架使用。
         * 使用可拔插的模块化的架构，方便增加新的策略控制机制。
     * Slave Daemon
