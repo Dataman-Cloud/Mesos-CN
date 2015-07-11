@@ -9,7 +9,7 @@ $ tar -zxf mesos-0.22.1.tar.gz
 
 2.克隆Mesos的Git库(适合高级用户)。
 ```
-$ git的克隆https://git-wip-us.apache.org/repos/asf/mesos.git
+$ git clone https://git-wip-us.apache.org/repos/asf/mesos.git
 ```
 
 ###系统要求
@@ -154,6 +154,6 @@ Mesos 包含了用 Java , C++ , Python 写的 frameworks 示例。
     # Run Python framework (Exits after successfully running some tasks.).
     $ ./src/examples/python/test-framework 127.0.0.1:5050
 ```
-注意：如果你要构建一个 frameworks 示例，需要确保你所构建的测试程序执行过 make check 
+注意：如果你要构建一个 frameworks 示例，需要确保你所构建的测试程序执行过 ***make check***
 
 >本篇内容翻译自[http://mesos.apache.org/gettingstarted/](http://mesos.apache.org/gettingstarted/)
