@@ -15,4 +15,4 @@
 * [资源]
     *[Marathon 官方用户文档中文版](resource)
 * [最佳实践](best-practices)
-* [Mesos优秀文章](excellent article)
+* [Mesos优秀文章](excellent—article)
