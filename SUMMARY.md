@@ -1,7 +1,7 @@
 # Summary
 
 * [简介](OverView/README.md)
-    * [Mesos简介](OverVice/Introduction-of-Mesos.md)
+    * [Mesos简介](OverView/Introduction-of-Mesos.md)
 * [入门]
     * [Mesos入门](primer/Mesos-of-Getting-Started.md)
 * [Meso文档]
