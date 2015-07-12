@@ -7,6 +7,7 @@
 * [Meso文档]
     * [Mesos基础](document/Mesos-Fundamentals)
     * [运行Mesos](document/runing-Mesos)
+       * [日志与调试](document/runing-Mesos/Mesos-of-Debug-and-Log.md)
     * [运行Mesos框架](document/Running-mesos-Frameworks)
     * [使用Meso框架开发](document/Developing-Mesos-Frameworks)
     * [Mesos Modeules](document/Mesos-Modeules)
