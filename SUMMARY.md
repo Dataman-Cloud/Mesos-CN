@@ -9,6 +9,7 @@
     * [运行Mesos](document/runing-Mesos)
        * [日志与调试](document/runing-Mesos/Mesos-of-Debug-and-Log.md)
     * [运行Mesos框架](document/Running-mesos-Frameworks)
+       * [建立在 Mesos 上的软件项目](document/Running-mesos-Frameworks/Software-projects-built-on-Mesos.md)
     * [使用Meso框架开发](document/Developing-Mesos-Frameworks)
     * [Mesos Modeules](document/Mesos-Modeules)
     * [Mesos贡献](document/Contributing-to-Mesos)
