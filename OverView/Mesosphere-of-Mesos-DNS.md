@@ -14,7 +14,7 @@
 
 ***Mesos-DNS在Github中的结构图：***
 
-![Mesos-DNS](/pic/Mesos-DNS.png)
+![Mesos-DNS](pic/Mesos-DNS.png)
 
 &nbsp;&nbsp;&nbsp;&nbsp;Frameworks运行在 Mesos 中，不需要直接与 Mesos-DNS 沟通。 Mesos-DNS 定期查询 Mesos master(s) ，检索所有 running 框架中正在运行的任务的状态，并为这些任务((A and SRV records)生成 DNS 记录。当 Mesos 集群中的任务开始，结束，或重启， Mesos-DNS 都需要更新 DNS 记录以保证为最新状态。
 
@@ -26,3 +26,5 @@
 
 &nbsp;&nbsp;&nbsp;&nbsp;Mesos-DNS 也将延伸到 Mesos 引入的安全和网络方面，并集成到即将到来的 Mesosphere Datacenter Operating System (DCOS) 中，以支持在公有云，私有数据中心以及混合部署中的服务发现。
 
+
+>本篇内容翻译自：[http://www.infoq.com/news/2015/01/mesos-dns-service-discovery](http://www.infoq.com/news/2015/01/mesos-dns-service-discovery)
