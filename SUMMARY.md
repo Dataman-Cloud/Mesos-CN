@@ -23,7 +23,7 @@
        * [Slave Recovery - jp]
        * [Tools - jp]
     * [运行Mesos框架](document/Running-mesos-Frameworks)
-       * [建立在 Mesos 上的软件项目](document/Running-mesos-Frameworks/Software-projects-built-on-Mesos.md)
+       * [建立在 Mesos 上的软件项目 - review](document/Running-mesos-Frameworks/Software-projects-built-on-Mesos.md)
     * [使用Meso框架开发](document/Developing-Mesos-Frameworks)
     * [Mesos Modeules](document/Mesos-Modeules)
        * [Mesos Modules - review](document/Mesos-Modeules/Mesos-Modules.md)
