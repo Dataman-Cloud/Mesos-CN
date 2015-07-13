@@ -1,4 +1,9 @@
 ##构建运行Mesos-DNS
+
+###什么是&nbsp;Mesos-DNS
+
+Mesosphere 发布了 Ahpha 版本的 Mesos-DNS，Mesos-DNS 是一个适用于 Mesos 集群的开源的服务发现组件，Mesos 上的应用和服务可以通过 DNS 的方式来发现对方。Mesos-DNS 的特点是轻量、无状态，易于部署和维护。
+
 ###构建&nbsp;Mesos-DNS
 要构建Mesos-DNS,你必须在你的电脑上安装go和godep。必须设置GOPATH环境变量指向go安装包的目录，必须添加$GOPATH/bin到PATH环境变量。如果你安装go到自定义目录，需要设置GOROOT环境变量，并且把$GOROOT/bin添加到PATH环境变量中去。例如，执行以下操作：
 <pre><code>export GOPATH=$HOME/go
