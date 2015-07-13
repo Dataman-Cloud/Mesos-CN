@@ -1,21 +1,21 @@
 ## Docker Containerizer
 
-Mesos 0.20.0 增加支持以 Docker 镜像容器为任务的方式，同时也支持 Docker 的一个子集，我们计划在未来支持更多。
+Mesos 0.20.0 开始支持通过 Docker 镜像容器来启动任务，同时也支持部分的 Docker 参数。当然我们计划在未来支持更多的参数。
 
-用户可以将启动一个 Docker 镜像作为一个任务，也可以作为一个 Executor 。
+用户可以将 Docker 镜像作为一个任务启动，也可以作为一个 Executor 启动。
 
-以下部分将描述 API 的变化随着 Docker 的支持，以及如何设置 Docker。
+以下部分将描述 API 的变化以及支持 Docker 的新功能，还有如何设置 Docker。
 
 ###设置
-为了运行支持 Docker Containerizer 的 slave，你必须将 " docker" 作为 containerizers 其中一个选项来启动 slave 。
+为了运行支持 Docker 容器的 slave，在启动slave的时候，你必须将 " docker" 作为容器化的选项之一 。
 
-例如: mesos-slave –containerizers=docker,mesos
-
-
-每个拥有 Docker containerizer 的 slave 应该已经安装了 Docker CLI 客户端 ( 版本号 > = 1.0.0)。
+例子: mesos-slave –containerizers=docker,mesos
 
 
-###如何使用 Docker Containerizer 
+每个支持 Docker 容器化的 slave 都应该已经安装了 Docker CLI 客户端 ( 版本号 > = 1.0.0)。
+
+
+###如何使用 Docker 容器化 
 
 TaskInfo 在 0.20.0 版本前仅适用于支持两种方式。 一种是通过 CommandInfo 启动运行 bash 命令任务，另一种是通过 ExecutorInfo 来启动自定义的执行任务。
 
