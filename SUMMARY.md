@@ -11,12 +11,12 @@
     * [运行Mesos](document/runing-Mesos)
        * [configuration - MY]
        * [Mesos Containerizer - MY]
-       * [Docker Containerizer - MY]
+       * [Docker Containerizer - MY - review](document/runing-Mesos/Docker-Containerizer.md)
        * [External Containerizer - MY]
        * [Framework Authorization - MY]
        * [Framework Rate Limiting - MY]
        * [日志与调试 - my - review](document/runing-Mesos/Mesos-of-Debug-and-Log.md)
-       * [High Availability - my]
+       * [High Availability - my -review](document/runing-Mesos/Mesos-High-Availability-Mode.md)
        * [Operational Guide - jp]
        * [Monitoring - jp]
        * [Network Monitoring - jp]
