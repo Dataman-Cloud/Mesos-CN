@@ -7,7 +7,19 @@
 * [Meso文档]
     * [Mesos基础](document/Mesos-Fundamentals)
     * [运行Mesos](document/runing-Mesos)
-       * [日志与调试](document/runing-Mesos/Mesos-of-Debug-and-Log.md)
+       * [configuration - MY]
+       * [Mesos Containerizer - MY]
+       * [Docker Containerizer - MY]
+       * [External Containerizer - MY]
+       * [Framework Authorization - MY]
+       * [Framework Rate Limiting - MY]
+       * [日志与调试 - my - review](document/runing-Mesos/Mesos-of-Debug-and-Log.md)
+       * [High Availability - my]
+       * [Operational Guide - jp]
+       * [Monitoring - jp]
+       * [Network Monitoring - jp]
+       * [Slave Recovery - jp]
+       * [Tools - jp]
     * [运行Mesos框架](document/Running-mesos-Frameworks)
        * [建立在 Mesos 上的软件项目](document/Running-mesos-Frameworks/Software-projects-built-on-Mesos.md)
     * [使用Meso框架开发](document/Developing-Mesos-Frameworks)
