@@ -1,12 +1,12 @@
 # Summary
 
 * [简介](OverView/README.md)
-    * [Mesos简介](OverView/Introduction-of-Mesos.md)
+    * [Mesos简介 - MY - review](OverView/Introduction-of-Mesos.md)
 * [入门]
-    * [Mesos入门](primer/Mesos-of-Getting-Started.md)
+    * [Mesos入门 - MY - review](primer/Mesos-of-Getting-Started.md)
 * [Meso文档]
     * [Mesos基础](document/Mesos-Fundamentals)
-       * [Mesos Architecture] 
+       * [Mesos 架构 - my - review](OverView/Introduction-of-Mesos.md)
        * [Video and Slides of Mesos Presentations ???]
     * [运行Mesos](document/runing-Mesos)
        * [configuration - MY]
@@ -29,6 +29,10 @@
        * [Mesos Modules - review](document/Mesos-Modeules/Mesos-Modules.md)
     * [Mesos贡献](document/Contributing-to-Mesos)
     * [关于Mesos更多信息](document/More-info-about-Mesos)
+	    * [Mesosphere-of-Mesos-DNS -MY -review](OverView/Mesosphere-of-Mesos-DNS.md)
+	    * [Mesos-dns -MY -review](OverView/mesos-dns.md)
+	    * [Mesos-DNS on Google Compute Platform -MY -review](OverView/Mesos-DNS-on-Google-Compute-Platform.md)
+	    * [spark-on-mesos -MY -review](OverView/spark-on-mesos.md)
 * [资源]
     * [Marathon 官方用户文档中文版](resource)
 * [最佳实践](best-practices)
