@@ -1,46 +1,50 @@
-## Docker Containerizer
+## Docker Containerizer（用 Docker 容器部署应用）
 
-Mesos 0.20.0 开始支持通过 Docker 镜像容器来启动任务，同时也支持部分的 Docker 参数。当然我们计划在未来支持更多的参数。
+Mesos 0.20.0 开始支持通过 Docker 镜像来启动任务，同时也支持部分的 Docker 参数。当然我们计划在未来支持更多的参数。
 
 用户可以将 Docker 镜像作为一个任务启动，也可以作为一个 Executor 启动。
 
 以下部分将描述 API 的变化以及支持 Docker 的新功能，还有如何设置 Docker。
 
 ###设置
-为了运行支持 Docker 容器的 slave，在启动slave的时候，你必须将 " docker" 作为容器化的选项之一 。
+为了运行支持 Docker 容器的 slave，在启动slave的时候，你必须将 " docker" 作为 Containerizer （ 容器化 ）选项之一 。
 
 例子: mesos-slave –containerizers=docker,mesos
 
 
-每个支持 Docker 容器化的 slave 都应该已经安装了 Docker CLI 客户端 ( 版本号 > = 1.0.0)。
+每个支持 Docker Containerizer 的 slave 都应该已经安装了 Docker CLI 客户端 ( 版本号 > = 1.0.0)。
 
 
 ###如何使用 Docker 容器化 
 
-TaskInfo 在 0.20.0 版本前仅适用于支持两种方式。 一种是通过 CommandInfo 启动运行 bash 命令任务，另一种是通过 ExecutorInfo 来启动自定义的执行任务。
+在 0.20.0 版本之前，TaskInfo 仅适用于两种情况：一种是通过 CommandInfo 启动运行 bash 命令任务，另一种是通过 ExecutorInfo 来调用自定义的执行器（ Executor ）来启动任务。（TODO）
 
-随着 0.20.0 后，我们增加了一个 TaskInfo 和 ExecutorInfo 的 ContainerInfo 字段，允许 Containerizer 作为 Docker 配置来运行 task 或 executor。
+随着 0.20.0 后，我们在 TaskInfo 和 ExecutorInfo 里各增加了 1 个 ContainerInfo 字段，通过设置容器（ 例如 “Docker” ）来运行 task 或 executor。
 
-要运行一个 Docker 镜像作为 task ( 任务 )，在 TaskInfo 中必须设置 command 和 container 字段作为 Docker Containerizer ，并将其作为启动 docker 镜像的辅助命令。 ContainerInfo 应该含有 Docker 类型和一个 docker image 所需的 DockerInfo 。
+要通过 Docker 镜像来运行任务 ( task )，在 TaskInfo 中必须设置 command 和 container field 字段， Docker Containerizer 会将它们作为启动 docker 镜像的辅助命令。 ContainerInfo 中的容器类型要设置为 “Docker”，而 DockerInfo 则指定要启动的 docker 镜像信息。
 
-要运行一个 Docker 镜像作为 executor （ 执行器 ），在 TaskInfo 中必须设置包含 ContainerInfo  类型的 docker 。并且， CommandInfo  将被用于启动 executor 。
+要运行一个 Docker 镜像作为 executor （执行器），在 TaskInfo 中必须设置包含 ContainerInfo  类型的 docker 。并且， CommandInfo  将被用于启动 executor 。
 
-###Docker Containerizer 的作用
+###Docker Containerizer 是如何工作的
 
-Docker Containerizer 转化为 Task / Executor 启动，Docker CLI 命令用于销毁。
+Docker Containerizer 将对 Task / Executor 的启动和销毁操作转化成 Docker CLI 的命令。
 
 目前，Docker Containerizer 作为任务启动时，需要执行以下操作：
 
-1. 获取所有指定 CommandInfo 进入到沙盒中的文件
+1. 将所有在 CommandInfo 中指定的文件放入沙盒中
 2. 从远程仓库拉取 docker 镜像
-3. 运行 docker 镜像作为 Docker executor ，映射沙盒目录到 Docker container 中，并且设置目录映射到 MESOS_SANDBOX 环境变量。 executor 也将容器日志以流的方式输入/输出到沙箱中的文件。
-4. 当 container 退出，或者 containerizer 销毁，停止并移除 docker 容器。
+3. 使用  Docker executor 来运行 docker 镜像，同时将沙盒目录映射到容器中环境变量 MESOS_SANDBOX 所指定的目录。 executor 也将容器的日志流重新定向到沙箱中的 stdout/stderr 文件。
+4. 当退出容器或者销毁 containerizer 时，停止并移除 docker 容器实例。
 
- Docker Containerizer 优先启动所有以 " mesos- " 为前缀的 slave ID （ 如，mesos-slave1-abcdefghji ），并且假设所有以 " mesos- "为前缀的容器由 slave 管理，可以自由的停止和销毁容器。
+ Docker Containerizer 启动的容器的 ID 由 前缀" mesos- " 加上 slave ID（ 如，mesos-slave1-abcdefghji ）组成，并且假设所有以 " mesos- "为前缀的容器都由 slave 管理，slave 可以任意停止和销毁容器。
 
-当启动 docker 镜像为 Executor。唯一的区别是，它跳过启动执行命令，但是将获取 docker 容器执行器的 pid。
+当启动 docker 镜像为 Executor。唯一的区别是，它跳过启动执行命令，但是将获取 docker 容器执行器的 pid。（todo）
 
-注意，我们目前默认主机网络在运行一个 docker 容器，以支持更容易运行的 docker 镜像作为 Executor 。
+注意，为了更方便地让 docker 镜像充当 Executor，我们目前默认以 host 的网络模式来在运行 docker 容器 。
+
+containerizer 也支持强制从镜像仓库更新 docker 镜像。如果我们关闭了这个功能，只有在 slave 上没有待运行的 docker 镜像或者镜像已经被更新的时候， slave 才会主动去拉取。
+
+The containerizer also supports optional force pulling of the image, and if disabled the docker image will only be updated again if it’s not available on the host.
 
 ###私有 Docker 仓库
 若要从私有仓库运行一个镜像，需 uri 指向包含登录信息的  .dockercfg 文件  。.dockercfg 文件将被 pull 到沙盒中。  Docker Containerizer 设置 HOME 环境变量指向沙盒。所以  docker cli 会自动配置文件。
