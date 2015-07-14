@@ -21,23 +21,20 @@
 
 ###实现细节
 
-Mesos 在两个抽象层面实现了 leader 选举：一个在 ***src/zookeeper*** ，另一个在 ***src/master***。
+Mesos implements two levels of ZooKeeper leader election abstractions, one in src/zookeeper and the other in src/master (look for contender|detector.hpp|cpp).
 
-- 低级的 ***LeaderContender*** 和 ***LeaderDetector*** 模仿 recipe 实现了通用的 ZooKeeper 选举算法。
+The lower level LeaderContender and LeaderDetector implement a generic ZooKeeper election algorithm loosely modeled after this recipe (sans herd effect handling due to the master group’s small size, which is often 3).
 
-- 高级的 ***MasterContender*** 和 ***MasterDetector*** 围绕 ZooKeeper 的 contender 和 detector 给抽象适配器提供/解析 ZooKeeper 数据。
+The higher level MasterContender and MasterDetector wrap around ZooKeeper’s contender and detector abstractions as adapters to provide/interpret the ZooKeeper data.
 
-- 每个 Mesos master 同时使用 contender 和 detector 选举出自己和其他 master 谁是当前的 leader 。 另外，一个单独的检测是必须的，因为每个 master 的 WebUI 定向选择的当前 leader 不是由选举产生的。其他的 Mesos组件（如 slaves和调度驱动程序）必须使用 detector（探测器）找到当前的 leader 并链接它。
+Each Mesos master simultaneously uses both a contender and a detector to try to elect themselves and detect who the current leader is. A separate detector is necessary because each master’s WebUI redirects browser traffic to the current leader when that master is not elected. Other Mesos components (i.e. slaves and scheduler drivers) use the detector to find the current leader and connect to it.
 
-leader 候选组概念在 ***Group*** 中实现。这种抽象处理可以通过 ZooKeeper 组成身份登录，注销和监控等。以下是  ZooKeeper 的几个 Session( 会话 ) 事件：
+The notion of the group of leader candidates is implemented in Group. This abstraction handles reliable (through queues and retries of retryable errors under the covers) ZooKeeper group membership registration, cancellation, and monitoring. It watches for several ZooKeeper session events:
 
-- 连接
-
-- 重新连接
-
-- Session 过期
-
-- Znode 的创建，删除和更新
+Connection
+Reconnection
+Session Expiration
+ZNode creation, deletion, updates
 
 通过 ***MASTER_CONTENDER_ZK_SESSION_TIMEOUT*** 和  ***MASTER_DETECTOR_ZK_SESSION_TIMEOUT*** 我们明确定义了 session 的 timeout 时长。当 Master 节点和 Zookeeper 联络中断超过了这个时长，我们就认为 Session 已经 Timeout。因为 ZooKeeper 客户端库仅在连接重新建立的时候才抛出 timeout 的事件，所以当网络彻底隔断的情况下，需要使用前面提到的方法来发现 timeout。
 
