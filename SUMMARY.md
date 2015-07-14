@@ -11,7 +11,7 @@
     * [运行Mesos](document/runing-Mesos)
        * [configuration - MY]
        * [Mesos Containerizer - MY]
-       * [Docker Containerizer - MY - review](document/runing-Mesos/Docker-Containerizer.md)
+       * [Docker Containerizer](document/runing-Mesos/Docker-Containerizer.md)
        * [External Containerizer - MY]
        * [Framework Authorization - MY]
        * [Framework Rate Limiting - MY]
