@@ -19,15 +19,15 @@ Mesos 0.20.0 开始支持通过 Docker 镜像来启动任务，同时也支持�
 
 在 0.20.0 版本之前，TaskInfo 仅适用于两种情况：一种是通过 CommandInfo 启动运行 bash 命令任务，另一种是通过 ExecutorInfo 来调用自定义的执行器（ Executor ）来启动任务。（TODO）
 
-随着 0.20.0 后，我们在 TaskInfo 和 ExecutorInfo 里各增加了 1 个 ContainerInfo 字段，通过设置容器（ 例如 “Docker” ）来运行 task 或 executor。
+随着 0.20.0 后，我们在 TaskInfo 和 ExecutorInfo 里各增加了 1 个 ContainerInfo 字段，可以设置为容器（ 例如 “Docker” ）来运行 task 或 executor。
 
 要通过 Docker 镜像来运行任务 ( task )，在 TaskInfo 中必须设置 command 和 container field 字段， Docker Containerizer 会将它们作为启动 docker 镜像的辅助命令。 ContainerInfo 中的容器类型要设置为 “Docker”，而 DockerInfo 则指定要启动的 docker 镜像信息。
 
-要运行一个 Docker 镜像作为 executor （执行器），在 TaskInfo 中必须设置包含 ContainerInfo  类型的 docker 。并且， CommandInfo  将被用于启动 executor 。
+要运行 Docker 镜像作为 executor （执行器），在 TaskInfo 中必须设置包含 ContainerInfo  类型的 docker 。并且， CommandInfo  将被用于启动 executor 。
 
 ###Docker Containerizer 是如何工作的
 
-Docker Containerizer 将对 Task / Executor 的启动和销毁操作转化成 Docker CLI 的命令。
+Docker Containerizer 将对 Task / Executor 的启动和销毁操作映射成 Docker CLI 的命令。
 
 目前，Docker Containerizer 作为任务启动时，需要执行以下操作：
 
@@ -44,18 +44,18 @@ Docker Containerizer 将对 Task / Executor 的启动和销毁操作转化成 Do
 
 containerizer 也支持强制从镜像仓库更新 docker 镜像。如果我们关闭了这个功能，只有在 slave 上没有待运行的 docker 镜像或者镜像已经被更新的时候， slave 才会主动去拉取。
 
-The containerizer also supports optional force pulling of the image, and if disabled the docker image will only be updated again if it’s not available on the host.
-
 ###私有 Docker 仓库
-若要从私有仓库运行一个镜像，需 uri 指向包含登录信息的  .dockercfg 文件  。.dockercfg 文件将被 pull 到沙盒中。  Docker Containerizer 设置 HOME 环境变量指向沙盒。所以  docker cli 会自动配置文件。
+若要从私有仓库运行一个镜像，需要指向包含登录信息的 .dockercfg 文件的 uri，这样 .dockercfg 文件会被下载到沙盒中。因为 Docker Containerizer 设置了指向沙盒的 HOME 环境变量，所以 Docker CLI 会自动识别这个配置文件。
 
 ###CommandInfo to run Docker images
-一个 docker 镜像目前支持入口点为 and / or 作为一个默认命令。
+docker 镜像目前支持 dockerfile 中定义的 ENTRY 和 CMD 命令。
 
-若要用默认命令运行一个 docker 镜像 （如，docker run image ）， CommandInfo 的 value  不能被设置。如果 value 被设置，那么它将覆盖默认的命令。
+如果要在运行 docker 镜像时启用 CMD 参数（如，docker run image ），则不能设置 CommandInfo，否则它将覆盖 CMD 定义的命令。
 
-若要用指定的入口运行 docker 镜像，CommandInfo 的 shell 选项必须设置为 false 。如果设置为 true , Docker Containerizer 运行的用户命令  /bin/sh -c 也将成为镜像的入口。
+若要用指定的 ENTRY 运行 docker 镜像，CommandInfo 的 shell 选项必须设置为 false。如果设置为 true , Docker Containerizer 运行的用户命令  /bin/sh -c 也将成为镜像的入口。
 
-###Recover Docker containers on slave recovery
+###Slave 节点重启的时候恢复容器
 
-无论 slave 是否在 Docker 容器中运行。当 slave 重启时，Docker containerizer 都支持恢复 Docker 容器。
+无论 slave 本身是否在 Docker 容器中运行。当 slave 重启时，Docker containerizer 都支持恢复之前处于运行状态的容器。
+
+如果 Docker containerizer 自身就运行在容器中，请把 flag —— docker_mesos_image 被设置为 true。
