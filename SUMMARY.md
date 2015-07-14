@@ -16,7 +16,7 @@
        * [Framework Authorization - MY]
        * [Framework Rate Limiting - MY]
        * [日志与调试](document/runing-Mesos/Mesos-of-Debug-and-Log.md)
-       * [High Availability - my -review](document/runing-Mesos/Mesos-High-Availability-Mode.md)
+       * [High Availability](document/runing-Mesos/Mesos-High-Availability-Mode.md)
        * [Operational Guide - jp]
        * [Monitoring - jp]
        * [Network Monitoring - jp]
