@@ -18,7 +18,7 @@
        * [日志与调试](document/runing-Mesos/Mesos-of-Debug-and-Log.md)
        * [High Availability](document/runing-Mesos/Mesos-High-Availability-Mode.md)
        * [Operational Guide - jp]
-       * [Monitoring - jp]
+       * [Monitoring - jp - review](document/runing-Mesos/Mesos-Observability-Metrics.md)
        * [Network Monitoring - jp]
        * [Slave Recovery - jp]
        * [Tools - jp]
