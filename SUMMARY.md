@@ -14,7 +14,7 @@
        * [Docker Containerizer](document/runing-Mesos/Docker-Containerizer.md)
        * [External Containerizer - MY -review](document/runing-Mesos/External-Containerizer.md)
        * [Framework Authorization - MY -review](document/runing-Mesos/Framework-Authorization.md)
-       * [Framework Rate Limiting - MY]
+       * [Framework Rate Limiting - MY -review](document/runing-Mesos/Framework-Rate-Limiting.md)
        * [日志与调试](document/runing-Mesos/Mesos-of-Debug-and-Log.md)
        * [High Availability](document/runing-Mesos/Mesos-High-Availability-Mode.md)
        * [Operational Guide - jp]
