@@ -9,7 +9,7 @@
        * [Mesos 架构 - my - review](OverView/Introduction-of-Mesos.md)
        * [Video and Slides of Mesos Presentations ???]
     * [运行Mesos](document/runing-Mesos)
-       * [configuration - MY]
+       * [configuration - MY - (未完成)](document/runing-Mesos/Configuration.md)
        * [Mesos Containerizer - MY -review](document/runing-Mesos/Mesos-Containerizer.md)
        * [Docker Containerizer](document/runing-Mesos/Docker-Containerizer.md)
        * [External Containerizer - MY -review](document/runing-Mesos/External-Containerizer.md)
@@ -18,7 +18,7 @@
        * [日志与调试](document/runing-Mesos/Mesos-of-Debug-and-Log.md)
        * [High Availability](document/runing-Mesos/Mesos-High-Availability-Mode.md)
        * [Operational Guide - jp]
-       * [Monitoring - jp - review](document/runing-Mesos/Mesos-Observability-Metrics.md)
+       * [Monitoring - jp - review(未完成)](document/runing-Mesos/Mesos-Observability-Metrics.md)
        * [Network Monitoring - jp]
        * [Slave Recovery - jp]
        * [Tools - jp]
