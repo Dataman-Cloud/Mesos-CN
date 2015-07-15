@@ -6,7 +6,7 @@
     * [Mesos入门 - MY - review](primer/Mesos-of-Getting-Started.md)
 * [Meso文档]
     * [Mesos基础](document/Mesos-Fundamentals)
-       * [Mesos 架构 - my - review](OverView/Introduction-of-Mesos.md)
+       * [Mesos 架构 - my - review](OverView/Mesos-Architecture.md)
        * [Video and Slides of Mesos Presentations ???]
     * [运行Mesos](document/runing-Mesos)
        * [configuration - MY - (未完成)](document/runing-Mesos/Configuration.md)
