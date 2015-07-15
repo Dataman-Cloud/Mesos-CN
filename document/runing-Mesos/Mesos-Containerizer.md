@@ -1,10 +1,10 @@
 ## Mesos Containerizer
-&nbsp;&nbsp;&nbsp;&nbsp;Mesos Containerizer 提供轻量级的容器化，其使用了 Linux 特有的功能，如 cgroup 和 namespace 。并且是可以组合的，因此可以选择性的使用不同的 isolators 。
+Mesos Containerizer 提供轻量级的容器化和资源隔离功能，主要使用了 Linux 内建的 cgroup 和 namespace 等机制 。这些机制可以组合使用，来满足不同的的隔离需求。
 
-&nbsp;&nbsp;&nbsp;&nbsp;Mesos Containerizer 还提供了对 POSIX 系统的基本支持 （ 如 OS X ），但没有实际的隔离效果，只是提供了资源的使用情况报告。
+Mesos Containerizer 还提供了对 POSIX 系统的基本支持（ 如 OS X ），但不支持资源隔离功能，只是提供资源的使用情况报告。
 
 ### Shared Filesystem （ 共享文件系统 ）
-&nbsp;&nbsp;&nbsp;&nbsp;Shared Filesystem 可以被任意使用在 Linux hosts 上， 使每个修改共享文件的 container 都可以看到。 
+Shared Filesystem 可以被任意使用在 Linux hosts 上， 使每个修改共享文件的 container 都可以看到。 
 
 &nbsp;&nbsp;&nbsp;&nbsp; 通过修改指定的包含在 ExecutorInfo 中的 ContainerInfo ，无论是通过 framework 或者使用 ***–default_container_info*** 的 slave 标记。
 
