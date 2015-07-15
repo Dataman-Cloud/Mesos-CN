@@ -7,57 +7,60 @@ mesos master 和 slave 可以通过命令行参数或环境变量来传递一系
  - 通过设定环境变量 MESOS_OPTION_NAME (变量名都以 MESOS_ 开头)
 
 执行时会先读取环境变量，然后才看命令行参数
-**重要的配置**
+####重要的配置
 如果你需要特定的需求，当配置 Mesos 的时候请参考 ./configure --help。另外，本文档列举了最新的选项快照。如果你想知道手头的版本支持哪些标记，你可以运行带有 --help 的命令，例如 mesos-master --help。
 
 ### Master 和 Slave 的配置选项
 
 下列选项 master 和 slave 都支持：
 
-标记                       解释
---external_log_file=VALUE  Specified the externally managed log file. This file will be exposed in the webui and HTTP api. This is useful when using stderr logging as the log file is otherwise unknown to Mesos.
+                 标记                                  解释
+        --external_log_file=VALUE  Specified the externally managed log file. This file will be exposed in the webui and HTTP api. This is useful when using stderr logging as the log file is otherwise unknown to Mesos.
+ 
+        --firewall_rules=VALUE     该值是终端防火墙的规则（rules），可以为JSON类型的 rules 或包含 JSON
+                                   类型 rules 的文件。文件路径可以为 
+                                   file:///path/to/file 或者 /path/to/file。
+                                   规则的格式请参考文件 flags.proto 中的防火墙信息。
+                                   例如：
+                                       {
+                                         "disabled_endpoints" : {
+                                            "paths" : [
+                                               "/files/browse.json",
+                                               "/slave(0)/stats.json",
+                                            ]
+                                        }
+                                    }
 
---firewall_rules=VALUE     该值是终端防火墙的规则（rules），可以为JSON类型的 rules 或包含 JSON 类型 rules 的文件。文件路径可以为 
-                               file:///path/to/file 或者 /path/to/file。
-                               规则的格式请参考文件 flags.proto 中的防火墙信息。
-                               例如：
-                               {
-                                 "disabled_endpoints" : {
-                                    "paths" : [
-                                      "/files/browse.json",
-                                      "/slave(0)/stats.json",
-                                         ]
-                                     }
-                               }
---[no-]help                输出帮助信息 (默认:否)
---[no-]initialize_driver_logging	是否初始化 scheduler 和 executor driver 的 Google loggin 机制
-Whether to automatically initialize Google logging of scheduler and/or executor drivers. (default: true)
---ip=VALUE                 监听的 IP 地址
---log_dir=VALUE            输出日志文件的位置（无默认值，不指定就不生成日志文件。这个参数不影响输出到 stderr 的日志）
---logbufsecs=VALUE         缓冲日志的时长（秒数）默认：0秒
---loggin_level=VALUE       输出日志的起始级别，包括 'INFO', 'WARNING', 'ERROR'。如果使用了 quiet 标记，这个参数只会影响到输出到 log_dir 的日志的级别（默认：INFO）
---port=VALUE               监听端口（master默认5050，slave默认5051）
---[no-]quiet               禁用输出日志到 sterr （默认:否）
---[no-]version             显示版本并且退出 （默认：否）
-
-
+        --[no-]help                输出帮助信息 (默认:否)
+        --[no-]initialize_driver_logging	是否初始化 scheduler 和 executor driver 的 Google 
+                                           loggin 机制（默认：是）
+        --ip=VALUE                 监听的 IP 地址
+        --log_dir=VALUE            输出日志文件的位置（无默认值，不指定就不生成日志文件。这个参数不影响输
+                                   出到 stderr 的日志）
+        --logbufsecs=VALUE         缓冲日志的时长（秒数）默认：0秒
+        --loggin_level=VALUE       输出日志的起始级别，包括 'INFO', 'WARNING', 'ERROR'。如果使用了
+                                   quiet 标记，只会影响到输出到 log_dir 的日志的级别（默认：INFO）
+        --port=VALUE               监听端口（master默认5050，slave默认5051）
+        --[no-]quiet               禁用输出日志到 sterr （默认:否）
+        --[no-]version             显示版本并且退出 （默认：否）
+ 
 
 ##Master配置选项
 
-必选标记
+*必选标记*
 
-        标记                        解释   
-        --quorum=VALUE              副本的仲裁数量的大小取决于使用'replicated_log'的基本注册表。                      其非常重要的设定此值为大多数的管理节点.比如，quorum > (管理节点总量)/2,如果在独立模式下运行不需要该设置(non-HA)。
-        --work_dir=VALUE            注册表中存储持久性信息的地址。
-        --zk=VALUE                  zookeeper URL(用于从主节点中选举出来一个首脑)可能为以下之一：
+              标记                                    解释   
+        --quorum=VALUE              The size of the quorum of replicas when using 'replicated_log' based registry. It is imperative to set this value to be a majority of masters i.e., quorum > (number of masters)/2.NOTE Not required if master is run in standalone mode (non-HA)。
+        --work_dir=VALUE            注册表中的持久性信息的存放路径
+        --zk=VALUE                  zookeeper URL（用于选举 master 的 leader）为以下之一：
                                     zk://host1:port1,host2:port2,.../path
                                     zk://username:password@host1:port1,host2:port2,.../path
                                     file:///path/to/file
-                                    注意：如果在独立模式下运行就不需要该设置(non-HA)。
-可选标记：
+                                    注意：如果 master 在单机模式下运行就不需要该设置(non-HA)。
+*可选标记*
 
-        标记                        解释 
-        --acls=VALUE               值是一个JSON格式的字符类型ACLs，请记住你也可以使用file:///文件路径或/文件路径参数值格式来将该JSON写入文件，针对期望的格式请参考mesos.proto中的ACLs protobuf
+              标记                                    解释 
+        --acls=VALUE               JSON 格式的 ACL，请记住你也可以使用 file:///path/to/file 或者 /path/to/file 指定包含该列表的文件，格式请参考文件 mesos.proto 中的 ACLs protobuf 段落
                                    JSON文件例子：
                                    {
                                         "register_frameworks": [
