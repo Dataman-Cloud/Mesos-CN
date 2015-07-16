@@ -17,7 +17,7 @@
        * [Framework Rate Limiting - MY -review](document/runing-Mesos/Framework-Rate-Limiting.md)
        * [日志与调试](document/runing-Mesos/Mesos-of-Debug-and-Log.md)
        * [High Availability](document/runing-Mesos/Mesos-High-Availability-Mode.md)
-       * [Operational Guide - jp]
+       * [Operational Guide - jp - review](document/runing-Mesos/Operational Guide.md)
        * [Monitoring - jp - review](document/runing-Mesos/Mesos-Observability-Metrics.md)
        * [Network Monitoring - jp - review](document/runing-Mesos/Network-Monitoring.md)
        * [Slave Recovery - jp - review](document/runing-Mesos/Slave-Recovery.md)
