@@ -100,37 +100,89 @@ mesos master 和 slave 可以通过命令行参数或环境变量来传递一系
                                 }
                                 文本文件样例：
                                 username secret
-    --external_log_file=VALUE    指定外部的管理日志文件。该文件将暴露在webui和HTTP api中，当用stderr记录日志时很有用，否则mesos日志文件是未知的。
 
---framework_sorter=VALUE 给定用户的工作框架之间资源分配的策略。选项和user_allocator相同。默认：drf。
+    --framework_sorter=VALUE     Policy to use for allocating resources between a given user's frameworks. Options are the same as for user_allocator. (default: drf)
 
---hooks=VALUE 钩模块以逗号分割的列表安装在住节点内。
+--hooks=VALUE 安装在 master 内的钩子模块（hook module）列表，名子以逗号进行分隔
 
---hostname=VALUE 主节点通知zookeeper里面的主机名。如果没有设置将从绑定的IP地址解析。
+--hostname=VALUE 这个 master 在 zookeeper 里登记的主机名。如果没有设置，将从绑定的IP地址进行解析。
 
---[no-]log_auto_initialize 是否自动初始化注册日志，如果这是为false，必须在第一次使用时手动初始化。默认：true。
+--[no-]log_auto_initialize Whether to automatically initialize the replicated log used for the registry. If this is set to false, the log has to be manually initialized when used for the very first time. (default: true)
 
---modules 加载模块列表并用于内部的子系统。使用—modules=filepath指定包含JSON格式文件的模块列表。可以使用file:///path/to/file 或者/path/to/file指定JSON格式的文件。用—modules=”{...}”指定模块列表。
+--max_slave_ping_timeouts=VALUE	 master 尝试 ping slave 的最高连续失败次数，超过这个限制的 slave 将被移除。（默认：5）
 
---offer_timeout=VALUE 从工作框架提议撤销之前的持续时间。有助于当工作框架坚持提议，或者不小心丢了提议时的公平。
+--modules 需要加载的模块列表，它们可以被内部的子系统调用。使用 —modules=filepath  指定包含模块列表的文件（JSON格式）。可以使用 file:///path/to/file 或者 /path/to/file 来指定文件，或者直接用 —modules=“{...}” 参数指定模块列表。
+JSON 格式文件举例:
+{
+  "libraries": [
+    {
+      "file": "/path/to/libfoo.so",
+      "modules": [
+        {
+          "name": "org_apache_mesos_bar",
+          "parameters": [
+            {
+              "key": "X",
+              "value": "Y"
+            }
+          ]
+        },
+        {
+          "name": "org_apache_mesos_baz"
+        }
+      ]
+    },
+    {
+      "name": "qux",
+      "modules": [
+        {
+          "name": "org_apache_mesos_norf"
+        }
+      ]
+    }
+  ]
+}
 
---rate_limits=VALUE 值可以是一个JSON格式的字符串或者是一个文件路径包含JSON格式的文件用户框架的速率限制。文件路径可以是file:///path/to/file或者/path/to/file。
+--offer_timeout=VALUE Duration of time before an offer is rescinded from a framework.
+This helps fairness when running frameworks that hold on to offers, or frameworks that accidentally drop offers.
 
---recovery_slave_removal_limit=VALUE 对于故障转移，限制百分比从节点冲注册表中删除和关机后重新登记超时时间间隔。如果超出限制主节点将删除从节点。这可以用来为生产环境提供安全保障。
+--rate_limits=VALUE The value could be a JSON formatted string of rate limits or a file path containing the JSON formatted rate limits used for framework rate limiting.
+Remember you can also use the file:///path/to/file or /path/to/file argument value format to write the JSON in a file.
 
-生产环境希望master故障切换，顶多一定比例的从节点会永久失败例如由于机架失败。设定此限制将确保需要人介入从节点意外普遍故障发生在集群中。值[0%-100%]。默认:100%.
+See the RateLimits protobuf in mesos.proto for the expected format.
 
---slave_removal_rate_limit=VALUE 最大速率在从节点被删除从主节点健康检查失败时。默认情况下从节点将被删除只要健康检查失败。值的形式是‘从节点数量’/‘持续时间’。
+Example:
 
---registry=VALUE 注册表持久性策略；可用选项是 'replicated_log', 'in_memory'，进行测试。默认：replicated_log。
+{
+  "limits": [
+    {
+      "principal": "foo",
+      "qps": 55.5
+    },
+    {
+      "principal": "bar"
+    }
+  ],
+  "aggregate_default_qps": 33.3
+}
 
---registry_fetch_timeout=VALUE 持续时间等待从注册表获取数据后其中操作被认为失败。默认：1mins
+--recovery_slave_removal_limit=VALUE For failovers, limit on the percentage of slaves that can be removed from the registry *and* shutdown after the re-registration timeout elapses. If the limit is exceeded, the master will fail over rather than remove the slaves.
+This can be used to provide safety guarantees for production environments. Production environments may expect that across Master failovers, at most a certain percentage of slaves will fail permanently (e.g. due to rack-level failures).
 
---registry_store_timeout=VALUE 持续时间等待将数据存储到注册表视为失败。默认：5secs
+Setting this limit would ensure that a human needs to get involved should an unexpected widespread failure of slaves occur in the cluster.
 
---[no-]registry_strict master是否将会采取行动持续信息基础存储到注册表中。
+Values: [0%-100%] (default: 100%)
 
---roles=VALUE 逗号分割的分配角色列表，在这个集群可能属于工作框架。
+--registry=VALUE 注册表持久化策略。可用选项有 'replicated_log', 'in_memory'（用于测试）。默认：replicated_log。
+
+--registry_fetch_timeout=VALUE Duration of time to wait in order to fetch data from the registry after which the operation is considered a failure. (default: 1mins)
+
+--registry_store_timeout=VALUE Duration of time to wait in order to store data in the registry after which the operation is considered a failure. (default: 5secs)
+
+--[no-]registry_strict Whether the Master will take actions based on the persistent information stored in the Registry. Setting this to false means that the Registrar will never reject the admission, readmission, or removal of a slave. Consequently, 'false' can be used to bootstrap the persistent state on a running cluster.
+NOTE: This flag is *experimental* and should not be used in production yet. (default: false)
+
+--roles=VALUE A comma separated list of the allocation roles that frameworks in this cluster may belong to.
 
 --[no-]root_submissions 可以root提交框架吗。默认：true
 
@@ -138,13 +190,15 @@ mesos master 和 slave 可以通过命令行参数或环境变量来传递一系
 
 --user_sorter=VALUE 用户之间资源分配策略，可能是dominant_resource_fairness (drf)。默认：drf
 
---webui_dir=VALUE 网页文件目录，默认：/usr/local/share/mesos/webui
+--webui_dir=VALUE 管理页面的网页文件的目录，默认：/usr/local/share/mesos/webui
 
---weights=VALUE 逗号分割的role/weight列表，成对表单'role=weight,role=weight'。 weights是用来表示形式的优先级。
+--weights=VALUE 逗号分割的角色/权重列表，成对表单 'role=weight,role=weight'。 weights是用来表达优先级。
 
---whitelist=VALUE 一个文件名包含从节点作为通知的列表。这个文件是个监测，并且定期重新读取刷新从节点名单。默认：None。
+--whitelist=VALUE A filename which contains a list of slaves (one per line) to advertise offers for. The file is watched, and periodically re-read to refresh the slave whitelist. By default there is no whitelist / all machines are accepted. (default: None)
+Example:
+file:///etc/mesos/slave_whitelist
 
---zk_session_timeout=VALUE zookeeper session超时。
+--zk_session_timeout=VALUE zookeeper 的 session 超时时长。
 
 
 
