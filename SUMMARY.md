@@ -9,7 +9,7 @@
        * [Mesos 架构 - my - review](OverView/Mesos-Architecture.md)
        * [Video and Slides of Mesos Presentations ???]
     * [运行Mesos](document/runing-Mesos)
-       * [configuration - MY - (未完成)](document/runing-Mesos/Configuration.md)
+       * [configuration - MY - review](document/runing-Mesos/Configuration.md)
        * [Mesos Containerizer - MY -review](document/runing-Mesos/Mesos-Containerizer.md)
        * [Docker Containerizer](document/runing-Mesos/Docker-Containerizer.md)
        * [External Containerizer - MY -review](document/runing-Mesos/External-Containerizer.md)
