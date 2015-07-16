@@ -19,7 +19,7 @@
        * [High Availability](document/runing-Mesos/Mesos-High-Availability-Mode.md)
        * [Operational Guide - jp]
        * [Monitoring - jp - review](document/runing-Mesos/Mesos-Observability-Metrics.md)
-       * [Network Monitoring - jp](document/runing-Mesos/Network-Monitoring.md)
+       * [Network Monitoring - jp - review](document/runing-Mesos/Network-Monitoring.md)
        * [Slave Recovery - jp - review](document/runing-Mesos/Slave-Recovery.md)
        * [Tools - jp]
     * [运行Mesos框架](document/Running-mesos-Frameworks)
