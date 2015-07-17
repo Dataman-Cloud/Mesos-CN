@@ -35,5 +35,9 @@
 	    * [spark-on-mesos -MY -review](OverView/spark-on-mesos.md)
 * [资源]
     * [Marathon 官方用户文档中文版](resource)
+	    * [Application_Basics](document/Marathon/Application_Basics.md)
+	    * [high-availability](document/Marathon/high-availability.md)
+	    * [Marathon](document/Marathon/Marathon.md)
+	    * [marathon_variable](document/Marathon/marathon_variable.md)
 * [最佳实践](best-practices)
 * [Mesos优秀文章](excellent—article)
