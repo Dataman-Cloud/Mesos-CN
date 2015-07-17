@@ -53,4 +53,4 @@
     $ start-marathon
 
 
-在您的浏览器加载 Marathon UI： http://10.141.141.10:8080，当完成后，通过  `vagrant halt` 来关闭Vagrant实例。
+在您的浏览器加载 Marathon UI： http://10.141.141.10:8080， 当完成后，通过  `vagrant halt` 来关闭Vagrant实例。
