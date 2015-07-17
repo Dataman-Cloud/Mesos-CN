@@ -122,7 +122,7 @@
 Marathon使用`--master`命令去发现Mesos的master节点，使用`--zk`发现ZooKeeper，因为他们相对独立，所以Mesos master也使用其他方式发现。
 
 
-对于所有的设置选项，请使用命令行[command line flags](https://mesosphere.github.io/marathon/docs/command-line-flags.html) doc。对于Marathon更多的高可用特性，请查阅[high-availability](https://mesosphere.github.io/marathon/docs/high-availability.html) doc
+对于所有的设置选项，请使用命令行[marathon_variable](document/Marathon/marathon_variable.md) doc。对于Marathon更多的高可用特性，请查阅[high-availability](document/Marathon/high-availability.md) doc
 
 ####Mesos Library
 
@@ -137,4 +137,4 @@ Marathon使用`--master`命令去发现Mesos的master节点，使用`--zk`发现
 ###启动应用
 
 
-Marathon应用的介绍以及如何执行，请查阅[Application Basics](https://mesosphere.github.io/marathon/docs/application-basics.html)。
+Marathon应用的介绍以及如何执行，请查阅[Application_Basics](document/Marathon/Application_Basics.md)。
