@@ -35,7 +35,7 @@
 	    * [spark-on-mesos -MY -review](OverView/spark-on-mesos.md)
 * [资源]
     * [Marathon 官方用户文档中文版](resource)
-	    * [Marathon](document/Marathon/Marathon.md)
+	    * [设置与运行Marathon](document/Marathon/Marathon.md)
 	    * [在虚拟机中开发Marathon](document/Marathon/developing-vm.md)
 * [最佳实践](best-practices)
 * [Mesos优秀文章](excellent—article)
