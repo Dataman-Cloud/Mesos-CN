@@ -38,5 +38,6 @@
 	    * [设置与运行Marathon](document/Marathon/Marathon.md)
 	    * [在虚拟机中开发Marathon](document/Marathon/developing-vm.md)
 	    * [SSL模式与普通模式接入认证](document/Marathon/SSL and Basic Access Authentication.md)
+	    * [服务发现与负载均衡](document/Marathon/Service-Discovery.md)
 * [最佳实践](best-practices)
 * [Mesos优秀文章](excellent—article)
