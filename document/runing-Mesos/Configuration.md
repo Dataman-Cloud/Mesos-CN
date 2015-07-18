@@ -184,11 +184,18 @@ NOTE: This flag is *experimental* and should not be used in production yet. (def
 
 --roles=VALUE A comma separated list of the allocation roles that frameworks in this cluster may belong to.
 
---[no-]root_submissions 可以root提交框架吗。默认：true
+--[no-]root_submissions Can root submit frameworks? (default: true)
 
---slave_reregister_timeout=VALUE 超时时间内所有的从节点预计将重新注册时，选举出一个新的master。如果超时没有重新注册上从节点将从注册表里面删除并关闭如果他们试图与主服务器通信。
+--slave_ping_timeout=VALUE	The timeout within which each slave is expected to respond to a ping from the master. Slaves that do not respond within `max_slave_ping_timeouts` ping retries will be removed. (default: 15secs)
 
---user_sorter=VALUE 用户之间资源分配策略，可能是dominant_resource_fairness (drf)。默认：drf
+--slave_removal_rate_limit=VALUE	The maximum rate (e.g., 1/10mins, 2/3hrs, etc) at which slaves will be removed from the master when they fail health checks. By default slaves will be removed as soon as they fail the health checks.
+The value is of the form 'Number of slaves'/'Duration'
+
+--slave_reregister_timeout=VALUE	The timeout within which all slaves are expected to re-register when a new master is elected as the leader. Slaves that do not re-register within the timeout will be removed from the registry and will be shutdown if they attempt to communicate with master.
+NOTE: This value has to be atleast 10mins. (default: 10mins)
+
+--user_sorter=VALUE	Policy to use for allocating resources between users. May be one of:
+dominant_resource_fairness (drf) (default: drf)
 
 --webui_dir=VALUE 管理页面的网页文件的目录，默认：/usr/local/share/mesos/webui
 
@@ -200,17 +207,28 @@ file:///etc/mesos/slave_whitelist
 
 --zk_session_timeout=VALUE zookeeper 的 session 超时时长。
 
+*使用 ‘–with-network-isolator’ 配置时允许使用的参数*
+
+--max_executors_per_slave=VALUE	每个 Slave 上最大允许的执行器数量。网络监控和隔离机制强行限制每个执行器使用的端口资源，所以每个 slave 上智能跑一定数量的执行器。
+这个标志位是用来避免框架接收了某些资源 offer，执行的时候却发现该 slave 上端口已经被分配完毕。
 
 
-从节点选项
+## Slave 选项
 
-必须项：
+*必选项*
 
---master=VALUE 从节点链接到主节点的地址，有三种方式1.--master=masterip1:port,masterip2:port 2.--master=zk://host1:port1,host2:port2,.../path --master=zk://username:password@host1:port1,host2:port2,.../path 3. file:///path/to/file
+--master=VALUE slave 连接到 master 的 URL，有三种连接方式：
+
+1. master 的主机名或者 IP 地址，如果是多个地址可以用逗号隔开，例如：
+--master=localhost:5050
+--master=10.0.0.5:5050,10.0.0.6:5050
+2. zookeeper or quorum hostname/ip + port + master registration path
+--master=zk://host1:port1,host2:port2,.../path
+--master=zk://username:password@host1:port1,host2:port2,.../path
+a path to a file containing either one of the above options. You can also use the file:///path/to/file syntax to read the argument from a file which contains one of the above.
 
 
-
-可选项
+*可选项*
 
 --attributes=VALUE 机器的属性：rack:2或者rack:2;u:1
 
