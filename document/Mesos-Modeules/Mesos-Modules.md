@@ -1,17 +1,20 @@
 ##Mesos Modules
-Mesos module 在 Mesos 0.21.0版本中被引用。
+Mesos module 是 Mesos 从版本 0.21.0 开始支持的实验性功能。
+###免责声明
+- 请自行程度开发和使用 Mesos Module 的风险
+- 如有和 Module 有关问题，请发邮件到 modules@mesos.apache.org。发送到 dev 邮件组的 module 有关问题也会被转发到这个邮箱。
 ###什么是 Mesos Modules
-Mesos module 提供了一种通过创建和按需使用共享库来轻松扩展 Mesos 内部工作。 Module 可以定制 Mesos 而无需通过重新编译/链接每个特定的实例。 Module 可以把外部依赖放到单独的库中，从而精简 Mesos 核心。 Module 还可以非常容易的尝试新的功能。例如，假设加载配置包含一个虚拟机( Lua, Python, … )，可以尝试编写新的配置脚本，而不强迫这些以来关系进入到项目中。最后，Module 提供一种简单的方法为第三方轻松扩展 Mesos ，而不必知道具体的内部细节。
-###调用  Mesos Modules
-命令行使用 ***--modules*** 可用于 Mesos master, slave 以及 tests 以指定模块列表被加载并提供给内部子系统。
+Mesos module 提供了一种方法来轻松扩展 Mesos 的内部机能，这就是通过创建和按需加载共享库（shared libraries）。通过 Module 可以定制 Mesos 来支撑不同的应用场景，无需重新编译/链接整个工程。 Module 可以把外部依赖放到单独的库中，从而精简 Mesos 的核心。 Module 还可以让开发者很容易地尝试新功能。例如，编写一个包含特定编程环境虚拟机( Lua, Python, … )的 allocator，可以用这些编程语言开发资源分配算法，而不必把这些环境的依赖库打到 Mesos 的主工程中。最后，Module 为第三方提供一种简单的方法扩展 Mesos，而不必了解 Mesos 所有内部细节。
 
-使用 ***--modules=filepath*** 通过包含指定模块列表的JSON格式字符串文件。***filepath*** 格式可以是‘ file:///path/to/file ’ 或者 ‘ /path/to/file ’。
+###调用 Mesos Modules
 
-使用 ***--modules="{...}"*** 指定的模块内部名单。
+在 Mesos master, slave 以及 tests 中，可以通过命令行使用 ***--modules*** 标志位来指定要加载的模块列表。
+- 通过 ***--modules=filepath*** 指定包含模块列表的文本文件（JSON格式）。***filepath*** 的格式可以是‘ file:///path/to/file ’ 或者 ‘ /path/to/file ’。
+- 直接在命令行使用 ***--modules="{...}"*** 指定的模块列表。
 
-#### JSON strings 例子:
+#### JSON 格式举例
 
-1. 加载一个包含 ***org_apache_mesos_bar*** 和 ***org_apache_mesos_baz*** 两个模块的 ***libfoo.so*** 库文件
+1. 加载包含 ***org_apache_mesos_bar*** 和 ***org_apache_mesos_baz*** 两个模块的 ***libfoo.so*** 库文件
 ```
  {
    "libraries": [
@@ -30,7 +33,7 @@ Mesos module 提供了一种通过创建和按需使用共享库来轻松扩展 
  }
 ```
 
-2. 通过 ***foo*** 库文件指定模块  ***org_apache_mesos_bar*** 的 key/valuse 参数为 X/Y  ( ***org_apache_mesos_baz*** 模块不包含任何参数加载)：
+2. 通过库文件 ***foo*** 来加载模块  ***org_apache_mesos_bar***， 同时将参数 X=Y 传递给命令行。例子的第二部分加载了 ***org_apache_mesos_baz*** 模块，但不包含任何参数。
 ```
  {
    "libraries": [
@@ -55,18 +58,18 @@ Mesos module 提供了一种通过创建和按需使用共享库来轻松扩展 
  }
 ```
 
-3.在命令行中指定：
+3.通过命令行中加载 module：
 ```
  --modules='{"libraries":[{"file":"/path/to/libfoo.so", "modules":[{"name":"org_apache_mesos_bar"}]}]}'
 ```
 ####库名称
 
-每个库，至少有一个" file "或者" path "在参数中被指定。" file "参数可以是文件名称(如"  libfoo.so ")，相对路径(如" myLibs/libfoo.so ")，或者绝对路径(如" /home/mesos/lib/libfoo.so ")。
-参数" name "指的是一个库名称(如" foo ")。如果指定了" name ",它会自动将匹配当前平台的扩展名(如，" foo "在 Linux 上扩展为    libfoo.so ,在 OS X 则为" libfoo.dylib ")。
+在 "file" 或者 "path" 这两个参数中，加载库的时候至少要指定一个。"file" 参数可以是文件名称(如"libfoo.so")，相对路径(如" myLibs/libfoo.so ")，或者文件的绝对路径(如" /home/mesos/lib/libfoo.so ")。
+另外一个参数 "name" 指的是某个库的名称(如 "foo")。如果指定了参数 "name"，它会自动被匹配到当前操作系统的扩展名(如，"foo" 在 Linux 上扩展为 libfoo.so，在 OS X 则变为 "libfoo.dylib")。
 
-如果库没有指定" file "参数，该库会搜索标准库的路径或目录指向的环境变量 ***LD\_LIBRARY\_PATH*** (OS X 则为 ***DYLD\_LIBRARY\_PATH***)。
+如果加载库的时候没有指定 "file" 参数，会在标准的库文件搜索或者定义搜索路径的环境变量 ***LD\_LIBRARY\_PATH*** (OS X 则为 ***DYLD\_LIBRARY\_PATH***)。
 
-如果" file "和" name "同时指定了，则" name "会被忽略。
+如果 "file" 和 "name" 同时指定了，则 "name" 会被忽略。
 
 ###支持哪些类型的模块？
 下面是目前可用的各种模块的种类。
