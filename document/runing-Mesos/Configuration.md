@@ -1,23 +1,23 @@
 ## mesos 配置向导
-标签： 配置
 
-mesos master 和 slave 可以通过命令行参数或环境变量来传递一系列的配置选项。通过运行 mesos-master –help 或者 mesos-slave –help 可以查看可用选项。每个选项可以通过两种方式设置：
+mesos master 和 slave 可以通过命令行参数或环境变量来传递一系列的配置选项。通过运行 mesos-master –help 或者 mesos-slave –help 可以查看相关的可用选项。每个选项可以通过以下两种方式设置：
 
  - 执行命令的时候使用 –-option_name=value 来传递配置选项。value 既可以是数值，也可以指定包含参数的文件 (--opthon_name=file://文件路径)。 该路径既可以是绝对路径，也可以是相对当前工作目录的相对路径。
- - 通过设定环境变量 MESOS_OPTION_NAME (变量名都以 MESOS_ 开头)
 
+ - 通过设定环境变量 MESOS_OPTION_NAME (变量名都以 MESOS_ 开头)  
 执行时会先读取环境变量，然后才看命令行参数
+
 ####重要的配置
-如果你需要特定的需求，当配置 Mesos 的时候请参考 ./configure --help。另外，本文档列举了最新的选项快照。如果你想知道手头的版本支持哪些标记，你可以运行带有 --help 的命令，例如 mesos-master --help。
+如果你有特定的需求，当配置 Mesos 的时候请参考 ./configure --help。另外，本文档列举了最新的配置选项。如果你想知道手头的版本支持哪些标志位，你可以运行带有 --help 的命令，例如 mesos-master --help。
 
 ### Master 和 Slave 的配置选项
 
-下列选项 master 和 slave 都支持：
+下列选项 都被 master 和 slave 所支持：
 
-                 标记                                  解释
+                 标志位                                 解释
         --external_log_file=VALUE  Specified the externally managed log file. This file will be exposed in the webui and HTTP api. This is useful when using stderr logging as the log file is otherwise unknown to Mesos.
  
-        --firewall_rules=VALUE     该值是终端防火墙的规则（rules），可以为JSON类型的 rules 或包含 JSON
+        --firewall_rules=VALUE     该值是终端防火墙的规则（rules），可以为JSON 类型的 rules 或包含 JSON
                                    类型 rules 的文件。文件路径可以为 
                                    file:///path/to/file 或者 /path/to/file。
                                    规则的格式请参考文件 flags.proto 中的防火墙信息。
@@ -32,8 +32,8 @@ mesos master 和 slave 可以通过命令行参数或环境变量来传递一系
                                     }
 
         --[no-]help                输出帮助信息 (默认:否)
-        --[no-]initialize_driver_logging	是否初始化 scheduler 和 executor driver 的 Google 
-                                           loggin 机制（默认：是）
+        --[no-]initialize_driver_logging	是否初始化 scheduler 和 executor driver 的
+                                           logging 机制（默认：是）
         --ip=VALUE                 监听的 IP 地址
         --log_dir=VALUE            输出日志文件的位置（无默认值，不指定就不生成日志文件。这个参数不影响输
                                    出到 stderr 的日志）
@@ -42,24 +42,24 @@ mesos master 和 slave 可以通过命令行参数或环境变量来传递一系
                                    quiet 标记，只会影响到输出到 log_dir 的日志的级别（默认：INFO）
         --port=VALUE               监听端口（master默认5050，slave默认5051）
         --[no-]quiet               禁用输出日志到 sterr （默认:否）
-        --[no-]version             显示版本并且退出 （默认：否）
+        --[no-]version             显示版本并退出 （默认：否）
  
 
-##Master配置选项
+##Master 配置选项
 
-*必选标记*
+*必选标志位*
 
-              标记                                    解释   
-        --quorum=VALUE              The size of the quorum of replicas when using 'replicated_log' based registry. It is imperative to set this value to be a majority of masters i.e., quorum > (number of masters)/2.NOTE Not required if master is run in standalone mode (non-HA)。
+              标志位                                    解释   
+        --quorum=VALUE              当使用 'replicated_log' 为基础的注册机时副本仲裁数量的多少。必须将该值设定为大多数 masters 比如， quorum > ( masters 总量)/2。注意：如果 master 是运行于一个单实例模式则不需要设定（non-HA）。
         --work_dir=VALUE            注册表中的持久性信息的存放路径
         --zk=VALUE                  zookeeper URL（用于选举 master 的 leader）为以下之一：
                                     zk://host1:port1,host2:port2,.../path
                                     zk://username:password@host1:port1,host2:port2,.../path
                                     file:///path/to/file
                                     注意：如果 master 在单机模式下运行就不需要该设置(non-HA)。
-*可选标记*
+*可选标志位*
 
-              标记                                    解释 
+              标志位                                    解释 
         --acls=VALUE               JSON 格式的 ACL，请记住你也可以使用 file:///path/to/file 或者 /path/to/file 指定包含该列表的文件，格式请参考文件 mesos.proto 中的 ACLs protobuf 段落
                                    JSON文件例子：
                                    {
@@ -100,50 +100,43 @@ mesos master 和 slave 可以通过命令行参数或环境变量来传递一系
                                 }
                                 文本文件样例：
                                 username secret
-
-    --framework_sorter=VALUE     Policy to use for allocating resources between a given user's frameworks. Options are the same as for user_allocator. (default: drf)
-
---hooks=VALUE 安装在 master 内的钩子模块（hook module）列表，名子以逗号进行分隔
-
---hostname=VALUE 这个 master 在 zookeeper 里登记的主机名。如果没有设置，将从绑定的IP地址进行解析。
-
---[no-]log_auto_initialize Whether to automatically initialize the replicated log used for the registry. If this is set to false, the log has to be manually initialized when used for the very first time. (default: true)
-
---max_slave_ping_timeouts=VALUE	 master 尝试 ping slave 的最高连续失败次数，超过这个限制的 slave 将被移除。（默认：5）
-
---modules 需要加载的模块列表，它们可以被内部的子系统调用。使用 —modules=filepath  指定包含模块列表的文件（JSON格式）。可以使用 file:///path/to/file 或者 /path/to/file 来指定文件，或者直接用 —modules=“{...}” 参数指定模块列表。
-JSON 格式文件举例:
-{
-  "libraries": [
-    {
-      "file": "/path/to/libfoo.so",
-      "modules": [
-        {
-          "name": "org_apache_mesos_bar",
-          "parameters": [
-            {
-              "key": "X",
-              "value": "Y"
-            }
-          ]
-        },
-        {
-          "name": "org_apache_mesos_baz"
-        }
-      ]
-    },
-    {
-      "name": "qux",
-      "modules": [
-        {
-          "name": "org_apache_mesos_norf"
-        }
-      ]
-    }
-  ]
-}
-
---offer_timeout=VALUE Duration of time before an offer is rescinded from a framework.
+    --framework_sorter=VALUE    (default: drf) 用于一个给定用户的架构之间分配资源的策略。该选项和 user_allocator 选项相同。 (默认： drf)
+    --hooks=VALUE               安装在 master 内的钩子模块（hook module）列表，名子以逗号进行分隔
+    --hostname=VALUE            该 master 在 zookeeper 里登记的主机名。如果没有设置，将从绑定的IP地址进行解析。
+    --[no-]log_auto_initialize  是否通过使用该注册机来自动初始化复制的 log .如果被设定为 false ， log 将会在最初使用的时候被手动初始化。(默认： true)
+    --max_slave_ping_timeouts=VALUE	 master 尝试 ping slave 的最高连续失败次数，超过这个限制的 slave 将被移除。（默认：5）
+    --modules                   需要加载的模块列表，它们可以被内部的子系统调用。使用 —modules=filepath  指定包含模块列表的文件（JSON格式）。可以使用 file:///path/to/file 或者 /path/to/file 来指定文件，或者直接用 —modules=“{...}” 参数指定模块列表。
+                                JSON 格式文件举例:
+                                {
+                                     "libraries": [
+                                          {
+                                            "file": "/path/to/libfoo.so",
+                                            "modules": [
+                                              {
+                                               "name": "org_apache_mesos_bar",
+                                               "parameters": [
+                                                    {
+                                                       "key": "X",
+                                                       "value": "Y"
+                                                     }
+                                                             ]
+                                                },
+                                                         {
+                                                            "name": "org_apache_mesos_baz"
+                                                          }
+                                                      ]
+                                              },
+                                              {
+                                                 "name": "qux",
+                                                 "modules": [
+                                                       {
+                                                          "name": "org_apache_mesos_norf"
+                                                       }
+                                                            ]
+                                              }
+                                            ]
+                                          }
+     --offer_timeout=VALUE    Duration of time before an offer is rescinded from a framework.
 This helps fairness when running frameworks that hold on to offers, or frameworks that accidentally drop offers.
 
 --rate_limits=VALUE The value could be a JSON formatted string of rate limits or a file path containing the JSON formatted rate limits used for framework rate limiting.
