@@ -120,19 +120,19 @@ Marathon app 环境变量可以在模板中被调用。随bamboo一起的默认�
 production.json文件中的配置可以通过以下环境变量来重写。其通常在你为Bamboo和HAProxy构建一个Docker镜像的时候 会非常有帮助。如果这些未被定制那么配置文件中的值将会被使用。 
 
 
-| 环境变量 | 对应参数 |  
-| -- | -- |  
-| MARATHON_ENDPOINT | Marathon.Endpoint |  
-| BAMBOO_ENDPOINT | Marathon.Endpoint |
-| BAMBOO_ZK_HOST | Bamboo.Zookeeper.Host |
-| BAMBOO_ZK_PATH | Bamboo.Zookeeper.Path |
-| HAPROXY_TEMPLATE_PATH | HAProxy.TemplatePath |
-| HAPROXY_OUTPUT_PATH | HAProxy.OutputPath |
-| HAPROXY_RELOAD_CMD | HAProxy.ReloadCommand |
-| BAMBOO_DOCKER_AUTO_HOST | 当 Bamboo 容器启动时， 设定 BAMBOO_ENDPOINT=$HOST 可以为任意值 |
-| STATSD_ENABLED | StatsD.Enabled |
-| STATSD_PREFIX |	StatsD.Prefix |
-| STATSD_HOST | StatsD.Host |
+| 环境变量  |  对应参数 |    
+| --  |  -- |    
+| MARATHON_ENDPOINT |  Marathon.Endpoint |    
+| BAMBOO_ENDPOINT  | Marathon.Endpoint |  
+| BAMBOO_ZK_HOST | Bamboo.Zookeeper.Host |  
+| BAMBOO_ZK_PATH | Bamboo.Zookeeper.Path |  
+| HAPROXY_TEMPLATE_PATH | HAProxy.TemplatePath |  
+| HAPROXY_OUTPUT_PATH | HAProxy.OutputPath |  
+| HAPROXY_RELOAD_CMD | HAProxy.ReloadCommand |  
+| BAMBOO_DOCKER_AUTO_HOST | 当 Bamboo 容器启动时， 设定 BAMBOO_ENDPOINT=$HOST 可以为任意值 |  
+| STATSD_ENABLED | StatsD.Enabled |  
+| STATSD_PREFIX |	StatsD.Prefix |  
+| STATSD_HOST | StatsD.Host |  
 
 
 **REST APIs**
@@ -268,7 +268,7 @@ Bamboo可以在 Docker 镜像内部通过 supervisord 启动。[默认的 Superv
 ## 本地  
     npm install && napa  
 
-## Start a foreman configured with Procfile for building SASS and JavaScript   
+## 启用一个与 Procfile 一起配置的 foreman 来构建 SASS 和 JavaScript   
     nf start
 
 
