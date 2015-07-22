@@ -23,6 +23,7 @@ v0.2.8 支持HTTP&TCP通过定制Marathon环境变量
 v0.2.9 支持Marathon 0.7.* （http_callback被启用的状态下）和Mesos 0.21.X  
 v0.2.11 升级了API，失效了之前的API端点
 
+
 **发布和更改记录 ** 
 
 自从Marathon API 和特性在过去已经做了更改，尤其最近几天。你需要期望我们旨在扑捉到这些更改，来提高设计并添加新的功能。我们旨在尽可能地维护向后兼容。发布和更改记录请参考[发布页面](https://github.com/QubitProducts/bamboo/releases)当需要升级 的时候。  
