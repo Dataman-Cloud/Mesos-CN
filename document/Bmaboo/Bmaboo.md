@@ -117,7 +117,7 @@ Marathon app 环境变量可以在模板中被调用。随bamboo一起的默认�
 在该示例中，BMABOO_TCP_PORT和MY_CUSTOM_ENV可以在HAProxy模板中被访问到。其允许基于你的喜好实现弹性模板定制。  
 
 **环境变量**  
-production.json文件中的配置可以通过以下环境变量来重写。其通常在你为Bamboo和HAProxy构建一个Docker镜像的时候 会非常有帮助。如果这些未被定制那么配置文件中的值将会被使用。 
+production.json文件中的配置可以通过以下环境变量来重写。其通常在你为Bamboo和HAProxy构建一个Docker镜像的时候 会非常有帮助。如果这些未被定制那么配置文件中的默认值将会被使用。 
 
 
 | 环境变量  |  对应参数 |    
@@ -223,8 +223,7 @@ deb包部署实例：
     
 像 Docker 容器一样运行 Bamboo
 
-当该镜像创建完成后，像一个容器一样运行就非常简单了 - 你仍然需要针对该镜像 提供配置作为环境变量。
- Docker allows two options for this - using the -e option or by putting them in a file and using the --env-file option. For this example we will use the former and we will map through ports 8000 and 80 to the docker host (obviously the hosts configured here will need to be reachable from this container):
+当该镜像创建完成后，像一个容器一样运行就非常简单了 - 你仍然需要针对该镜像 提供配置作为环境变量。 对此  Docker 允许使用两个选项 - 使用 -e 选项或通过将配置写入一个文件并使用 --env-file 选项。 例如我们将使用前者并将端口 8000 和 80 映射至 docker 主机(很显然这个主机的配置将能够从该容器内被读取到)：  
 
     docker run -t -i --rm -p 8000:8000 -p 80:80 \
         -e MARATHON_ENDPOINT=http://marathon:8080 \
