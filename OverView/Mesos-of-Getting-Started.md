@@ -1,7 +1,7 @@
 ##入门
 ###下载 Mesos
 这里有不同的方式获取 Mesos：    
-1. 从[ Apache](http://mesos.apache.org/downloads/)下载最新稳定版(推荐)。
+1.从[ Apache](http://mesos.apache.org/downloads/)下载最新稳定版(推荐)。
 ```
 $ wget http://www.apache.org/dist/mesos/0.22.1/mesos-0.22.1.tar.gz
 $ tar -zxf mesos-0.22.1.tar.gz
