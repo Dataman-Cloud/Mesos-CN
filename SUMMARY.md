@@ -21,7 +21,7 @@
        * [Monitoring - jp - review](document/runing-Mesos/Mesos-Observability-Metrics.md)
        * [Network Monitoring - jp - review](document/runing-Mesos/Network-Monitoring.md)
        * [Slave Recovery - jp - review](document/runing-Mesos/Slave-Recovery.md)
-       * [Tools - jp - review](document/runing-Mesos/Tools.md)
+       * [Tools](document/runing-Mesos/Tools.md)
     * [运行Mesos框架](document/Running-mesos-Frameworks)
        * [建立在 Mesos 上的软件项目](document/Running-mesos-Frameworks/Software-projects-built-on-Mesos.md)
     * [使用Meso框架开发](document/Developing-Mesos-Frameworks)
