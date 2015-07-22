@@ -4,8 +4,9 @@
 
 使用这些工具可以很容易地建立和运行 Mesos 集群。
 
+
 - [collectd plugin](https://github.com/rayrod2030/collectd-mesos) 收集 Mesos 集群指标。
-- 
+
 - [Deploy scripts](http://mesos.apache.org/documentation/latest/deploy-scripts/) 在一组机器上发布  Mesos  集群。
 
 - [Chef cookbook by Everpeace](https://github.com/everpeace/cookbook-mesos)安装  Mesos  和配置  master  和  slave 节点。这个 cookbook 支持从 Mesosphere的包或者源代码安装。
