@@ -158,30 +158,20 @@ mesos master 和 slave 可以通过命令行参数或环境变量来传递一系
     --[no-]registry_strict    无论 Master 是否将基于注册机中存储的持久信息来采取行动。设定改值为 false 意味着注册员将永远拒绝入列，出列和一个 slave 的移除。所以， 'false' 可以用来在一个运行的集群上来引导持久化的状态。注意： 该标志位是 *experimental* 而且还不能在应用中使用.(默认: false)
     --roles=VALUE             其 frameworks 在这个集群中可能归属于的用逗号分离的一系列指派的角色。
     --[no-]root_submissions   root 是否可以提交 frameworks? (默认: true)
-    --slave_ping_timeout=VALUE	The timeout within which each slave is expected to respond to a ping from the master. Slaves that do not respond within `max_slave_ping_timeouts` ping retries will be removed. (default: 15secs)
-    --slave_removal_rate_limit=VALUE	The maximum rate (e.g., 1/10mins, 2/3hrs, etc) at which slaves will be removed from the master when they fail health checks. By default slaves will be removed as soon as they fail the health checks.
-The value is of the form 'Number of slaves'/'Duration'
-
---slave_reregister_timeout=VALUE	The timeout within which all slaves are expected to re-register when a new master is elected as the leader. Slaves that do not re-register within the timeout will be removed from the registry and will be shutdown if they attempt to communicate with master.
-NOTE: This value has to be atleast 10mins. (default: 10mins)
-
---user_sorter=VALUE	Policy to use for allocating resources between users. May be one of:
-dominant_resource_fairness (drf) (default: drf)
-
---webui_dir=VALUE 管理页面的网页文件的目录，默认：/usr/local/share/mesos/webui
-
---weights=VALUE 逗号分割的角色/权重列表，成对表单 'role=weight,role=weight'。 weights是用来表达优先级。
-
---whitelist=VALUE A filename which contains a list of slaves (one per line) to advertise offers for. The file is watched, and periodically re-read to refresh the slave whitelist. By default there is no whitelist / all machines are accepted. (default: None)
-Example:
-file:///etc/mesos/slave_whitelist
-
---zk_session_timeout=VALUE zookeeper 的 session 超时时长。
+    --slave_ping_timeout=VALUE	在每个 slave 被期望从一个 master 回应一个 ping 值的超时时间。 Slaves 如果不是在  `max_slave_ping_timeouts` 回复，ping 从新尝试将被移除.  (默认: 15secs)
+    --slave_removal_rate_limit=VALUE	最大的比例(e.g., 1/10mins, 2/3hrs, etc) 对于那个 slaves 将被从 master 中移除当他们遇到健康检测失败。默认的是 slave 将尽可能快的被移除当它们遇到健康监测失败。值为 'Number of slaves'/'Duration' 的模式。
+    --slave_reregister_timeout=VALUE	在所有的 slaves被期望重新注册当一个新的 master 被选举为 leader的超时时间。 Slaves 其不会在此超时时间内被重新注册将被从注册中移除并将被关掉如果它们尝试去与 master 通信。注意： 该值将被设置为最少 10mins. (默认: 10mins)
+    --user_sorter=VALUE	     被用来在用户中分配资源的策略。可以为以下之一：dominant_resource_fairness (drf) (default: drf) 
+    --webui_dir=VALUE        管理页面的网页文件的目录，默认：/usr/local/share/mesos/webui
+    --weights=VALUE          逗号分割的角色/权重列表，成对表单 'role=weight,role=weight'。 weights是用来表达优先级。
+    --whitelist=VALUE         一个 文件名器包含一系列的 slaves （每行一个）来通告 offers.该文件被观测，并周期性的重读取来刷新 slave 白名单。 默认的这里没有白名单/所有机器被接收. (默认: None)
+                                例子：
+                                file:///etc/mesos/slave_whitelist
+    --zk_session_timeout=VALUE  zookeeper 的 session 超时时长。
 
 *使用 ‘–with-network-isolator’ 配置时允许使用的参数*
 
---max_executors_per_slave=VALUE	每个 Slave 上最大允许的执行器数量。网络监控和隔离机制强行限制每个执行器使用的端口资源，所以每个 slave 上智能跑一定数量的执行器。
-这个标志位是用来避免框架接收了某些资源 offer，执行的时候却发现该 slave 上端口已经被分配完毕。
+    --max_executors_per_slave=VALUE	每个 Slave 上最大允许的执行器数量。网络监控和隔离机制强行限制每个执行器使用的端口资源，所以每个 slave 上智能跑一定数量的执行器。这个标志位是用来避免框架接收了某些资源 offer，执行的时候却发现该 slave 上端口已经被分配完毕。
 
 
 ## Slave 选项
