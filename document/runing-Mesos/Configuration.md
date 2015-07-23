@@ -16,7 +16,6 @@ mesos master 和 slave 可以通过命令行参数或环境变量来传递一系
 
                  标志位                                 解释
         --external_log_file=VALUE  Specified the externally managed log file. This file will be exposed in the webui and HTTP api. This is useful when using stderr logging as the log file is otherwise unknown to Mesos.
- 
         --firewall_rules=VALUE     该值是终端防火墙的规则（rules），可以为JSON 类型的 rules 或包含 JSON
                                    类型 rules 的文件。文件路径可以为 
                                    file:///path/to/file 或者 /path/to/file。
@@ -30,7 +29,6 @@ mesos master 和 slave 可以通过命令行参数或环境变量来传递一系
                                             ]
                                         }
                                     }
-
         --[no-]help                输出帮助信息 (默认:否)
         --[no-]initialize_driver_logging	是否初始化 scheduler 和 executor driver 的
                                            logging 机制（默认：是）
@@ -44,13 +42,14 @@ mesos master 和 slave 可以通过命令行参数或环境变量来传递一系
         --[no-]quiet               禁用输出日志到 sterr （默认:否）
         --[no-]version             显示版本并退出 （默认：否）
  
+       
 
 ##Master 配置选项
 
 *必选标志位*
 
               标志位                                    解释   
-        --quorum=VALUE              当使用 'replicated_log' 为基础的注册机时副本仲裁数量的多少。必须将该值设定为大多数 masters 比如， quorum > ( masters 总量)/2。注意：如果 master 是运行于一个单实例模式则不需要设定（non-HA）。
+        --quorum=VALUE              当使用 'replicated_log' 为基础的注册时副本仲裁数量的多少。必须将该值设定为大多数 masters 比如， quorum > ( masters 总量)/2。注意：如果 master 是运行于一个单实例模式则不需要设定（non-HA）。
         --work_dir=VALUE            注册表中的持久性信息的存放路径
         --zk=VALUE                  zookeeper URL（用于选举 master 的 leader）为以下之一：
                                     zk://host1:port1,host2:port2,.../path
@@ -103,7 +102,7 @@ mesos master 和 slave 可以通过命令行参数或环境变量来传递一系
     --framework_sorter=VALUE    (default: drf) 用于一个给定用户的架构之间分配资源的策略。该选项和 user_allocator 选项相同。 (默认： drf)
     --hooks=VALUE               安装在 master 内的钩子模块（hook module）列表，名子以逗号进行分隔
     --hostname=VALUE            该 master 在 zookeeper 里登记的主机名。如果没有设置，将从绑定的IP地址进行解析。
-    --[no-]log_auto_initialize  是否通过使用该注册机来自动初始化复制的 log .如果被设定为 false ， log 将会在最初使用的时候被手动初始化。(默认： true)
+    --[no-]log_auto_initialize  是否通过使用该注册来自动初始化复制的 log .如果被设定为 false ， log 将会在最初使用的时候被手动初始化。(默认： true)
     --max_slave_ping_timeouts=VALUE	 master 尝试 ping slave 的最高连续失败次数，超过这个限制的 slave 将被移除。（默认：5）
     --modules                   需要加载的模块列表，它们可以被内部的子系统调用。使用 —modules=filepath  指定包含模块列表的文件（JSON格式）。可以使用 file:///path/to/file 或者 /path/to/file 来指定文件，或者直接用 —modules=“{...}” 参数指定模块列表。
                                 JSON 格式文件举例:
@@ -136,41 +135,26 @@ mesos master 和 slave 可以通过命令行参数或环境变量来传递一系
                                               }
                                             ]
                                           }
-     --offer_timeout=VALUE    Duration of time before an offer is rescinded from a framework.
-This helps fairness when running frameworks that hold on to offers, or frameworks that accidentally drop offers.
-
---rate_limits=VALUE The value could be a JSON formatted string of rate limits or a file path containing the JSON formatted rate limits used for framework rate limiting.
-Remember you can also use the file:///path/to/file or /path/to/file argument value format to write the JSON in a file.
-
-See the RateLimits protobuf in mesos.proto for the expected format.
-
-Example:
-
-{
-  "limits": [
-    {
-      "principal": "foo",
-      "qps": 55.5
-    },
-    {
-      "principal": "bar"
-    }
-  ],
-  "aggregate_default_qps": 33.3
-}
-
---recovery_slave_removal_limit=VALUE For failovers, limit on the percentage of slaves that can be removed from the registry *and* shutdown after the re-registration timeout elapses. If the limit is exceeded, the master will fail over rather than remove the slaves.
-This can be used to provide safety guarantees for production environments. Production environments may expect that across Master failovers, at most a certain percentage of slaves will fail permanently (e.g. due to rack-level failures).
-
-Setting this limit would ensure that a human needs to get involved should an unexpected widespread failure of slaves occur in the cluster.
-
-Values: [0%-100%] (default: 100%)
-
---registry=VALUE 注册表持久化策略。可用选项有 'replicated_log', 'in_memory'（用于测试）。默认：replicated_log。
-
---registry_fetch_timeout=VALUE Duration of time to wait in order to fetch data from the registry after which the operation is considered a failure. (default: 1mins)
-
---registry_store_timeout=VALUE Duration of time to wait in order to store data in the registry after which the operation is considered a failure. (default: 5secs)
+     --offer_timeout=VALUE    offer 从一个 framework 中被回收之前的时间间隔。 其保证了公平性当运行中的 frameworks 留住 offers, 或 frameworks 意外的丢弃 offers。
+     --rate_limits=VALUE     该值可以为一个 JSON 格式的速率限制或一个文件路径包含了被 framework 限速 所使用的 JSON 格式的速率限制。请记住你也可以是使用 file:///path/to/file 或 /path/to/file 参数值格式来将该 JSON 写入至一个文件。
+                             期望的格式请参考 mesos.proto 中的 RateLimits protobuf.
+                             例子：
+                             {
+                               "limits": [
+                                    {
+                                      "principal": "foo",
+                                      "qps": 55.5
+                                    },
+                                    {
+                                      "principal": "bar"
+                                    }
+                                        ],
+                                      "aggregate_default_qps": 33.3
+                              }
+     --recovery_slave_removal_limit=VALUE     针对故障转移，限制上的百分比的 slaves 可以从注册中移除并关机在重新注册的超时时间到了之后。 如果该限制被突破， master 将实行故障转移而不是移除 slaves.这可被用来针对生产环境提供安全保障。生产环境可能期望在 Master 故障转移过程中， 最多一定百分比的 slaves 将永久性的挂掉 (比如, 由于 rack-level 的故障)。设定该限制可以保证一个人需要参与进来当在该集群中一个非预期的大范围的 slave 故障发生。值: [0%-100%] (默认: 100%)
+    --registry=VALUE          注册表持久化策略。可用选项有 'replicated_log','in_memory'（用于测试）。默认：replicated_log。
+    --registry_fetch_timeout=VALUE 在操作被认为是一个失败后的为了从注册中提取数据的等待的时间间隔.(默认： 1mins)
+    --registry_store_timeout=VALUE Duration of time to wait in order to store data in the registry after which the operation is considered a failure. (default: 5secs)
 
 --[no-]registry_strict Whether the Master will take actions based on the persistent information stored in the Registry. Setting this to false means that the Registrar will never reject the admission, readmission, or removal of a slave. Consequently, 'false' can be used to bootstrap the persistent state on a running cluster.
 NOTE: This flag is *experimental* and should not be used in production yet. (default: false)
