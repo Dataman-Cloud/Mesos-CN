@@ -155,16 +155,11 @@ mesos master 和 slave 可以通过命令行参数或环境变量来传递一系
     --registry=VALUE          注册表持久化策略。可用选项有 'replicated_log','in_memory'（用于测试）。默认：replicated_log。
     --registry_fetch_timeout=VALUE 在操作被认为是一个失败后的为了从注册中提取数据的等待的时间间隔.(默认： 1mins)
     --registry_store_timeout=VALUE 等待的时间周期为了当操作被认为一个失败的时候将数据存储入注册机。 (默认：5secs)
-    --[no-]registry_strict    无论 Master 是否将基于注册机中存储的持久信息来草去行动。设定改值为 false 意味者 Whether the Master will take actions based on the persistent information stored in the Registry. Setting this to false means that the Registrar will never reject the admission, readmission, or removal of a slave. Consequently, 'false' can be used to bootstrap the persistent state on a running cluster.
-NOTE: This flag is *experimental* and should not be used in production yet. (default: false)
-
---roles=VALUE A comma separated list of the allocation roles that frameworks in this cluster may belong to.
-
---[no-]root_submissions Can root submit frameworks? (default: true)
-
---slave_ping_timeout=VALUE	The timeout within which each slave is expected to respond to a ping from the master. Slaves that do not respond within `max_slave_ping_timeouts` ping retries will be removed. (default: 15secs)
-
---slave_removal_rate_limit=VALUE	The maximum rate (e.g., 1/10mins, 2/3hrs, etc) at which slaves will be removed from the master when they fail health checks. By default slaves will be removed as soon as they fail the health checks.
+    --[no-]registry_strict    无论 Master 是否将基于注册机中存储的持久信息来采取行动。设定改值为 false 意味着注册员将永远拒绝入列，出列和一个 slave 的移除。所以， 'false' 可以用来在一个运行的集群上来引导持久化的状态。注意： 该标志位是 *experimental* 而且还不能在应用中使用.(默认: false)
+    --roles=VALUE             其 frameworks 在这个集群中可能归属于的用逗号分离的一系列指派的角色。
+    --[no-]root_submissions   root 是否可以提交 frameworks? (默认: true)
+    --slave_ping_timeout=VALUE	The timeout within which each slave is expected to respond to a ping from the master. Slaves that do not respond within `max_slave_ping_timeouts` ping retries will be removed. (default: 15secs)
+    --slave_removal_rate_limit=VALUE	The maximum rate (e.g., 1/10mins, 2/3hrs, etc) at which slaves will be removed from the master when they fail health checks. By default slaves will be removed as soon as they fail the health checks.
 The value is of the form 'Number of slaves'/'Duration'
 
 --slave_reregister_timeout=VALUE	The timeout within which all slaves are expected to re-register when a new master is elected as the leader. Slaves that do not re-register within the timeout will be removed from the registry and will be shutdown if they attempt to communicate with master.
@@ -300,78 +295,49 @@ file:///etc/mesos/slave_whitelist
     --perf_events=VALUE            一系列命令分离的 perf 事件当使用 perf_event 分离器时候来精简每个容器。默认为 None。运行 ' perf list ' 命令查看所有事件。当在 PerfStatistics protobuf 中被通告时候事件名称将被悲观性的消除并使用下划线代替连字符。 例如，cpu-cycles 变为 cpu_cycles。在 PerfStatistics protobuf 中可以看到所有名字。
     --perf_interval = VALUE        多个 perf stat 例子启动间的时间间隔。Perf 示例基于 perf_interval 周期性的被获取并且最近获取的例子将返回而不是按需简化。基于此原因，perf_interval 为独立的资源监控时间间隔。（ 默认： 1 mins ）。
     --qos_controller=VALUE         Qos 控制器的名称被用来超额订阅。
-    --qos_correction_interval_min=VALUE   The slave polls and carries out QoS corrections from the QoS Controller based on its observed performance of running tasks. 这些校正之间的最小间隔有此标记指定。 （ 默认： 0 secs ）。
+    --qos_correction_interval_min=VALUE  slave 从 Qos 控制器投票和执行 QoS 的更正基于其已运行 tasks 的观察到的性能 这些校正之间的最小间隔有此标记位指定。 （ 默认： 0 secs ）。
+    --recover = VALUE                 是否要恢复状态更新以及重新连接 旧的 executor 。" recover " 为有效值。                                             reconnect : 重新连接任何活着的 旧的 executor。
+                                      cleanup : 杀死并退出所有活着的 old exetuor 。当你要做一个不兼容的 slave　活着 executor 升级时，可以用这个选项。注意：当 slave 没有设置 checkpointed 时，recovery 不能执行，并且  该 slave 作为一个新的 slave 注册到 master。 ( 默认： reconnect )
+    --recovery_timeout=VALUE         分配给 slave 恢复的时间。如果　slave 恢复所用的时间超过 recovery_timeout，将会被终止。( 默认：15 min )
+    --registration_backoff_factor=VALUE slave 最初挑选一个随机的时间段[0,B],其中 b = registration_backoff_factor ,( 重新注册 )注册到一个新的 master。 后续重试都基于此时间段成倍扩大 ，最多为 1 mins。( 默认: 1 secs )
+    --resource_estimator=VALUE       用于 过度订阅 的 资源评估者 的名称。
+    --resource_monitoring_interval=VALUE  executor 资源使用监视周期。（ 例如，10 secs , 1 min 等 ）.( 默认： 1secs )。
+    --resources=VALUE                每个 slave 总的可消耗资源。格式：***name(role):value;name(role):value...***。
+    --[no-]revocable_cpu_low_priority 通过 revocable CPU 以相对低的优先级运行 containers 。 目前只支持 cgroups/cpu isolator 。( 默认: true )
+    --slave_subsystems=VALUE         一系列的逗号分隔的 cgroup 子系统来从二进制运行slave。例如，***memory*** , ***cpuacct*** 。默认为 none 。此功能用于资源的监视以及 no cgroup 下限制设置，它们从 root mesos cgroup 继承而来。
+    --[no-]strict                    如果 strict    = true，任何以及所有错误恢复都被认为是致命的。反之，恢复期间，任何预期的错误都会被忽略。 ( 默认： true )
+    --[no-]switch_user               是否用提交它们的用户来运行 tasks 而不是使用运行 slave 的用户. ( 需要 setuid 权限)。 ( 默认: true )
+    --fetcher_cache_size=VALUE      以字节为单位的 fetcher cache 大小。( 默认: 2 GB )
+    --fetcher_cache_dir=VALUE       fetcher cache 的父目录。默认在工作目录中，所以一切都可以在测试环境中保存或删除。然而，典型的生产方案使用的是单独的 缓存卷 。首先，它不意味着需要被备份。其次，要避免沙盒目录和缓存目录以不可预知的方式通过共享空间相互干扰。因此建议，明确设置缓存目录。 ( 默认: /tmp/mesos/fetch )
+    --work_dir=VALUE                framework 工作目录的路径。( 默认: /tmp/mesos )
 
---recover = VALUE 是否要恢复状态更新以及重新连接 old executor 。" recover " 是有效值。reconnect : 重新连接任何活着的 old executor。 cleanup : 杀死并退出所有活着的 old exetuor 。当你要做一个不兼容的 slave　活着 executor 升级时，可以用这个选项。注意：当 slave 没有设置 checkpointed 时，recovery 不能执行，并且  slave 作为一个新的 slave 注册到 master。 ( 默认： reconnect )
+#####当配置了 ' –with-network-isolator ', 以下标记位才会生效：
 
---recovery_timeout=VALUE 分配给 slave 恢复的时间。如果　slave 恢复所用的时间超过 recovery_timeout，将会被终止。( 默认：15 min )
-
---registration_backoff_factor=VALUE slave 最初挑选一个随机的时间段[0,B],其中 b = registration_backoff_factor ,( 重新注册 )注册到一个新的 master。 后续重试都基于此时间段成倍扩大 ，最多为 1 mins。( 默认: 1 secs )
-
---resource_estimator=VALUE 用于 oversubscription 的 resource estimator 的名称。
-
---resource_monitoring_interval=VALUE executor 资源使用监视周期。（ 例如，10 secs , 1 min 等 ）.( 默认： 1secs )。
-
---resources=VALUE 每个 slave 总的可消耗资源。格式：***name(role):value;name(role):value...***。
-
---[no-]revocable_cpu_low_priority 通过 revocable CPU 以相对低的优先级运行 containers 。 目前只支持 cgroups/cpu isolator 。( 默认: true )
-
---slave_subsystems=VALUE List of comma-separated cgroup subsystems to run the slave binary in 。例如，***memory*** , ***cpuacct*** 。默认为 none 。此功能用于资源的监视以及 no cgroup 下限制设置，它们从 root mesos cgroup 继承而来。
-
---[no-]strict 如果 strict = true ，任何以及所有错误恢复都被认为是致命的。反之，恢复期间，任何预期的错误都会被忽略。 ( 默认： true )
-
---[no-]switch_user Whether to run tasks as the user who submitted them ，而不是运行 slave 的 user ( 需要 setuid 权限)。 ( 默认: true )
-
---fetcher_cache_size=VALUE 以字节为单位的 fetcher cache 大小。( 默认: 2 GB )
-
---fetcher_cache_dir=VALUE fetcher cache 的父目录。默认在工作目录中，所以一切都可以在测试环境中保存或删除。然而，典型的生产方案使用的是单独的 cache volume 。首先，它不意味着要备份。其次，要避免沙盒目录和缓存目录以不可预知的方式通过共享空间相互干扰。因此建议，明确设置缓存目录。 ( 默认: /tmp/mesos/fetch )
-
---work_dir=VALUE framework 工作目录的路径。( 默认: /tmp/mesos )
-
-#####当配置了 ' –with-network-isolator ', 以下命令才会生效：
-
---ephemeral_ports_per_container=VALUE 有网络隔离器分配临时端口给一个容器。此端口号必须是 2 的倍数。( 默认: 1024 )
-
---eth0_name = VALUE 公网接口的名称 ( 如 eth0 )。如果没有指定，网络隔离器会尝试基于主机的默认网关来猜测它。
-
---lo_name=VALUE 网络 loopback 接口的名称( 例如, lo )。如果没有指定，网络隔离器会尝试猜测它。
-
---egress_rate_limit_per_container=VALUE 每个容器的出口流量限制，单位是 字节/每秒。如果没有指定或指定为零，网络隔离器不会强制限制容器的出口流量。这个标记使用字节类型, 定义在 stout 。
-
---[no-]network_enable_socket_statistics_summary 是否从每个容器收集 socket 统计摘要。这个标记被用在  'network/port_mapping' 隔离器。 ( 默认: false )
-
---[no-]network_enable_socket_statistics_details 是否从每个容器收集 socket 细节信息。该标记用于 ' network/port_mapping ' 隔离器。( 默认: false )
+    --ephemeral_ports_per_container=VALUE   有网络隔离器分配临时端口给一个容器。此端口号必须是 2 的倍数。( 默认: 1024 )
+    --eth0_name = VALUE             公网接口的名称 ( 如 eth0 )。如果没有指定，网络隔离器会尝试基于主机的默认网关来猜测它。
+    --lo_name=VALUE                 网络 loopback 接口的名称( 例如, lo )。如果没有指定，网络隔离器会尝试猜测它。
+    --egress_rate_limit_per_container=VALUE 每个容器的出口流量限制，单位是 字节/每秒。如果没有指定或指定为零，网络隔离器不会强制限制容器的出口流量。这个标记使用字节类型, 定义在 stout 。
+    --[no-]network_enable_socket_statistics_summary 是否从每个容器收集 socket 统计摘要。这个标记位被用在  'network/port_mapping' 隔离器。 ( 默认: false )
+    --[no-]network_enable_socket_statistics_details 是否从每个容器收集 socket 细节信息。该标记用于 ' network/port_mapping ' 隔离器。( 默认: false )
 
 
 ###Mesos构建配置选项
 
 ####配置脚本有以下可选的功能标志
 
---enable-shared[=PKGS] 建立共享库 [ 默认: yes ]
-
---enable-static[=PKGS] 建立静态库 [ 默认: yes ]
-
---enable-fast-install[=PKGS] 快速安装 [ 默认: yes ]
-
---disable-libtool-lock 避免锁死 ( 可能会破坏并发的编译 )
-
---disable-java don't build Java bindings
-
---disable-python don't build Python bindings
-
---enable-debug 启用 Debug 调试。如果设置了 CFLAGS/CXXFLAGS ，这个选项不会改变它们。默认: no 
-
---enable-optimize 启用优化 如果设置了 CFLAGS/CXXFLAGS ，这个选项不会改变它们。默认: no 
-
---disable-bundled 预装相关依赖，而不是绑定 libraries 。
-
---disable-bundled-distribute excludes building and using the bundled distribute package in lieu of an installed version in PYTHONPATH
-
---disable-bundled-pip	excludes building and using the bundled pip package in lieu of an installed version in PYTHONPATH
-
---disable-bundled-wheel	excludes building and using the bundled wheel package in lieu of an installed version in PYTHONPATH
-
---disable-python-dependency-install 在 make install 期间 python packages 已经安装时，没有外部依赖正在下载或者安装。
+    --enable-shared[=PKGS]    建立共享库 [ 默认: yes ]
+    --enable-static[=PKGS]    建立静态库 [ 默认: yes ]
+    --enable-fast-install[=PKGS] 快速安装 [ 默认: yes ]
+    --disable-libtool-lock    避免锁死 ( 可能会破坏并行编译 )
+    --disable-java            不需要构建 Java 绑定
+    --disable-python          不需要构建 Python 绑定
+    --enable-debug            启用 Debug 调试。如果设置了 CFLAGS/CXXFLAGS ，这个选项不会改变它们。默认: no 
+    --enable-optimize         启用优化 如果设置了 CFLAGS/CXXFLAGS ，这个选项不会改变它们。默认: no 
+    --disable-bundled         预装相关依赖，而不是绑定 libraries 。
+    --disable-bundled-distribute 不包含构建和使用绑定的分发包来替换在 PYTHONPATH 中的已安装版本。
+    --disable-bundled-pip	excludes 不包含构建和使用绑定的 pip 包来替换在 PYTHONPATH 中的已安装版本.
+    --disable-bundled-wheel	  不包含构建和使用绑定的 wheel 包来替换在 PYTHONPATH 中的已安装版本
+    --disable-python-dependency-install 当在 make install 期间安装 python 包，不需要外部的依赖或安装。 
 
 ####配置脚本有以下的标志位针对可选的包选项：
 
@@ -390,6 +356,7 @@ file:///etc/mesos/slave_whitelist
     --with-network-isolator 建立网络隔离
 
 ####一些 influential 的环境变量配置脚本：
+
 使用这些变量来重写 'configure'生成的选择项或帮助其来查找库文件和非标准的名字/地址一起来编程。 
 
        JAVA_HOME              JDK 根目录
