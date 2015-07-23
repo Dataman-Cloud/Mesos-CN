@@ -421,11 +421,12 @@ JSON 文件例子：
 --with-network-isolator 建立网络隔离
 
 ####一些 influential 的环境变量配置脚本：
-使用这些变量来重写 'configure'生成的选择项或帮助其来查找库文件和非标准的名字/地址一起来编程。
-     JAVA_HOME  JDK 根目录
-     JAVA_CPPFLAGS  JNI 目录
-     JAVA_JVM_LIBRARY libjvm.so 的完整路径
-     MAVEN_HOME  mvn 的根目录
-     PROTOBUF_JAR　在 prefixed builds　上完整的 protobuf jar　路径
-     PYTHON　指定使用哪个 Python 解析器
-     PYTHON_VERSION 已经安装并使用的 Python 版本号 例如，'2.3'。该字符串将追加到 Python 解析器
+使用这些变量来重写 'configure'生成的选择项或帮助其来查找库文件和非标准的名字/地址一起来编程。 
+
+       JAVA_HOME  JDK 根目录
+       JAVA_CPPFLAGS  JNI 目录
+       JAVA_JVM_LIBRARY libjvm.so 的完整路径
+       MAVEN_HOME  mvn 的根目录
+       PROTOBUF_JAR　在 prefixed builds　上完整的 protobuf jar　路径
+       PYTHON　指定使用哪个 Python 解析器
+       PYTHON_VERSION 已经安装并使用的 Python 版本号 例如，'2.3'。该字符串将追加到 Python 解析器
