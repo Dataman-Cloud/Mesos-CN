@@ -1,28 +1,15 @@
-#Slave Recovery
 #Slave 恢复
 
-Slave recovery is a feature of Mesos that allows:
+Slave 恢复是 Mesos 的一个特色功能：
 
+1. 当 slave 进程中断时，Executors/tasks 保持运行。
+2. slave 进程重启之后，重新连接到仍在运行 Executors/tasks。
 
-
-1. Executors/tasks to keep running when the slave process is down and
-
-
-1. Allows a restarted slave process to reconnect with running executors/tasks on the slave.
-
-Mesos slave could be restarted for an upgrade or due to a crash. This feature is introduced in 0.14.0 release.
-
-
-Slave 恢复是  Mesos  的一个功能， 允许：
-
-1. 当  slave  进程断掉时  Executors/tasks  保持运行。
-2. 允许一个重新开始的  slave  进程连接到正在运行  Executors/tasks  的  slave。
-
-当升级或者崩溃时  Mesos slave 能重新启动。在0.14.0中介绍了这个功能。
+这个功能是 0.14.0 版引入的。当需要升级或者意外崩溃时，Mesos slave 能被重新启动。
 
 
 #How does it work?
-#它是如何工作的？
+#工作原理
 
 Slave recovery works by having the slave checkpoint enough information (e.g., Task Info, Executor Info, Status Updates) about the running tasks and executors to local disk. Once the slave and the framework(s) enable checkpointing, any subsequent slave restarts would recover the checkpointed information and reconnect with the executors. Note that if the host running the slave process is rebooted all the executors/tasks are killed.
 
@@ -33,12 +20,9 @@ NOTE: To enable recovery the framework should explicitly request checkpointing. 
 注意：要使得framework恢复应该请求检查点。另外，不希望本地磁盘的开销
 
 
-#Enabling slave checkpointing
-#启用  slave  检查点
+#启用 slave 检查点功能
 
-NOTE: From Mesos 0.22.0 slave checkpointing will be automatically enabled for all slaves.
-
-注意： 从 Mesos 版本0.22.0开始，slaves  检查点会自动对所有的  slave  启动。
+注意：从 Mesos 版本 0.22.0 开始，Slave 会自动启动检查点功能。
 
 
 As part of this feature, 4 new flags were added to the slave.
