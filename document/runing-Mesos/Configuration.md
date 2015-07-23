@@ -194,85 +194,59 @@ file:///etc/mesos/slave_whitelist
 
 *必选项*
 
---master=VALUE slave 连接到 master 的 URL，有三种连接方式：
-
-1. master 的主机名或者 IP 地址，如果是多个地址可以用逗号隔开，例如：
---master=localhost:5050
---master=10.0.0.5:5050,10.0.0.6:5050
-2. zookeeper or quorum hostname/ip + port + master registration path
---master=zk://host1:port1,host2:port2,.../path
---master=zk://username:password@host1:port1,host2:port2,.../path
-a path to a file containing either one of the above options. You can also use the file:///path/to/file syntax to read the argument from a file which contains one of the above.
+    --master=VALUE       slave 连接到 master 的 URL，有三种连接方式：
+                         1. master 的主机名或者 IP 地址，如果是多个地址可以用逗号隔开，例如：
+                               --master=localhost:5050
+                               --master=10.0.0.5:5050,10.0.0.6:5050
+                         2. zookeeper 或仲裁 主机名/ip +端口  master 注册地址
+                               --master=zk://host1:port1,host2:port2,.../path
+                               --master=zk://username:password@host1:port1,host2:port2,.../path
+                         一个文件对应的一个路径包含以上选项的任意一个。你也可以使用 file:///path/to/file 语句来从一个包含以上任意一个选项的文件中读取参数
 
 
 *可选项*
 
---attributes=VALUE 机器的属性：rack:2或者rack:2;u:1
-
---authenticatee=VALUE 用于主节点身份验证，默认crammd5，或者用—modules加载备用模块。默认：crammd5。
-
---[no-]cgroups_enable_cfs 通过限制CFS带宽来限制CPU资源. 默认: defult
-
---cgroups_hierarchy=VALUE cgroups的路径根位置. 默认: /sys/fs/cgroup
-
---[no-]cgroups_limit_swap 用于内存和swap的限制, 默认: false, 只限制内存
-
---cgroups_root=VALUE 根cgroup的命名. 默认: mesos
-
---container_disk_watch_interval=VALUE 用于查询容器中磁盘配额时间间隔. 被用于posix/disk的时间间隔, 默认: 15秒
-
---containerizer_path=VALUE 当外部隔离机制被激活时(--isolation=external), 外部容器被执行的路径 
-
---containerizers=VALUE 用逗号把一组容器隔开, 以达到对容器的实现. 包括mesos, external, docker在Linux中. 默认: mesos
-
---credential=VALUE 一行包含"principal"和"secret"由空格隔开的文本路径. 或是包含一条凭证的JSON格式文件的路径. 路径的格式是file://path/to/file. 也可以使用路径file:///path/to/file, 从文件中读取值 。
-JSON 文件例子:
-```
-{
-  "principal": "username",
-  "secret": "secret"
-}
-```
---default_container_image=VALUE   当使用 external containerizer 时，如果没有在一个 task 上指定 ，则使用 default container image 。
-
---default_container_info=VALUE  JSON格式的 CONTAINERINFO 将包含到任何没有指定 ContainerInfo 的 ExecutorInfo 中。
-
-例如：
-```
-{
-  "type": "MESOS",
-  "volumes": [
-    {
-      "host_path": "./.private/tmp",
-      "container_path": "/tmp",
-      "mode": "RW"
-    }
-  ]
-}
-```
-
---default_role=VALUE 任何用 --resources 忽略　role 的资源，以及在没有　--resources 标记，但被检测到的资源。都将使用默认的这个值。
-
---disk_watch_interval=VALUE 周期性(例如 10 S ,2 MIN 等)检查硬盘的使用情况。默认是 1 MIN 。
-
---docker=VALUE docker 容器化的可执行文件的绝对路径。( 默认: docker )
-
---docker_remove_delay=VALUE 移除 docker 前等待的时间 （ 如 3 天，2 周 等）。默认为 6 小时。
-
---[no-]docker_kill_orphans 允许 docker kill 掉 orphaned containers 。当你启动多个 slave 在相同的 OS ，你应该考虑将此值设为 false 。 然而，你还应该确保启用　checkpoint　，这样可以重用相同 id 的 slave 。否则当 slave 重启后，docker 任务不会被清除掉。( 默认为　true ) 。
-
---docker_sock=VALUE UNIX socket 路径被挂载到 docker executor 以提供 docker CLI 
-有权访问 docker daemon 。它必须是用于使用 slave 的 docker 镜像的路径 （ 默认： /var/run/docker.sock ）。
-
---docker_mesos_image=VALUE docker 镜像用于启动这个 mesos 实例。如果一个镜像被指定，docker containerizer 假定 slave 运行在 docker 容器中，并当 slave 重启和恢复时启动 executor 恢复他们。
-
---docker_sandbox_directory=VALUE 描述沙盒在容器中被映射到的绝对路径。（ 默认：  /mnt/mesos/sandbox ）。
-
---docker_stop_timeout=VALUE 杀死实例后，停止它的间隔时间 （ 默认： 0 Secs ）。
-
--[no-]enforce_container_disk_quota 是否为容器启用磁盘定额。这个标记用来 ' posix/disk ' 隔离。 （ 默认: false ）。
-
---executor_environment_variables JSON 对象，代表传递到 executor 的环境变量， and thus subsequently task(s)  。默认情况下 executor 将继承 slave 的环境变量。例如：
+    --attributes=VALUE    机器的属性：rack:2或者rack:2;u:1
+    --authenticatee=VALUE 用于主节点身份验证，默认crammd5，或者用—modules加载备用模块。默认：crammd5。
+    --[no-]cgroups_enable_cfs 通过限制CFS带宽来限制CPU资源. 默认: defult
+    --cgroups_hierarchy=VALUE cgroups的根路径位置. 默认: /sys/fs/cgroup
+    --[no-]cgroups_limit_swap 用于内存和swap的限制, 默认: false, 只限制内存
+    --cgroups_root=VALUE      根cgroup的命名. 默认: mesos
+    --container_disk_watch_interval=VALUE 用于查询容器中磁盘配额的时间间隔. 被用于posix/disk的时间间隔, 默认: 15秒
+    --containerizer_path=VALUE 当外部隔离机制被激活时(--isolation=external), 外部容器被执行的路径 
+    --containerizers=VALUE    用逗号把一组容器隔开, 以达到对容器的实现. 包括mesos, external, docker在Linux中. 默认: mesos
+    --credential=VALUE        一行包含"principal"和"secret"由空格隔开的文本路径. 或是包含一条凭证的JSON格式文件的路径. 路径的格式是file://path/to/file. 也可以使用路径 file:///path/to/file, 从文件中读取值 。
+                             JSON 文件例子:
+                             ```
+                             {
+                               "principal": "username",
+                               "secret": "secret"
+                             }
+                             ```
+    --default_container_image=VALUE  当使用外部 containerizer 时，如果没有在一个 task 上指定 ，则使用默认的容器镜像。
+    --default_container_info=VALUE  JSON格式的 CONTAINERINFO 将包含到任何没有指定 ContainerInfo 的 ExecutorInfo 中。
+                                    例如：
+                                   {
+                                   "type": "MESOS",
+                                   "volumes": [
+                                     {
+                                       "host_path": "./.private/tmp",
+                                       "container_path": "/tmp",
+                                       "mode": "RW"
+                                     }
+                                   ]
+                                 }                      
+    --default_role=VALUE         任何用 --resources 标志位将忽略一个 role ，以及在 --resources 标记位中出现，但被自动检测到的资源。都将使用默认的这个 role。
+    --disk_watch_interval=VALUE 周期性时间间隔(例如 10 S ,2 MIN 等)检查硬盘的使用情况。默认是 1 MIN 。
+    --docker=VALUE docker       容器化的可执行文件的绝对路径。( 默认: docker )
+    --docker_remove_delay=VALUE 移除 docker 前等待的时间 （ 如 3 天，2 周 等）。默认为 6 小时。
+    --[no-]docker_kill_orphans  允许 docker kill 掉 orphaned containers 。当你相同的 OS 中启动多个 slave，你应该考虑将此值设为 false 。 以规避 DockerContainerizer 中的一个实例移除被其他 slaves 所启用的 docker 任务。然而，你还应该确保为 slave 启用　checkpoint，这样相同 slave id 可以被重用 。否则当 slave 重启后，docker 任务不会被清除掉。( 默认为　true ) 。
+    --docker_sock=VALUE         被挂载到 docker executor 以提供访问 docker daemon 的 docker CLI  的 UNIX socket 路径。它必须是用于使用 slave 的 docker 镜像的路径 （ 默认： /var/run/docker.sock ）。
+    --docker_mesos_image=VALUE  docker 镜像用于启动这个 mesos slave 实例。如果一个镜像被指定，docker containerizer 假定 slave 运行在 docker 容器中，并当 slave 重启和恢复时启动 executor 来恢复他们。
+    --docker_sandbox_directory=VALUE 描述沙盒在容器中被映射到的绝对路径。（ 默认：  /mnt/mesos/sandbox ）。
+    --docker_stop_timeout=VALUE 杀死实例后，在停止它之前 docker  需要等待的间隔时间 （ 默认： 0 Secs ）。
+    --[no-]enforce_container_disk_quota 是否为容器启用磁盘限额。这个标记位用来为 ' posix/disk ' 隔离。 （ 默认: false ）。
+    --executor_environment_variables JSON 对象，代表传递到 executor 的环境变量， and thus subsequently task(s)  。默认情况下 executor 将继承 slave 的环境变量。例如：
 ```
 {
   "PATH": "/bin:/usr/bin",
@@ -421,9 +395,8 @@ JSON 文件例子：
 
 ####配置脚本有以下可选的 packages 选项：
 
---with-gnu-ld 假设 C 编译器使用 GNU ld [ 默认: no ]
-
---with-sysroot=DIR 在 DIR 中搜索依赖库 ( 或者如果编译器的 sysroot 没有指定 )
+    --with-gnu-ld 假设 C 编译器使用 GNU ld [ 默认: no ]
+    --with-sysroot=DIR 在 DIR 中搜索依赖库 ( 或者如果编译器的 sysroot 没有指定 )
 
 --with-zookeeper[=DIR]	excludes building and using the bundled ZooKeeper package in lieu of an installed version at a location prefixed by the given path
 
@@ -435,7 +408,7 @@ JSON 文件例子：
 
 --with-gmock[=DIR]	excludes building and using the bundled gmock package in lieu of an installed version at a location prefixed by the given path
 
---with-curl=[=DIR] 指定在哪里找到 curl library
+     --with-curl=[=DIR] 指定在哪里找到 curl library
 
 --with-sasl=[=DIR] 指定在哪里找到 sasl2 library
 
@@ -448,19 +421,11 @@ JSON 文件例子：
 --with-network-isolator 建立网络隔离
 
 ####一些 influential 的环境变量配置脚本：
-
-Use these variables to override the choices made by `configure' or to help it to find libraries and programs with nonstandard names/locations.
-
-JAVA_HOME  JDK 根目录
-
-JAVA_CPPFLAGS  JNI 目录
-
-JAVA_JVM_LIBRARY libjvm.so 的完整路径
-
-MAVEN_HOME  mvn 的根目录
-
-PROTOBUF_JAR　在 prefixed builds　上完整的 protobuf jar　路径
-
-PYTHON　指定使用哪个 Python 解析器
-
-PYTHON_VERSION 已经安装并使用的 Python 版本号 例如，'2.3'。该字符串将追加到 Python 解析器
+使用这些变量来重写 'configure'生成的选择项或帮助其来查找库文件和非标准的名字/地址一起来编程。
+     JAVA_HOME  JDK 根目录
+     JAVA_CPPFLAGS  JNI 目录
+     JAVA_JVM_LIBRARY libjvm.so 的完整路径
+     MAVEN_HOME  mvn 的根目录
+     PROTOBUF_JAR　在 prefixed builds　上完整的 protobuf jar　路径
+     PYTHON　指定使用哪个 Python 解析器
+     PYTHON_VERSION 已经安装并使用的 Python 版本号 例如，'2.3'。该字符串将追加到 Python 解析器
