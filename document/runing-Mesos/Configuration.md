@@ -154,9 +154,8 @@ mesos master 和 slave 可以通过命令行参数或环境变量来传递一系
      --recovery_slave_removal_limit=VALUE     针对故障转移，限制上的百分比的 slaves 可以从注册中移除并关机在重新注册的超时时间到了之后。 如果该限制被突破， master 将实行故障转移而不是移除 slaves.这可被用来针对生产环境提供安全保障。生产环境可能期望在 Master 故障转移过程中， 最多一定百分比的 slaves 将永久性的挂掉 (比如, 由于 rack-level 的故障)。设定该限制可以保证一个人需要参与进来当在该集群中一个非预期的大范围的 slave 故障发生。值: [0%-100%] (默认: 100%)
     --registry=VALUE          注册表持久化策略。可用选项有 'replicated_log','in_memory'（用于测试）。默认：replicated_log。
     --registry_fetch_timeout=VALUE 在操作被认为是一个失败后的为了从注册中提取数据的等待的时间间隔.(默认： 1mins)
-    --registry_store_timeout=VALUE Duration of time to wait in order to store data in the registry after which the operation is considered a failure. (default: 5secs)
-
---[no-]registry_strict Whether the Master will take actions based on the persistent information stored in the Registry. Setting this to false means that the Registrar will never reject the admission, readmission, or removal of a slave. Consequently, 'false' can be used to bootstrap the persistent state on a running cluster.
+    --registry_store_timeout=VALUE 等待的时间周期为了当操作被认为一个失败的时候将数据存储入注册机。 (默认：5secs)
+    --[no-]registry_strict    无论 Master 是否将基于注册机中存储的持久信息来草去行动。设定改值为 false 意味者 Whether the Master will take actions based on the persistent information stored in the Registry. Setting this to false means that the Registrar will never reject the admission, readmission, or removal of a slave. Consequently, 'false' can be used to bootstrap the persistent state on a running cluster.
 NOTE: This flag is *experimental* and should not be used in production yet. (default: false)
 
 --roles=VALUE A comma separated list of the allocation roles that frameworks in this cluster may belong to.
@@ -246,81 +245,62 @@ file:///etc/mesos/slave_whitelist
     --docker_sandbox_directory=VALUE 描述沙盒在容器中被映射到的绝对路径。（ 默认：  /mnt/mesos/sandbox ）。
     --docker_stop_timeout=VALUE 杀死实例后，在停止它之前 docker  需要等待的间隔时间 （ 默认： 0 Secs ）。
     --[no-]enforce_container_disk_quota 是否为容器启用磁盘限额。这个标记位用来为 ' posix/disk ' 隔离。 （ 默认: false ）。
-    --executor_environment_variables JSON 对象，代表传递到 executor 的环境变量， and thus subsequently task(s)  。默认情况下 executor 将继承 slave 的环境变量。例如：
-```
-{
-  "PATH": "/bin:/usr/bin",
-  "LD_LIBRARY_PATH": "/usr/local/lib"
-}
-```
-
---executor_registration_timeout=VALUE  挂起或者关闭前，等待 executor 注册 slave 的时间。（ 例如，60 S，3 mins 等 ）。默认为 1 MIN 。
-
---executor_shutdown_grace_period=VALUE 等待 executor 关闭的时间。( 例如, 60 S, 3 mins 等 )。默认为 5 S 。
-
---frameworks_home=VALUE 相对于 executor 的路径前缀的 URI 。
-
---gc_delay=VALUE 清理 executor 目录的延迟时间（ 例如，3 天 或 2 周 等 ）。注意，根据实际可用磁盘的情况，这个值可能会小些（ 默认：1 周 ）。
-
---gc_disk_headroom = VALUE 用于调整 executor 目录的最大磁盘空间。计算方法为 gc_delay * max(0.0, (1.0 - gc_disk_headroom - disk usage)) 每个 --disk_watch_interval 期间，gc_disk_headroom 都必须在 0.0 到 1.0 之间。（ 默认：0.1 ）。
-
---hadoop_home=VALUE Hadoop 的安装路径。
-
---hooks=VALUE A comma separated list of hook modules to be installed inside master.
-
---hostname=VALUE slave 的 hostname 。
-
---isolation = VALUE 隔离机制的使用。 例如  ' posix/cpu,posix/mem ', ' cgroups/cpu,cgroups/mem '  或者 network/port_mapping 及 'external' 或者使用 ***--modules*** 标记代替隔离模块。注意，这个标记只用于 Mesos Containerizer （ 默认：posix/cpu, posix/mem ）。
-
---launcher_dir=VALUE Mesos 二进制目录路径 （ 默认： /usr/local/lib/mesos ）。
-
---modules=VALUE 待加载的模块列表，并提供给内部的子系统。你也可以使用 file:///path/to/file 或者 /path/to/file 参数值格式从一个文件中读取值。使用 ***--modules="{...}"*** 指定模块内嵌的列表。
-JSON 文件例子：
-```
-{
-  "libraries": [
-    {
-      "file": "/path/to/libfoo.so",
-      "modules": [
-        {
-          "name": "org_apache_mesos_bar",
-          "parameters": [
-            {
-              "key": "X",
-              "value": "Y"
-            }
-          ]
-        },
-        {
-          "name": "org_apache_mesos_baz"
-        }
-      ]
-    },
-    {
-      "name": "qux",
-      "modules": [
-        {
-          "name": "org_apache_mesos_norf"
-        }
-      ]
-    }
-  ]
-}
-```
-
---oversubscribed_resources_interval=VALUE Slave 会定期向 master 更新自己有效的，可以分配的资源。（ 默认：15 S ）。
-
- 
---perf_duration=VALUE Duration of a perf stat sample 。持续时间必须比 perf_interval 少。默认为 10 S。
-
---perf_events=VALUE 当使用 perf_event  隔离的时候，List of command-separated perf events to sample for each container 。默认为 None。运行 ' perf list ' 命令查看所有事件。当在 PerfStatistics protobuf 中 reported 的时候，Event names are sanitized by downcasing 以及使用下划线代替连字符。 例如，cpu-cycles 变为 cpu_cycles。在 PerfStatistics protobuf 中可以看到所有名字。
-
---perf_interval = VALUE Interval between the start of perf stat samples. Perf samples are obtained periodically according to perf_interval and the most recently obtained sample is returned rather than sampling on demand。
-基于此原因，perf_interval 是独立的监视资源时间间隔的。（ 默认： 1 mins ）。
-
---qos_controller=VALUE The name of the QoS Controller to use for oversubscription.
-
---qos_correction_interval_min=VALUE The slave polls and carries out QoS corrections from the QoS Controller based on its observed performance of running tasks. 这些校正之间的最小间隔有此标记指定。 （ 默认： 0 secs ）。
+    --executor_environment_variables     JSON 对象展示必须要传递到 executor 和接下来的 task(s) 中的环境变量。默认情况下 executor 将继承 slave 的环境变量。例如：
+                                        ```
+                                        {
+                                          "PATH": "/bin:/usr/bin",
+                                          "LD_LIBRARY_PATH": "/usr/local/lib"
+                                        }
+                                        ```
+    --executor_registration_timeout=VALUE  executor 挂起或者关闭前，等待其注册 slave 的时间。（ 例如，60 S，3 mins 等 ）。默认为 1 MIN 。
+    --executor_shutdown_grace_period=VALUE 等待 executor 关闭的时间。( 例如, 60 S, 3 mins 等 )。默认为 5 S 。
+    --frameworks_home=VALUE                相对于 executor 的路径前缀的 URI 。
+    --gc_delay=VALUE                       清理 executor 目录的延迟时间（ 例如，3 天 或 2 周 等）。注意，根据实际可用磁盘的情况，这个值可能会小些（ 默认：1 周 ）。
+    --gc_disk_headroom = VALUE             用于调整 executor 目录的最大磁盘空间。计算方法为 gc_delay * max(0.0, (1.0 - gc_disk_headroom - disk usage)) 每个 --disk_watch_interval 期间，gc_disk_headroom 都必须在 0.0 到 1.0 之间。（ 默认：0.1 ）。
+    --hadoop_home=VALUE                    Hadoop 的安装路径。
+    --hooks=VALUE                          以逗号分隔的需要在 master 内部被安装的一系列钩子模块
+    --hostname=VALUE                       slave 的 主机名 。
+    --isolation = VALUE                    隔离机制的使用。 例如  ' posix/cpu,posix/mem ', ' cgroups/cpu,cgroups/mem '  或者 network/port_mapping 及 'external' 或者使用 ***--modules*** 标记位来代替隔离模块。注意，这个标记位只用于 Mesos Containerizer （ 默认：posix/cpu, posix/mem ）。
+    --launcher_dir=VALUE                   Mesos 二进制目录路径 （ 默认： /usr/local/lib/mesos ）。
+    --modules=VALUE                        待加载的模块列表，并提供给内部的子系统。你也可以使用 file:///path/to/file 或者 /path/to/file 参数值格式从一个文件中读取值。使用 ***--modules="{...}"*** 指定模块内嵌的列表。
+                                           JSON 文件例子：
+                                           ```
+                                           {
+                                             "libraries": [
+                                               {
+                                                 "file": "/path/to/libfoo.so",
+                                                 "modules": [
+                                                   {
+                                                     "name": "org_apache_mesos_bar",
+                                                     "parameters": [
+                                                       {
+                                                         "key": "X",
+                                                         "value": "Y"
+                                                       }
+                                                     ]
+                                                   },
+                                                   {
+                                                     "name": "org_apache_mesos_baz"
+                                                   }
+                                                 ]
+                                               },
+                                               {
+                                                 "name": "qux",
+                                                 "modules": [
+                                                   {
+                                                     "name": "org_apache_mesos_norf"
+                                                   }
+                                                 ]
+                                               }
+                                             ]
+                                           }
+                                           ```
+    --oversubscribed_resources_interval=VALUE  Slave 会定期向 master 更新自己有效的，可以分配的资源。（ 默认：15 S ）。
+    --perf_duration=VALUE          一个 perf stat 例子的执行周期。持续时间必须比 perf_interval 少。默认为 10 S。
+    --perf_events=VALUE            一系列命令分离的 perf 事件当使用 perf_event 分离器时候来精简每个容器。默认为 None。运行 ' perf list ' 命令查看所有事件。当在 PerfStatistics protobuf 中被通告时候事件名称将被悲观性的消除并使用下划线代替连字符。 例如，cpu-cycles 变为 cpu_cycles。在 PerfStatistics protobuf 中可以看到所有名字。
+    --perf_interval = VALUE        多个 perf stat 例子启动间的时间间隔。Perf 示例基于 perf_interval 周期性的被获取并且最近获取的例子将返回而不是按需简化。基于此原因，perf_interval 为独立的资源监控时间间隔。（ 默认： 1 mins ）。
+    --qos_controller=VALUE         Qos 控制器的名称被用来超额订阅。
+    --qos_correction_interval_min=VALUE   The slave polls and carries out QoS corrections from the QoS Controller based on its observed performance of running tasks. 这些校正之间的最小间隔有此标记指定。 （ 默认： 0 secs ）。
 
 --recover = VALUE 是否要恢复状态更新以及重新连接 old executor 。" recover " 是有效值。reconnect : 重新连接任何活着的 old executor。 cleanup : 杀死并退出所有活着的 old exetuor 。当你要做一个不兼容的 slave　活着 executor 升级时，可以用这个选项。注意：当 slave 没有设置 checkpointed 时，recovery 不能执行，并且  slave 作为一个新的 slave 注册到 master。 ( 默认： reconnect )
 
@@ -393,32 +373,21 @@ JSON 文件例子：
 
 --disable-python-dependency-install 在 make install 期间 python packages 已经安装时，没有外部依赖正在下载或者安装。
 
-####配置脚本有以下可选的 packages 选项：
+####配置脚本有以下的标志位针对可选的包选项：
 
-    --with-gnu-ld 假设 C 编译器使用 GNU ld [ 默认: no ]
-    --with-sysroot=DIR 在 DIR 中搜索依赖库 ( 或者如果编译器的 sysroot 没有指定 )
-
---with-zookeeper[=DIR]	excludes building and using the bundled ZooKeeper package in lieu of an installed version at a location prefixed by the given path
-
---with-leveldb[=DIR]	excludes building and using the bundled LevelDB package in lieu of an installed version at a location prefixed by the given path
-
---with-glog[=DIR]	excludes building and using the bundled glog package in lieu of an installed version at a location prefixed by the given path
-
---with-protobuf[=DIR]	excludes building and using the bundled protobuf package in lieu of an installed version at a location prefixed by the given path
-
---with-gmock[=DIR]	excludes building and using the bundled gmock package in lieu of an installed version at a location prefixed by the given path
-
-     --with-curl=[=DIR] 指定在哪里找到 curl library
-
---with-sasl=[=DIR] 指定在哪里找到 sasl2 library
-
---with-zlib=[=DIR] 指定在哪里找到 zlib library
-
---with-apr=[=DIR] 指定在哪里找到 apr-1 library
-
---with-svn=[=DIR] 指定在哪里找到 svn-1 library
-
---with-network-isolator 建立网络隔离
+    --with-gnu-ld            假设 C 编译器使用 GNU ld [ 默认: no ]
+    --with-sysroot=DIR       在 DIR 中搜索依赖库 ( 或者如果编译器的 sysroot 没有指定 )
+    --with-zookeeper[=DIR]	  不包含构建和已构建的 ZooKeeper 包来替代在一个给定的目录为前缀名的地址下的已安装版本。
+    --with-leveldb[=DIR]	    不包含构建的和使用与 LevelDB 绑定的包来替代在一个给定的目录为前缀名的地址下的已安装版本。
+    --with-glog[=DIR]	       不包含构建的和使用与 glog 绑定的包来替代在一个给定的目录为前缀名的地址下的已安装版本。
+    --with-protobuf[=DIR]	   不包含构建的和使用与 protobuf 绑定的包来替代在一个给定的目录为前缀名的地址下的已安装版本。
+    --with-gmock[=DIR]	      不包含构建的和使用与 gmock 绑定的包来替代在一个给定的目录为前缀名的地址下的已安装版本
+    --with-curl=[=DIR] 指定在哪里找到 curl 库
+    --with-sasl=[=DIR] 指定在哪里找到 sasl2 库
+    --with-zlib=[=DIR] 指定在哪里找到 zlib 库
+    --with-apr=[=DIR] 指定在哪里找到 apr-1 库
+    --with-svn=[=DIR] 指定在哪里找到 svn-1 库
+    --with-network-isolator 建立网络隔离
 
 ####一些 influential 的环境变量配置脚本：
 使用这些变量来重写 'configure'生成的选择项或帮助其来查找库文件和非标准的名字/地址一起来编程。 
