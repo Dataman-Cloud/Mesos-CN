@@ -11,148 +11,61 @@ Slave 恢复是 Mesos 的一个特色功能：
 #How does it work?
 #工作原理
 
-Slave recovery works by having the slave checkpoint enough information (e.g., Task Info, Executor Info, Status Updates) about the running tasks and executors to local disk. Once the slave and the framework(s) enable checkpointing, any subsequent slave restarts would recover the checkpointed information and reconnect with the executors. Note that if the host running the slave process is rebooted all the executors/tasks are killed.
+Slave 可以定期将检查点（check point）记录到本地硬盘，检查点的内容包括正在运行的 tasks 和  executors（包括 Task 信息，Executor  信息， 更新状态等）。一旦在 slave 和框架上激活了检查点特性，在他们重启的时候会自动读取既有的检查点信息，重新连接上还在运行的 executor。当然如果之前宿主机整个系统被重启过，那所有 executors/task 都不存在了。
 
-Slave 恢复工作是通过读取  slave  检查点检查关于运行任务和  executors  在本地磁盘的信息（比如，Task  信息，Executor  信息， 更新状态）。一旦  slave  和  frameworks  被检查， 随后重启的 slave 能够发现检查点的信息和连接到  executor。注意的是， 如果主机正在运行的  slave  进程重新启动， 其中所有的  executors/tasks  将被杀掉。
-
-NOTE: To enable recovery the framework should explicitly request checkpointing. Alternatively, a framework that doesn’t want the disk i/o overhead of checkpointing can opt out of checkpointing.
-
-注意：要使得framework恢复应该请求检查点。另外，不希望本地磁盘的开销
+注意：如果要启用 framework 恢复功能，必须先手动激活检查点特性。如果为了避免额外 I/O 开销，也可以手动关闭检查点特性。
 
 
-#启用 slave 检查点功能
+#激活 slave 检查点特性
 
-注意：从 Mesos 版本 0.22.0 开始，Slave 会自动启动检查点功能。
+注意：从 Mesos 版本 0.22.0 开始，Slave 会自动激活检查点特性。
 
+作为这个特性的一部分， 在 slave 中添加了四种新的标记。
 
-As part of this feature, 4 new flags were added to the slave.
-
-作为这个特性的一部分， 4种新的标记被添加到  slave  中。
-
+- `checkpoint`：是否将 slave 和 framework 的检查点信息保存到磁盘。[默认值：true]
 
 
-
-- `checkpoint` : Whether to checkpoint slave and frameworks information to disk [Default: true].
-
-
-
-- `checkpoint`：是否检查点  slave  和  framework  信息到磁盘中。[默认值： true]
-
-
-
-
- - This enables a restarted slave to recover status updates and reconnect with (–recover=reconnect) or kill (–recover=cleanup) old executors.
-NOTE: From Mesos 0.22.0 this flag will be removed as it will be enabled for all slaves.
-   
-
-
- - 这使得一个重启的  slave  能恢复状态更新和重新连接（`–recover=reconnect`）或者杀掉（`–recover=cleanup`）旧的  executors。
-     
- 
-
-       -  NOTE: From Mesos 0.22.0 this flag will be removed as it will be enabled for all slaves.
-
+- 重启的 slave 恢复状态更新之后，重新连接（`–recover=reconnect`）或者杀掉（`–recover=cleanup`）旧的  executor。
        -  注意： 从  Mesos  版本0.22.0开始， 这个标记也将能够删除所有的 slaves。
 
+- `strict` ：在  strict  模式是否允许恢复。[默认值： true]
 
+ - 如果 strict=true, 在恢复过程中的任何错误都将被认为是致命的。
 
+ - 如果 strict=false,  在恢复期间的任何错误（比如：在检查点数据）都将被忽视， 以便尽可能多地恢复状态。
 
-- `strict` : Whether to do recovery in strict mode [Default: true].
+- `recover`： 是否要恢复状态更新，以及重新连接旧的 executors。 [默认值：reconnect]
 
- 
+ -     如果 recover=reconnect , 重新连接任何存活的 executor。
 
-- `strict` ：在  strict  模式是否能够恢复。[默认值： true]
-
-
-
- - If strict=true, any and all recovery errors are considered fatal.
-
-
- - 如果  strict=true  , 任何和所有恢复错误被认为是致命的。
-
- - If strict=false, any errors (e.g., corruption in checkpointed data) during recovery are ignored and as much state as possible is recovered.
-
- - 如果 strict=false,  在恢复期间一些错误（比如：在检查点数据）被忽视， 尽可能多的状态恢复。
-
-
-
-- `recover` : Whether to recover status updates and reconnect with old executors[Default: reconnect]. 
-- `recover`： 是否要恢复状态更新和重新连接旧的  executors 。 [默认值： reconnect]
-
-
-
-  -   If recover=reconnect, Reconnect with any old live executors.
-   
- -     如果 recover=reconnect , 重新连接任何旧的存活的 executors。
-
-  - If recover=cleanup, Kill any old live executors and exit. Use this option when doing an incompatible slave or executor upgrade!).
-
-   - 如果  recover=cleanup, 杀掉或者退出存活旧的  executors 。  当执行一个不兼容的  slave  或者  executor  升级时用这个选项。
-
-
+   - 如果  recover=cleanup, 杀掉所有还存活的 executor，然后退出。这个功能用于 slave 或者  executor 大版本升级之前的环境清理工作。
 
 
       - NOTE: If no checkpointing information exists, no recovery is performed and the slave registers with the master as a new slave.
 
-      
 
-      - 注意：  如果没有检查点信息存在,  不执行恢复和注册  master  的  slave  作为一个新的  slave。
-
+      - 注意：如果不存在检查点信息, slave 重启的时候不会进行恢复，而是和 master 注册为一个新的 slave。
 
 
-- `recovery_timeout` : Amount of time allotted for the slave to recover [Default: 15 mins].
+- `recovery_timeout` ： 给 slave 恢复所分配时间。[默认值：15 mins]
 
-
-
-- `recovery_timeout` ： 给  slave  恢复分配时间。[默认值： 15 mins]
-
-
- 
-  - If the slave takes longer than recovery_timeout to recover, any executors that are waiting to reconnect to the slave will self-terminate.
-
-   
-
-   - 如果 slave 恢复的时间比`recovery_timeout`长,  正在等待连接到  slave 的任何  executors  将自己终止。
-
-
-
-      - NOTE: This flag is only applicable when `--checkpoint` is enabled.
-       
-
-      - 注意：这个标记仅适用在`--checkpoint`是  enable  的时。
-
+   - 如果 slave 重启后用于恢复的时间超过了 `recovery_timeout` 限制, 所有正在等待连接 slave 的 executor 将自行销毁。
+      - 注意：这个标记仅适用于已经设置了 `--checkpoint` 时。
 
 NOTE: If none of the frameworks have enabled checkpointing, executors/tasks of frameworks die when the slave dies and are not recovered.
 
-注意：如果一个框架没有检查点， 当  slave  挂掉和没有恢复时，框架的executors/tasks也挂掉。
+注意：如果所有的框架都没有设置检查点，当 slave 挂掉并且重启无法恢复时，框架的 executor/task 也会挂掉。
 
+一个被重启的  slave  应该在一定时限内重新在 master 注册（目前是75秒）。如果这个 slave 重新注册的间隔超过了这个时限， master  将杀掉这个 slave，进而杀掉这个 slave 上全部还在运行的 executor/task。因此，强烈推荐将 slave 重启这个操作变成自动触发（例如使用 monit 命令来监控并重启服务）。
 
-A restarted slave should re-register with master within a timeout (currently, 75s). If the slave takes longer than this timeout to re-register, the master shuts down the slave, which in turn shuts down any live executors/tasks. Therefore, it is highly recommended to automate the process of restarting a slave (e.g, using monit).
+要查询 Slave 启动选项的完整列表，请在命令行运行  `./mesos-slave.sh –help`
 
-一个重新开始的  slave  应该重新注册  master（目前是75秒）。如果这个  slave  花费在注册时时间比这个时间长， master  将杀掉  这个  slave， 进而关闭任何存活的  executors/tasks。因此， 强烈推荐自动化重新启动一个  slave  的进程。
+#激活 framework 检查点特性
+作为这个特性的一部分，更新了的 `FrameworkInfo` 选项包括一个可选的 `checkpoint` 字段。当 framework 想激活检查点特性，应该在注册到 master 之前设置 `FrameworkInfo.checkpoint=True`。
 
-For the complete list of slave options: `./mesos-slave.sh –help`
-
-slave  选项的完整列表： `./mesos-slave.sh –help`
-
-#Enabling framework checkpointing
-# framework 检查点
-
-As part of this feature, `FrameworkInfo` has been updated to include an optional `checkpoint` field. A framework that would like to opt in to checkpointing should set `FrameworkInfo.checkpoint=True` before registering with the master.
-
-作为此功能的一部分，`FrameworkInfo`  已经更新包括一个可选的  `checkpoint`  的字段。一个framework想选择检查点，应该设置  `FrameworkInfo.checkpoint=True`  在 注册  master  之前。
-
-
-
-- NOTE: Frameworks that have enabled checkpointing will only get offers from checkpointing slaves. So, before setting `checkpoint=True` on FrameworkInfo, ensure that there are slaves in your cluster that have enabled checkpointing. Because, if there are no checkpointing slaves, the framework would not get any offers and hence cannot launch any tasks/executors!
-
-
-
-- 注意: 已经启用检查点的  Frameworks 将只能从 检查点的 slave  得到  offer 。 所以， 在  FrameworkInfo设置  `checkpoint=True`  之前， 确定在你的集群中有检查点的  slave。因为， 如果没有检查点的  slaves， 这个  framework 将得不到任何  offer， 不能发布任何  tasks/executors!
+- 注意: 已经启用检查点的 frameworks 将只能从同样启用了检查点的 slave 节点得到资源 offer。所以在 frameworkInfo 中设置  `checkpoint=True` 之前，请确定集群中有激活了检查点特性的 slave！如果不存在（激活此特性的） slave，那么这个 framework 将得不到任何资源 offer，就不能发布任何 task/executor!
 
 #Upgrading to 0.14.0
 #升级到 0.14.0
 
-if you want to upgrade a running Mesos cluster to 0.14.0 to take advantage of slave recovery please follow the [upgrade instructions](http://mesos.apache.org/documentation/latest/upgrades/).
-
-如果你希望利用  slave 恢复升级一个正在运行的 Mesos 集群到0.14.0 ，请查阅[upgrade instructions](http://mesos.apache.org/documentation/latest/upgrades/).
+为了体验 slave 恢复特性，你希望将一个正在运行的 Mesos 集群升级到 0.14.0，请查阅 [upgrade instructions] (http://mesos.apache.org/documentation/latest/upgrades/).
