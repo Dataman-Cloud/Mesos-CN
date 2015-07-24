@@ -1,18 +1,18 @@
 ###External Containerizer
-- EC = external containerizer 。 mesos slave 的一部分，提供 API ，通过可执行的外部插件来支持 containerizing ( 集装箱化 )。
-- ECP = external containerizer 程序。 一个通过 containering system 接口实现了真实的集装箱化的可执行外部插件 。 ( 例如 Docker )
+- EC = 外部 containerizer 。 mesos slave 的一部分其提供 API ，通过可执行的外部插件来支持 containerizing ( 集装箱化 )。
+- ECP = 外部 containerizer 程序。 一个通过 containering system 接口实现了真正的集装箱化的可执行外部插件 。 ( 例如 Docker )
  
-###Containerizing ( 集装箱化 )
+###Containerizing 
 
-####General Overview（ 总体概述 ）
+####总体概述 
 EC 调用 ECP 作为一个 shell 进程，将 shell 中的命令作为参数传递给 ECP 执行 。 额外的数据则通过 stdin 和 stdout 传递。
 
 
-ECP 会对所有它能够处理的命令返回一个 " 0 " ,非 " 0 " 状态码则表示发出的错误信号。下面你会找到必须在 ECP 上实现的命令的概述，以及它们的调用机制。
+ECP 会对所有它能够处理的命令返回一个 " 0 "状态码 ,非 " 0 " 状态码则表示发出的错误信号。下面你会找到必须在 ECP 上实现的命令的概述，以及它们的调用机制。
 
 ECP 有望使用 stderr 来显示更多的调试信息和状态信息。这些信息记录到一个文件中。
 
-####Call and communication scheme ( 调用与通信方案 )
+#### 调用与通信方案
 
 接口描述了一个 ECP 具有通过命令调用来实现的功能。在 ECP 上的许多调用还将 protobuf 消息通过 stdin 传递。 在 ECP ，有些调用期望通过 strout 提供一个 protobuf 消息返回。
 
@@ -32,11 +32,11 @@ ECP 有望使用 stderr 来显示更多的调试信息和状态信息。这些�
 
 * ***recover***
 
-###Command Ordering (命令顺序)
+###命令顺序
 
 ####不要擅自假设
 
-命令几乎可以以任意顺序执行，只有一个例外。当启动一个 task 时， EC 将确保 ECP 第一个接收到指定的 container 。所有的命令都需要排在后边，直到 ECP 返回启动。
+命令几乎可以以任意顺序执行，对此只有一个例外： 当启动一个 task 时， EC 将确保 ECP 首先在指定的容器上接收一个 launch 。所有的命令都需要排在后边，直到  luanch 从 ECP 能够返回。
 
 ###用例
 
@@ -51,14 +51,14 @@ ECP 有望使用 stderr 来显示更多的调试信息和状态信息。这些�
 
 * 随着调用，ECP 会通过 stdin 接受到一个 " containerizer::Wait "  protobuf 消息。
 
-* ECP 现在阻塞，直到收到启动命令。启动命令可以通过 ECP 中的 waitpid 实现。
+* ECP 现在阻塞，直到再次收到启动命令。启动命令可以通过 ECP 中的 waitpid 实现。
 
 * 一但收到命令， ECP 应该通过 strout 提供一个 " containerizer::Termination  " protobuf 消息， 返回给 EC 。
 
-###Container 生命周期图
+###容器 生命周期图
 
 ####Container 启动
-
+http://mesos.apache.org/documentation/latest/external-containerizer/images/ec_launch_seqdiag.png?raw=true
 ####Container 运行
 
 ####资源限制
