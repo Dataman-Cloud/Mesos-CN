@@ -40,6 +40,6 @@
 	    * [SSL模式与普通模式接入认证](document/Marathon/SSL and Basic Access Authentication.md)
 	    * [服务发现与负载均衡](document/Marathon/Service-Discovery.md)
     * [Bmaboo 官方用户文档中文版](resource)
-	    * [Bmaboo 文档](document/Bmaboo/Bmaboo.md)
-* [最佳实践](best-practices)
-* [Mesos优秀文章](excellent—article)
+	    * Bmaboo 文档
+* [最佳实践]()
+* [Mesos优秀文章]()
