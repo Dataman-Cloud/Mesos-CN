@@ -9,7 +9,7 @@ Mesos 在 0.20.0 版本增加了给 framewrok 的授权支持。
 3.  经过授权的 ***principals*** 通过 “/shutdown” HTTP endpoint 来关闭 frameworks。
 
 ###ACLs
-授权通过 Access Control Lists (ACLs) 实现。在上述三点中，都有相应的 ACL(s)，可以通过它来限制访问。 ALCs 可以通过 JSON 格式建立。
+授权通过访问控制列表 (ACLs) 实现。在上述三点中，都有相应的 ACL(s)，可以通过它来限制访问。 ALCs 可以通过 JSON 格式建立。
 
 每个 ACL 指定一组 ***Subjects*** ，可以在一组 ***Objects*** 上执行 ***action*** 。
 
@@ -27,7 +27,7 @@ Mesos 在 0.20.0 版本增加了给 framewrok 的授权支持。
 
 目前支持的 ***Objects*** 有：
 
-1. “roles” ：Resource roles that framework can register with (used by “register_frameworks” action)
+1. “roles” ：资源角色其可以被 framework 所注册 (used by “register_frameworks” action)
 2. “users” ：Unix 用户以 " user " 模式启动 task / executor。 (used by “run_tasks” action)
 3. “framework_principals” ： 框架主体可以通过 HTTP POST 关闭 （ used by “shutdown_frameworks” action ）
 
@@ -167,8 +167,6 @@ Mesos master 检查 ACLs 来验证一个请求是否被授权。
 ###启动授权
 作为这个功能的一部分，有一个新的 flag 需要添加到 master。
 
-* ***acls*** 该值可以是 JSON 字符串格式的 ACLs ,或者是包含用于授权的 JSON 格式的 ACL 文件路径。 路径可以是 ‘ file:///path/to/file ’ 或者 ‘ /path/to/file ’ 。 See the ACLs protobuf in mesos.proto for the expected format 。
-
-
+* ***acls*** 该值可以是 JSON 字符串格式的 ACLs ,或者是包含用于授权的 JSON 格式的 ACL 文件路径。 路径可以是 ‘ file:///path/to/file ’ 或者 ‘ /path/to/file ’ 。 更多的期望格式请参考 mesos.proto 中的 ACLs protobuf。
 
 
