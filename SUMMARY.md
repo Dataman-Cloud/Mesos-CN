@@ -1,9 +1,10 @@
 * **Mesos 官方文档**
-    * [Mesos入门](primer/Mesos-of-Getting-Started.md)
-    * [Mesos基础](document/Mesos-Fundamentals)
+    * Mesos入门
+       * [Mesos入门](primer/Mesos-of-Getting-Started.md)
+    * Mesos基础
        * [Mesos 架构](OverView/Mesos-Architecture.md)
        * Video and Slides of Mesos Presentations
-    * [运行Mesos](document/runing-Mesos)
+    * 运行Mesos
        * [configuration](document/runing-Mesos/Configuration.md)
        * [Mesos Containerizer](document/runing-Mesos/Mesos-Containerizer.md)
        * [Docker Containerizer](document/runing-Mesos/Docker-Containerizer.md)
@@ -17,13 +18,13 @@
        * Network Monitoring
        * [Slave Recovery](document/runing-Mesos/Slave-Recovery.md)
        * [Tools](document/runing-Mesos/Tools.md)
-    * [运行Mesos框架](document/Running-mesos-Frameworks)
+    * 运行 Mesos 框架
        * [建立在 Mesos 上的软件项目](document/Running-mesos-Frameworks/Software-projects-built-on-Mesos.md)
-    * [使用Meso框架开发](document/Developing-Mesos-Frameworks)
-    * [Mesos Modeules](document/Mesos-Modeules)
+    * 使用Meso框架开发(TBD)
+    * Mesos Modeules
        * [Mesos Modules](document/Mesos-Modeules/Mesos-Modules.md)
-    * [Mesos贡献](document/Contributing-to-Mesos)
-    * [关于Mesos更多信息](document/More-info-about-Mesos)
+    * Mesos贡献
+    * 关于Mesos更多信息
 	    * [Mesosphere-of-Mesos-DNS](OverView/Mesosphere-of-Mesos-DNS.md)
 	    * [Mesos-dns](OverView/mesos-dns.md)
 	    * [Mesos-DNS on Google Compute Platform](OverView/Mesos-DNS-on-Google-Compute-Platform.md)
