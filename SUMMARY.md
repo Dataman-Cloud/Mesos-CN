@@ -1,10 +1,5 @@
-# Summary
-
-* [简介](OverView/README.md)
-    * [Mesos简介](OverView/Introduction-of-Mesos.md)
-* [入门]
+* **Mesos 官方文档**
     * [Mesos入门](primer/Mesos-of-Getting-Started.md)
-* [Meso文档]
     * [Mesos基础](document/Mesos-Fundamentals)
        * [Mesos 架构](OverView/Mesos-Architecture.md)
        * Video and Slides of Mesos Presentations
@@ -33,13 +28,14 @@
 	    * [Mesos-dns](OverView/mesos-dns.md)
 	    * [Mesos-DNS on Google Compute Platform](OverView/Mesos-DNS-on-Google-Compute-Platform.md)
 	    * [spark-on-mesos](OverView/spark-on-mesos.md)
-* [资源]
-    * [Marathon 官方用户文档中文版](resource)
-	    * [设置与运行Marathon](document/Marathon/Marathon.md)
-	    * [在虚拟机中开发Marathon](document/Marathon/developing-vm.md)
-	    * [SSL模式与普通模式接入认证](document/Marathon/SSL and Basic Access Authentication.md)
-	    * [服务发现与负载均衡](document/Marathon/Service-Discovery.md)
-    * [Bmaboo 官方用户文档中文版](resource)
-	    * Bmaboo 文档
-* [最佳实践]()
-* [Mesos优秀文章]()
+
+* **Marathon 官方用户文档中文版**
+    * [设置与运行Marathon](document/Marathon/Marathon.md)
+    * [在虚拟机中开发Marathon](document/Marathon/developing-vm.md)
+    * [SSL模式与普通模式接入认证](document/Marathon/SSL and Basic Access Authentication.md)
+    * [服务发现与负载均衡](document/Marathon/Service-Discovery.md)
+* **Bmaboo 官方用户文档中文版**
+    * Bmaboo 文档
+* **最佳实践**
+* **Mesos 优秀文章**
+    * [Mesos简介](OverView/Introduction-of-Mesos.md)
