@@ -1,25 +1,25 @@
 # Summary
 
 * [简介](OverView/README.md)
-    * [Mesos简介 - MY - review](OverView/Introduction-of-Mesos.md)
+    * [Mesos简介](OverView/Introduction-of-Mesos.md)
 * [入门]
-    * [Mesos入门 - MY - review](primer/Mesos-of-Getting-Started.md)
+    * [Mesos入门](primer/Mesos-of-Getting-Started.md)
 * [Meso文档]
     * [Mesos基础](document/Mesos-Fundamentals)
-       * [Mesos 架构 - my - review](OverView/Mesos-Architecture.md)
-       * [Video and Slides of Mesos Presentations ???]
+       * [Mesos 架构](OverView/Mesos-Architecture.md)
+       * Video and Slides of Mesos Presentations
     * [运行Mesos](document/runing-Mesos)
-       * [configuration - MY - review](document/runing-Mesos/Configuration.md)
+       * [configuration](document/runing-Mesos/Configuration.md)
        * [Mesos Containerizer](document/runing-Mesos/Mesos-Containerizer.md)
        * [Docker Containerizer](document/runing-Mesos/Docker-Containerizer.md)
-       * [External Containerizer - MY -review](document/runing-Mesos/External-Containerizer.md)
-       * [Framework Authorization - MY -review](document/runing-Mesos/Framework-Authorization.md)
-       * [Framework Rate Limiting - MY -review](document/runing-Mesos/Framework-Rate-Limiting.md)
+       * [External Containerizer](document/runing-Mesos/External-Containerizer.md)
+       * [Framework Authorization](document/runing-Mesos/Framework-Authorization.md)
+       * [Framework Rate Limiting](document/runing-Mesos/Framework-Rate-Limiting.md)
        * [日志与调试](document/runing-Mesos/Mesos-of-Debug-and-Log.md)
        * [High Availability](document/runing-Mesos/Mesos-High-Availability-Mode.md)
-       * [Operational Guide - jp - review](document/runing-Mesos/Operational Guide.md)
-       * [Monitoring - jp - review](document/runing-Mesos/Mesos-Observability-Metrics.md)
-       * [Network Monitoring - jp - review](document/runing-Mesos/Network-Monitoring.md)
+       * Operational Guide
+       * [Monitoring](document/runing-Mesos/Mesos-Observability-Metrics.md)
+       * Network Monitoring
        * [Slave Recovery](document/runing-Mesos/Slave-Recovery.md)
        * [Tools](document/runing-Mesos/Tools.md)
     * [运行Mesos框架](document/Running-mesos-Frameworks)
@@ -29,10 +29,10 @@
        * [Mesos Modules](document/Mesos-Modeules/Mesos-Modules.md)
     * [Mesos贡献](document/Contributing-to-Mesos)
     * [关于Mesos更多信息](document/More-info-about-Mesos)
-	    * [Mesosphere-of-Mesos-DNS -MY -review](OverView/Mesosphere-of-Mesos-DNS.md)
-	    * [Mesos-dns -MY -review](OverView/mesos-dns.md)
-	    * [Mesos-DNS on Google Compute Platform -MY -review](OverView/Mesos-DNS-on-Google-Compute-Platform.md)
-	    * [spark-on-mesos -MY -review](OverView/spark-on-mesos.md)
+	    * [Mesosphere-of-Mesos-DNS](OverView/Mesosphere-of-Mesos-DNS.md)
+	    * [Mesos-dns](OverView/mesos-dns.md)
+	    * [Mesos-DNS on Google Compute Platform](OverView/Mesos-DNS-on-Google-Compute-Platform.md)
+	    * [spark-on-mesos](OverView/spark-on-mesos.md)
 * [资源]
     * [Marathon 官方用户文档中文版](resource)
 	    * [设置与运行Marathon](document/Marathon/Marathon.md)
