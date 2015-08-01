@@ -42,4 +42,4 @@
     * [Mesos简介](OverView/Introduction-of-Mesos.md)
     * [Autodesk如何使用Mesos来实现自己的PaaS云平台](Excellent-article/putting-mesos-through-its_paces.md)
 * **Mesos 最新版本发布**
-    * Mesos 0.23版本发布
+    * [Mesos 0.23版本发布](Release/mesos-023-released.md)
