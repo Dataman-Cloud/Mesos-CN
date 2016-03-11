@@ -159,6 +159,7 @@ Mesos 可以运行在 Linux (64位)和 Mac OS X（64位）。如果要从源代�
 	$ sudo yum install -y apache-maven python-devel java-1.8.0-openjdk-devel zlib-devel libcurl-devel openssl-devel cyrus-sasl-devel cyrus-sasl-md5 apr-devel subversion-devel apr-util-devel
 
 ####构建 Mesos
+
 ```
 	# Change working directory.
     $ cd mesos
@@ -172,7 +173,9 @@ Mesos 可以运行在 Linux (64位)和 Mac OS X（64位）。如果要从源代�
     $ ../configure
     $ make
 ```
-为了加快构建以及减少冗长的 log ，你可以在 ***make*** 命令后添加 ***-j \<number of cores\> V=0***
+
+为了加快构建以及减少冗长的 log ，你可以在 `make` 命令后添加 `-j \<number of cores\> V=0`
+
 ```
 	# Run test suite.
     $ make check
@@ -180,8 +183,11 @@ Mesos 可以运行在 Linux (64位)和 Mac OS X（64位）。如果要从源代�
     # Install (Optional).
     $ make install
 ```
+
 ####示例
-Mesos 包含了用 Java , C++ , Python 写的 frameworks 示例。
+
+Mesos 包含了用 Java , C++ , Python 写的 frameworks 示例。frameworks 示例的二进制文件只有在运行了`make check`之后才可用。
+
 ```
  	# Change into build directory.
     $ cd build
@@ -204,6 +210,6 @@ Mesos 包含了用 Java , C++ , Python 写的 frameworks 示例。
     # Run Python framework (Exits after successfully running some tasks.).
     $ ./src/examples/python/test-framework 127.0.0.1:5050
 ```
-注意：如果你要构建一个 frameworks 示例，需要确保你所构建的测试程序执行过 ***make check***
+*注意：这些示例假设你是在本地机器上运行 Mesos 。但在生产环境（如 AWS ）中，按照上面的示例操作，你将无法访问 Mesos 的 web 界面。如果想访问 Mesos 页面，你需要在启动 Mesos Master 时为主机分配一个真实 IP 地址，并确保你的防火墙打开了 5050 端口的外部访问权限。*
 
 >本篇内容翻译自[http://mesos.apache.org/gettingstarted/](http://mesos.apache.org/gettingstarted/)
