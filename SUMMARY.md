@@ -2,7 +2,7 @@
     * [Mesos入门](primer/Mesos-of-Getting-Started.md)
     * Mesos基础
        * [Mesos 架构](OverView/Mesos-Architecture.md)
-       * Video and Slides of Mesos Presentations
+       * [Mesos 演示的相关视频和PPT](http://mesos.apache.org/documentation/latest/presentations/)
     * 运行Mesos
        * [configuration](document/runing-Mesos/Configuration.md)
        * [Mesos Containerizer](document/runing-Mesos/Mesos-Containerizer.md)
