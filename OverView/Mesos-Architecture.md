@@ -28,4 +28,4 @@ Master 使用 Resource Offers 实现跨应用细粒度资源共享，如 cpu、�
 
 你也可以从这里了解更多的 Mesos 架构：[Mesos技术文档](http://mesos.berkeley.edu/mesos_tech_report.pdf)
 
->本篇内容翻译自[http://mesos.apache.org/documentation/latest/mesos-architecture/](http://mesos.apache.org/documentation/latest/mesos-architecture/)
+>本篇内容翻译自[http://mesos.apache.org/documentation/latest/architecture/](http://mesos.apache.org/documentation/latest/architecture/)
