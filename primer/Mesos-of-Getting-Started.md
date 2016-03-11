@@ -42,59 +42,83 @@ Mesos 可以运行在 Linux (64位)和 Mac OS X（64位）。如果要从源代�
 	# Install other Mesos dependencies.
 	$ sudo apt-get -y install build-essential python-dev python-boto libcurl4-nss-dev libsasl2-dev libsasl2-modules maven libapr1-dev libsvn-dev
 
-####Mac OS X Yosemite
-以下是在 Mac OS X Yosemite下的说明。如果您使用不同的版本，请下载相应的软件包。
-```
- 	# Install Command Line Tools.
-    $ xcode-select --install
+####Mac OS X Yosemite 和 El Capitan
 
-    # Install Homebrew.
-    $ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+以下是在 Mac OS X Yosemite 和 El Capitan 下的安装说明。如果您使用不同的版本，请下载相应的软件包。
 
-    # Install libraries.
-    $ brew install autoconf automake libtool subversion maven
-```
+	# Install Command Line Tools.
+	$ xcode-select --install
+
+	# Install Homebrew.
+	$ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+	# Install Java.
+	$ brew install Caskroom/cask/java
+
+	# Install libraries.
+	$ brew install wget git autoconf automake libtool subversion maven
+
+*注：当你从 Yosemite 升级到 El Capitan ，请在升级后重新运行 `xcode-select --install`。*
+
 ####CentOS 6.6
 以下是在 CentOS 6.6版本下的说明。如果您使用不同的版本，请下载相应的软件包。
-```
-	# Install a few utility tools
-    $ sudo yum install -y tar wget which
 
-    # 'Mesos > 0.21.0' requires a C++ compiler with full C++11 support,
-    # (e.g. GCC > 4.8) which is available via 'devtoolset-2'.
-    # Fetch the Scientific Linux CERN devtoolset repo file.
-    $ sudo wget -O /etc/yum.repos.d/slc6-devtoolset.repo http://linuxsoft.cern.ch/cern/devtoolset/slc6-devtoolset.repo
+	# Install a recent kernel for full support of process isolation.
+	$ sudo rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+	$ sudo rpm -Uvh http://www.elrepo.org/elrepo-release-6-6.el6.elrepo.noarch.rpm
+	$ sudo yum --enablerepo=elrepo-kernel install -y kernel-lt
 
-    # Import the CERN GPG key.
-    $ sudo rpm --import http://linuxsoft.cern.ch/cern/centos/7/os/x86_64/RPM-GPG-KEY-cern
+	# Make the just installed kernel the one booted by default, and reboot.
+	$ sudo sed -i 's/default=1/default=0/g' /boot/grub/grub.conf
+	$ sudo reboot
 
-    # Fetch the Apache Maven repo file.
-    $ sudo wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
+	# Install a few utility tools. This also forces an update of `nss`,
+	# which is necessary for the Java bindings to build properly.
+	$ sudo yum install -y tar wget git which nss
 
-    # 'Mesos > 0.21.0' requires 'subversion > 1.8' devel package, which is
-    # not available in the default repositories.
-    # Add the WANdisco SVN repo file: '/etc/yum.repos.d/wandisco-svn.repo' with content:
+	# 'Mesos > 0.21.0' requires a C++ compiler with full C++11 support,
+	# (e.g. GCC > 4.8) which is available via 'devtoolset-2'.
+	# Fetch the Scientific Linux CERN devtoolset repo file.
+	$ sudo wget -O /etc/yum.repos.d/slc6-devtoolset.repo http://linuxsoft.cern.ch/cern/devtoolset/slc6-devtoolset.repo
 
-      [WANdiscoSVN]
-      name=WANdisco SVN Repo 1.8
-      enabled=1
-      baseurl=http://opensource.wandisco.com/centos/6/svn-1.8/RPMS/$basearch/
-      gpgcheck=1
-      gpgkey=http://opensource.wandisco.com/RPM-GPG-KEY-WANdisco
+	# Import the CERN GPG key.
+	$ sudo rpm --import http://linuxsoft.cern.ch/cern/centos/7/os/x86_64/RPM-GPG-KEY-cern
 
-    # Install essential development tools.
-    $ sudo yum groupinstall -y "Development Tools"
+	# Fetch the Apache Maven repo file.
+	$ sudo wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
 
-    # Install 'devtoolset-2-toolchain' which includes GCC 4.8.2 and related packages.
-    $ sudo yum install -y devtoolset-2-toolchain
+	# 'Mesos > 0.21.0' requires 'subversion > 1.8' devel package, which is
+	# not available in the default repositories.
+	# Create a WANdisco SVN repo file to install the correct version:
+	$ sudo cat > /etc/yum.repos.d/wandisco-svn.repo <<EOF
+	[WANdiscoSVN]
+	name=WANdisco SVN Repo 1.8
+	enabled=1
+	baseurl=http://opensource.wandisco.com/centos/6/svn-1.8/RPMS/$basearch/
+	gpgcheck=1
+	gpgkey=http://opensource.wandisco.com/RPM-GPG-KEY-WANdisco
+	EOF
 
-    # Install other Mesos dependencies.
-    $ sudo yum install -y apache-maven python-devel java-1.7.0-openjdk-devel zlib-devel libcurl-devel openssl-devel cyrus-sasl-devel cyrus-sasl-md5 apr-devel subversion-devel apr-util-devel
+	# Install essential development tools.
+	$ sudo yum groupinstall -y "Development Tools"
 
-    # Enter a shell with 'devtoolset-2' enabled.
-    $ scl enable devtoolset-2 bash
-    $ g++ --version  # Make sure you've got GCC > 4.8!
-```
+	# Install 'devtoolset-2-toolchain' which includes GCC 4.8.2 and related packages.
+	$ sudo yum install -y devtoolset-2-toolchain
+
+	# Install other Mesos dependencies.
+	$ sudo yum install -y apache-maven python-devel java-1.7.0-openjdk-devel zlib-devel libcurl-devel openssl-devel cyrus-sasl-devel cyrus-sasl-md5 apr-devel subversion-devel apr-util-devel
+
+	# Enter a shell with 'devtoolset-2' enabled.
+	$ scl enable devtoolset-2 bash
+	$ g++ --version  # Make sure you've got GCC > 4.8!
+
+	# Process isolation is using cgroups that are managed by 'cgconfig'.
+	# The 'cgconfig' service is not started by default on CentOS 6.6.
+	# Also the default configuration does not attach the 'perf_event' subsystem.
+	# To do this, add 'perf_event = /cgroup/perf_event;' to the entries in '/etc/cgconfig.conf'.
+	$ sudo yum install -y libcgroup
+	$ sudo service cgconfig start
+
 ####CentOS 7.1
 以下是在 CentOS 7.1版本下的说明。如果您使用不同的版本，请下载相应的软件包。
 ```
