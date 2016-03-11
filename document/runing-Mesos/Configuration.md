@@ -1,11 +1,17 @@
+---
+title: Mesos 配置向导，如何配置 Mesos
+---
+
 ## mesos 配置向导
 
-mesos master 和 slave 可以通过命令行参数或环境变量来传递一系列的配置选项。通过运行 mesos-master –help 或者 mesos-slave –help 可以查看相关的可用选项。每个选项可以通过以下两种方式设置：
+mesos master 和 slave 可以通过命令行参数或环境变量来传递一系列的配置选项。通过运行 `mesos-master --help` 或者 `mesos-slave --help` 可以查看相关的可用选项。每个选项可以通过以下两种方式设置：
 
  - 执行命令的时候使用 –-option_name=value 来传递配置选项。value 既可以是数值，也可以指定包含参数的文件 (--opthon_name=file://文件路径)。 该路径既可以是绝对路径，也可以是相对当前工作目录的相对路径。
 
  - 通过设定环境变量 MESOS_OPTION_NAME (变量名都以 MESOS_ 开头)  
 执行时会先读取环境变量，然后才看命令行参数
+
+配置参数会首先在环境中搜索，然后才是命令行。
 
 ####重要的配置
 如果你有特定的需求，当配置 Mesos 的时候请参考 ./configure --help。另外，本文档列举了最新的配置选项。如果你想知道手头的版本支持哪些标志位，你可以运行带有 --help 的命令，例如 mesos-master --help。
