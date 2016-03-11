@@ -1,16 +1,20 @@
 ##入门
 ###下载 Mesos
-这里有不同的方式获取 Mesos：    
-1. 从[ Apache](http://mesos.apache.org/downloads/)下载最新稳定版(推荐)。
-```
-$ wget http://www.apache.org/dist/mesos/0.22.1/mesos-0.22.1.tar.gz
-$ tar -zxf mesos-0.22.1.tar.gz
-```
+这里有不同的方式获取 Mesos:
 
-2.克隆Mesos的Git库(适合高级用户)。
-```
-$ git clone https://git-wip-us.apache.org/repos/asf/mesos.git
-```
+1\. 从[ Apache](http://mesos.apache.org/downloads/)下载最新稳定版(推荐)。
+
+
+	$ wget http://www.apache.org/dist/mesos/0.27.2/mesos-0.27.2.tar.gz
+	$ tar -zxf mesos-0.27.2.tar.gz
+
+2\. 克隆Mesos的Git库(适合高级用户)。
+
+
+	$ git clone https://git-wip-us.apache.org/repos/asf/mesos.git
+
+
+*注：如果你在运行上述命令时遇到问题，你可能需要先安装 `wget`, `tar`, `git` 这些工具。可以参考***系统要求***部分。*
 
 ###系统要求
 Mesos可以运行在 Linux (64位)和 Mac OS X（64位）。
