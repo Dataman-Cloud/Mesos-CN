@@ -145,18 +145,18 @@ Mesos 可以运行在 Linux (64位)和 Mac OS X（64位）。如果要从源代�
 	EOF
 
 	# Parts of Mesos require systemd in order to operate. However, Mesos
-  # only supports versions of systemd that contain the 'Delegate' flag.
-  # This flag was first introduced in 'systemd version 218', which is
-  # lower than the default version installed by centos. Luckily, centos
-  # 7.1 has a patched 'systemd < 218' that contains the 'Delegate' flag.
-  # Explicity update systemd to this patched version.
-  $ sudo yum update systemd
+	# only supports versions of systemd that contain the 'Delegate' flag.
+	# This flag was first introduced in 'systemd version 218', which is
+	# lower than the default version installed by centos. Luckily, centos
+	# 7.1 has a patched 'systemd < 218' that contains the 'Delegate' flag.
+	# Explicity update systemd to this patched version.
+	$ sudo yum update systemd
 
-  # Install essential development tools.
-  $ sudo yum groupinstall -y "Development Tools"
+	# Install essential development tools.
+	$ sudo yum groupinstall -y "Development Tools"
 
-  # Install other Mesos dependencies.
-  $ sudo yum install -y apache-maven python-devel java-1.8.0-openjdk-devel zlib-devel libcurl-devel openssl-devel cyrus-sasl-devel cyrus-sasl-md5 apr-devel subversion-devel apr-util-devel
+	# Install other Mesos dependencies.
+	$ sudo yum install -y apache-maven python-devel java-1.8.0-openjdk-devel zlib-devel libcurl-devel openssl-devel cyrus-sasl-devel cyrus-sasl-md5 apr-devel subversion-devel apr-util-devel
 
 ####构建 Mesos
 ```
