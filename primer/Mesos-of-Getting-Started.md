@@ -17,22 +17,31 @@
 *注：如果你在运行上述命令时遇到问题，你可能需要先安装 `wget`, `tar`, `git` 这些工具。可以参考***系统要求***部分。*
 
 ###系统要求
-Mesos可以运行在 Linux (64位)和 Mac OS X（64位）。
+
+Mesos 可以运行在 Linux (64位)和 Mac OS X（64位）。如果要从源代码编译 Mesos ,则 GCC 4.8.1+ 或 Clang 3.5+ 是必须的。
+
+完全支持 Linux 下的进程隔离，内核版本要不低于 3.10
+
+确保你的主机名可以通过 DNS 或 `/etc/hosts` 解析，从而可以完全支持 Docker 的 host-networking 功能。这在一些 Mesos 测试中会被用到。如有疑问，请确认 `/etc/hosts` 中包含你的主机名。
+
 ####Ubuntu14.04
 以下是 Ubuntu 14.04现有的说明。如果您使用不同的版本，请安装相应的的软件包。
-```
-    # Update the packages.
-    $ sudo apt-get update
 
-    # Install the latest OpenJDK.
-    $ sudo apt-get install -y openjdk-7-jdk
+	# Update the packages.
+	$ sudo apt-get update
 
-    # Install autotools (Only necessary if building from git repository).
-    $ sudo apt-get install -y autoconf libtool
+	# Install a few utility tools.
+	$ sudo apt-get install -y tar wget git
 
-    # Install other Mesos dependencies.
-    $ sudo apt-get -y install build-essential python-dev python-boto libcurl4-nss-dev libsasl2-dev maven libapr1-dev libsvn-dev
-```
+	# Install the latest OpenJDK.
+	$ sudo apt-get install -y openjdk-7-jdk
+
+	# Install autotools (Only necessary if building from git repository).
+	$ sudo apt-get install -y autoconf libtool
+
+	# Install other Mesos dependencies.
+	$ sudo apt-get -y install build-essential python-dev python-boto libcurl4-nss-dev libsasl2-dev libsasl2-modules maven libapr1-dev libsvn-dev
+
 ####Mac OS X Yosemite
 以下是在 Mac OS X Yosemite下的说明。如果您使用不同的版本，请下载相应的软件包。
 ```
@@ -126,7 +135,7 @@ Mesos可以运行在 Linux (64位)和 Mac OS X（64位）。
     $ ../configure
     $ make
 ```
-为了加快构建以及减少冗长的 log ，你可以在 ***make*** 命令后添加 ***-j \<number of cores\> V=0*** 
+为了加快构建以及减少冗长的 log ，你可以在 ***make*** 命令后添加 ***-j \<number of cores\> V=0***
 ```
 	# Run test suite.
     $ make check
