@@ -1,3 +1,6 @@
+<title>Mesos 入门介绍：包括 Mesos 的下载、安装等注意事项</title>
+<description>本文介绍了如何下载最新的Mesos,并在不同的系统上安装Mesos</description>
+
 ##入门
 ###下载 Mesos
 这里有不同的方式获取 Mesos:
@@ -213,7 +216,3 @@ Mesos 包含了用 Java , C++ , Python 写的 frameworks 示例。frameworks 示
 *注意：这些示例假设你是在本地机器上运行 Mesos 。但在生产环境（如 AWS ）中，按照上面的示例操作，你将无法访问 Mesos 的 web 界面。如果想访问 Mesos 页面，你需要在启动 Mesos Master 时为主机分配一个真实 IP 地址，并确保你的防火墙打开了 5050 端口的外部访问权限。*
 
 >本篇内容翻译自[http://mesos.apache.org/gettingstarted/](http://mesos.apache.org/gettingstarted/)
-
----
-title: Mesos 入门介绍：包括 Mesos 的下载、安装等注意事项
----
