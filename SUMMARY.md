@@ -1,6 +1,5 @@
 * **Mesos 官方文档**
-    * Mesos入门
-       * [Mesos入门](primer/Mesos-of-Getting-Started.md)
+    * [Mesos入门](primer/Mesos-of-Getting-Started.md)
     * Mesos基础
        * [Mesos 架构](OverView/Mesos-Architecture.md)
        * Video and Slides of Mesos Presentations
