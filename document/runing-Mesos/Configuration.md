@@ -14,10 +14,190 @@ mesos master 和 slave 可以通过命令行参数或环境变量来传递一系
 
 下列选项 都被 master 和 slave 所支持：
 
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th width="30%">
+        Flag
+      </th>
+      <th>
+        Explanation
+      </th>
+    </tr>
+  </thead>
+<tr>
+  <td>
+    --advertise_ip=VALUE
+  </td>
+  <td>
+IP address advertised to reach mesos master/slave.
+Mesos master/slave does not bind using this IP address.
+However, this IP address may be used to access Mesos master/slave.
+  </td>
+</tr>
+<tr>
+  <td>
+    --advertise_port=VALUE
+  </td>
+  <td>
+Port advertised to reach mesos master/slave (along with
+<code>advertise_ip</code>). Mesos master/slave does not bind using this port.
+However, this port (along with <code>advertise_ip</code>) may be used to
+access Mesos master/slave.
+  </td>
+</tr>
+<tr>
+  <td>
+    --firewall_rules=VALUE
+  </td>
+  <td>
+The value could be a JSON-formatted string of rules or a
+file path containing the JSON-formatted rules used in the endpoints
+firewall. Path must be of the form <code>file:///path/to/file</code>
+or <code>/path/to/file</code>.
+<p/>
+See the <code>Firewall</code> message in <code>flags.proto</code> for the expected format.
+<p/>
+Example:
+<pre><code>{
+  "disabled_endpoints" : {
+    "paths" : [
+      "/files/browse",
+      "/metrics/snapshot"
+    ]
+  }
+}</code></pre>
+  </td>
+</tr>
+<tr>
+  <td>
+    --[no-]help
+  </td>
+  <td>
+Show the help message and exit. (default: false)
+  </td>
+</tr>
+<tr>
+  <td>
+    --ip=VALUE
+  </td>
+  <td>
+IP address to listen on. This cannot be used in conjunction
+with <code>--ip_discovery_command</code>. (master default: 5050; slave default: 5051)
+  </td>
+</tr>
+<tr>
+  <td>
+    --ip_discovery_command=VALUE
+  </td>
+  <td>
+Optional IP discovery binary: if set, it is expected to emit
+the IP address which the master/slave will try to bind to.
+Cannot be used in conjunction with <code>--ip</code>.
+  </td>
+</tr>
+<tr>
+  <td>
+    --port=VALUE
+  </td>
+  <td>
+Port to listen on.
+  </td>
+</tr>
+<tr>
+  <td>
+    --[no-]version
+  </td>
+  <td>
+Show version and exit. (default: false)
+  </td>
+</tr>
+<tr>
+  <td>
+    --hooks=VALUE
+  </td>
+  <td>
+A comma-separated list of hook modules to be installed inside master/slave.
+  </td>
+</tr>
+<tr>
+  <td>
+    --hostname=VALUE
+  </td>
+  <td>
+The hostname the slave node should report, or that the master
+should advertise in ZooKeeper.
+If left unset, the hostname is resolved from the IP address
+that the master/slave binds to; unless the user explicitly prevents
+that, using <code>--no-hostname_lookup</code>, in which case the IP itself
+is used.
+  </td>
+</tr>
+<tr>
+  <td>
+    --[no-]hostname_lookup
+  </td>
+  <td>
+Whether we should execute a lookup to find out the server's hostname,
+if not explicitly set (via, e.g., <code>--hostname</code>).
+True by default; if set to <code>false</code> it will cause Mesos
+to use the IP address, unless the hostname is explicitly set. (default: true)
+  </td>
+</tr>
+<tr>
+  <td>
+    --modules=VALUE
+  </td>
+  <td>
+List of modules to be loaded and be available to the internal
+subsystems.
+<p/>
+Use <code>--modules=filepath</code> to specify the list of modules via a
+file containing a JSON-formatted string. <code>filepath</code> can be
+of the form <code>file:///path/to/file</code> or <code>/path/to/file</code>.
+<p/>
+Use <code>--modules="{...}"</code> to specify the list of modules inline.
+<p/>
+Example:
+<pre><code>{
+  "libraries": [
+    {
+      "file": "/path/to/libfoo.so",
+      "modules": [
+        {
+          "name": "org_apache_mesos_bar",
+          "parameters": [
+            {
+              "key": "X",
+              "value": "Y"
+            }
+          ]
+        },
+        {
+          "name": "org_apache_mesos_baz"
+        }
+      ]
+    },
+    {
+      "name": "qux",
+      "modules": [
+        {
+          "name": "org_apache_mesos_norf"
+        }
+      ]
+    }
+  ]
+}</code></pre>
+  </td>
+</tr>
+</table>
+
+
+
                  标志位                                 解释
         --external_log_file=VALUE  Specified the externally managed log file. This file will be exposed in the webui and HTTP api. This is useful when using stderr logging as the log file is otherwise unknown to Mesos.
         --firewall_rules=VALUE     该值是终端防火墙的规则（rules），可以为JSON 类型的 rules 或包含 JSON
-                                   类型 rules 的文件。文件路径可以为 
+                                   类型 rules 的文件。文件路径可以为
                                    file:///path/to/file 或者 /path/to/file。
                                    规则的格式请参考文件 flags.proto 中的防火墙信息。
                                    例如：
@@ -41,8 +221,8 @@ mesos master 和 slave 可以通过命令行参数或环境变量来传递一系
         --port=VALUE               监听端口（master默认5050，slave默认5051）
         --[no-]quiet               禁用输出日志到 sterr （默认:否）
         --[no-]version             显示版本并退出 （默认：否）
- 
-       
+
+
 
 ##Master 配置选项
 
@@ -58,7 +238,7 @@ mesos master 和 slave 可以通过命令行参数或环境变量来传递一系
                                     注意：如果 master 在单机模式下运行就不需要该设置(non-HA)。
 *可选标志位*
 
-              标志位                                    解释 
+              标志位                                    解释
         --acls=VALUE               JSON 格式的 ACL，请记住你也可以使用 file:///path/to/file 或者 /path/to/file 指定包含该列表的文件，格式请参考文件 mesos.proto 中的 ACLs protobuf 段落
                                    JSON文件例子：
                                    {
@@ -161,7 +341,7 @@ mesos master 和 slave 可以通过命令行参数或环境变量来传递一系
     --slave_ping_timeout=VALUE	在每个 slave 被期望从一个 master 回应一个 ping 值的超时时间。 Slaves 如果不是在  `max_slave_ping_timeouts` 回复，ping 从新尝试将被移除.  (默认: 15secs)
     --slave_removal_rate_limit=VALUE	最大的比例(e.g., 1/10mins, 2/3hrs, etc) 对于那个 slaves 将被从 master 中移除当他们遇到健康检测失败。默认的是 slave 将尽可能快的被移除当它们遇到健康监测失败。值为 'Number of slaves'/'Duration' 的模式。
     --slave_reregister_timeout=VALUE	在所有的 slaves被期望重新注册当一个新的 master 被选举为 leader的超时时间。 Slaves 其不会在此超时时间内被重新注册将被从注册中移除并将被关掉如果它们尝试去与 master 通信。注意： 该值将被设置为最少 10mins. (默认: 10mins)
-    --user_sorter=VALUE	     被用来在用户中分配资源的策略。可以为以下之一：dominant_resource_fairness (drf) (default: drf) 
+    --user_sorter=VALUE	     被用来在用户中分配资源的策略。可以为以下之一：dominant_resource_fairness (drf) (default: drf)
     --webui_dir=VALUE        管理页面的网页文件的目录，默认：/usr/local/share/mesos/webui
     --weights=VALUE          逗号分割的角色/权重列表，成对表单 'role=weight,role=weight'。 weights是用来表达优先级。
     --whitelist=VALUE         一个 文件名器包含一系列的 slaves （每行一个）来通告 offers.该文件被观测，并周期性的重读取来刷新 slave 白名单。 默认的这里没有白名单/所有机器被接收. (默认: None)
@@ -197,7 +377,7 @@ mesos master 和 slave 可以通过命令行参数或环境变量来传递一系
     --[no-]cgroups_limit_swap 用于内存和swap的限制, 默认: false, 只限制内存
     --cgroups_root=VALUE      根cgroup的命名. 默认: mesos
     --container_disk_watch_interval=VALUE 用于查询容器中磁盘配额的时间间隔. 被用于posix/disk的时间间隔, 默认: 15秒
-    --containerizer_path=VALUE 当外部隔离机制被激活时(--isolation=external), 外部容器被执行的路径 
+    --containerizer_path=VALUE 当外部隔离机制被激活时(--isolation=external), 外部容器被执行的路径
     --containerizers=VALUE    用逗号把一组容器隔开, 以达到对容器的实现. 包括mesos, external, docker在Linux中. 默认: mesos
     --credential=VALUE        一行包含"principal"和"secret"由空格隔开的文本路径. 或是包含一条凭证的JSON格式文件的路径. 路径的格式是file://path/to/file. 也可以使用路径 file:///path/to/file, 从文件中读取值 。
                              JSON 文件例子:
@@ -321,13 +501,13 @@ mesos master 和 slave 可以通过命令行参数或环境变量来传递一系
     --disable-libtool-lock    避免锁死 ( 可能会破坏并行编译 )
     --disable-java            不需要构建 Java 绑定
     --disable-python          不需要构建 Python 绑定
-    --enable-debug            启用 Debug 调试。如果设置了 CFLAGS/CXXFLAGS ，这个选项不会改变它们。默认: no 
-    --enable-optimize         启用优化 如果设置了 CFLAGS/CXXFLAGS ，这个选项不会改变它们。默认: no 
+    --enable-debug            启用 Debug 调试。如果设置了 CFLAGS/CXXFLAGS ，这个选项不会改变它们。默认: no
+    --enable-optimize         启用优化 如果设置了 CFLAGS/CXXFLAGS ，这个选项不会改变它们。默认: no
     --disable-bundled         预装相关依赖，而不是绑定 libraries 。
     --disable-bundled-distribute 不包含构建和使用绑定的分发包来替换在 PYTHONPATH 中的已安装版本。
     --disable-bundled-pip	excludes 不包含构建和使用绑定的 pip 包来替换在 PYTHONPATH 中的已安装版本.
     --disable-bundled-wheel	  不包含构建和使用绑定的 wheel 包来替换在 PYTHONPATH 中的已安装版本
-    --disable-python-dependency-install 当在 make install 期间安装 python 包，不需要外部的依赖或安装。 
+    --disable-python-dependency-install 当在 make install 期间安装 python 包，不需要外部的依赖或安装。
 
 ####配置脚本有以下的标志位针对可选的包选项：
 
@@ -347,7 +527,7 @@ mesos master 和 slave 可以通过命令行参数或环境变量来传递一系
 
 ####一些 influential 的环境变量配置脚本：
 
-使用这些变量来重写 'configure'生成的选择项或帮助其来查找库文件和非标准的名字/地址一起来编程。 
+使用这些变量来重写 'configure'生成的选择项或帮助其来查找库文件和非标准的名字/地址一起来编程。
 
        JAVA_HOME              JDK 根目录
        JAVA_CPPFLAGS          JNI 目录
