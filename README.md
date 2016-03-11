@@ -12,9 +12,9 @@ Mesos 中文文档是最初由[数人云](http://www.shurenyun.com/)  CTO 肖德
 
 如果你对 Mesos 感兴趣，且擅长翻译和校对，流程如下：
 
-1. 选择你擅长的内容至 tli@dataman-inc.com 邮箱，申请“任务认领”
-2. 完成任务后发内容至 tli@dataman-inc.com 邮箱等待审核
-3. 通过审核后会直接更新到 Mesos 中文文档中，并署名
+1. 选择你擅长的内容至 tli@dataman-inc.com 邮箱，申请“任务认领”.
+2. 完成任务后发内容至 tli@dataman-inc.com 邮箱等待审核.
+3. 通过审核后会直接更新到 Mesos 中文文档中，并署名.
 
 如果你对 Mesos 有一定实践经验，且愿意分享给大家，形成文档后，有两种参与途径：
 
