@@ -1,5 +1,5 @@
 ---
-title: Mesos 配置向导，如何配置 Mesos
+title: Mesos 配置向导，如何配置 Mesos - Mesos中文网
 ---
 
 ## mesos 配置向导
