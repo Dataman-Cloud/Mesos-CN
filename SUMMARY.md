@@ -1,4 +1,4 @@
-* **Mesos 官方文档**
+* Mesos 官方文档
     * [Mesos简介](Mesos-Introduction.md)
     * [Mesos入门](primer/Mesos-of-Getting-Started.md)
     * Mesos基础
@@ -30,16 +30,20 @@
 	    * [Mesos-DNS on Google Compute Platform](OverView/Mesos-DNS-on-Google-Compute-Platform.md)
 	    * [spark-on-mesos](OverView/spark-on-mesos.md)
 
-* **Marathon 官方用户文档中文版**
+* Marathon 官方用户文档中文版
     * [设置与运行Marathon](document/Marathon/Marathon.md)
     * [在虚拟机中开发Marathon](document/Marathon/developing-vm.md)
     * [SSL模式与普通模式接入认证](document/Marathon/SSL and Basic Access Authentication.md)
     * [服务发现与负载均衡](document/Marathon/Service-Discovery.md)
-* **Bmaboo 官方用户文档中文版**
+* Bmaboo 官方用户文档中文版
     * Bmaboo 文档
-* **最佳实践**
-* **Mesos 优秀文章**
+* 最佳实践
+* Mesos 优秀文章
     * [Autodesk如何使用Mesos来实现自己的PaaS云平台](Excellent-article/putting-mesos-through-its_paces.md)
     * [如何利用Mesos持久化存储方案部署ArangoDB集群](Excellent-article/arangodb-mesos-persistent-storage.md)
-* **Mesos 最新版本发布**
+* Mesos 最新版本发布
     * [Mesos 0.23版本发布](Release/mesos-023-released.md)
+* Mesos 社区交流
+    * [Mesos 交流社区](http://open.shurenyun.com/topic/Mesos)
+    * [Mesos Meetup 技术沙龙](community/meetup.md)
+    * [Mesos 爱好者微信群](community/weixin.md)
