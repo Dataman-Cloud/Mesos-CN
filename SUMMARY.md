@@ -3,7 +3,7 @@
     * [Mesos入门](primer/Mesos-of-Getting-Started.md)
     * Mesos基础
        * [Mesos 架构](OverView/Mesos-Architecture.md)
-       * [Mesos 演示的相关视频和PPT](http://mesos.apache.org/documentation/latest/presentations/)
+       * [Mesos 演示的相关视频和PPT](OverView/Mesos-video.md)
     * 运行Mesos
        * [Mesos 配置](document/runing-Mesos/Configuration.md)
        * [Mesos Containerizer](document/runing-Mesos/Mesos-Containerizer.md)
@@ -44,6 +44,6 @@
 * Mesos 最新版本发布
     * [Mesos 0.23版本发布](Release/mesos-023-released.md)
 * Mesos 社区交流
-    * [Mesos 交流社区](http://open.shurenyun.com/topic/Mesos)
+    * [Mesos 交流社区](community/community.md)
     * [Mesos Meetup 技术沙龙](community/meetup.md)
     * [Mesos 爱好者微信群](community/weixin.md)
