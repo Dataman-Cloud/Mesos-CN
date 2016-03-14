@@ -41,6 +41,7 @@
 * Mesos 优秀文章
     * [Autodesk如何使用Mesos来实现自己的PaaS云平台](Excellent-article/putting-mesos-through-its_paces.md)
     * [如何利用Mesos持久化存储方案部署ArangoDB集群](Excellent-article/arangodb-mesos-persistent-storage.md)
+    * [数据处理平台架构中的SMACK组合](Excellent-article/SMACK.md)
 * Mesos 最新版本发布
     * [Mesos 0.23版本发布](Release/mesos-023-released.md)
 * Mesos 社区交流
