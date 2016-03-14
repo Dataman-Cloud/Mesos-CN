@@ -1,7 +1,3 @@
----
-title: Mesos 配置向导，如何配置 Mesos - Mesos中文网
----
-
 ## mesos 配置向导
 
 mesos master 和 slave 可以通过命令行参数或环境变量来传递一系列的配置选项。通过运行 `mesos-master --help` 或者 `mesos-slave --help` 可以查看相关的可用选项。每个选项可以通过以下两种方式设置：
@@ -36,9 +32,9 @@ mesos master 和 slave 可以通过命令行参数或环境变量来传递一系
     --advertise_ip=VALUE
   </td>
   <td>
-IP address advertised to reach mesos master/slave.
-Mesos master/slave does not bind using this IP address.
-However, this IP address may be used to access Mesos master/slave.
+用来触达 mesos master/slave 的 IP 广播地址。
+Mesos master/slave 不会与这个 IP 地址绑定。
+但是，这个 IP 地址可以被用来访问 Mesos master/slave.
   </td>
 </tr>
 <tr>
@@ -46,10 +42,9 @@ However, this IP address may be used to access Mesos master/slave.
     --advertise_port=VALUE
   </td>
   <td>
-Port advertised to reach mesos master/slave (along with
-<code>advertise_ip</code>). Mesos master/slave does not bind using this port.
-However, this port (along with <code>advertise_ip</code>) may be used to
-access Mesos master/slave.
+用来触达 mesos master/slave 的广播端口 (配合
+<code>advertise_ip</code>). Mesos master/slave 不与这个端口绑定。
+但是，这个端口 (配合 <code>advertise_ip</code>) 可以用于访问 Mesos master/slave.
   </td>
 </tr>
 <tr>
@@ -57,14 +52,10 @@ access Mesos master/slave.
     --firewall_rules=VALUE
   </td>
   <td>
-The value could be a JSON-formatted string of rules or a
-file path containing the JSON-formatted rules used in the endpoints
-firewall. Path must be of the form <code>file:///path/to/file</code>
-or <code>/path/to/file</code>.
+  该值是终端防火墙的规则（rules），可以为JSON 类型的 rules 或包含 JSON 类型 rules 的文件。文件路径可以为       <code>file:///path/to/file</code> 或者 <code>/path/to/file</code>。<p/>
+  规则的格式请参考文件 <code>flags.proto</code> 中的 <code>Firewall</code> 信息。
 <p/>
-See the <code>Firewall</code> message in <code>flags.proto</code> for the expected format.
-<p/>
-Example:
+例如:
 <pre><code>{
   "disabled_endpoints" : {
     "paths" : [
@@ -80,7 +71,7 @@ Example:
     --[no-]help
   </td>
   <td>
-Show the help message and exit. (default: false)
+输出帮助信息 (默认值: false)
   </td>
 </tr>
 <tr>
@@ -88,8 +79,7 @@ Show the help message and exit. (default: false)
     --ip=VALUE
   </td>
   <td>
-IP address to listen on. This cannot be used in conjunction
-with <code>--ip_discovery_command</code>. (master default: 5050; slave default: 5051)
+监听的 IP 地址. 这个不能与<code>--ip_discovery_command</code>一起使用. (master默认5050，slave默认5051)
   </td>
 </tr>
 <tr>
@@ -97,9 +87,8 @@ with <code>--ip_discovery_command</code>. (master default: 5050; slave default: 
     --ip_discovery_command=VALUE
   </td>
   <td>
-Optional IP discovery binary: if set, it is expected to emit
-the IP address which the master/slave will try to bind to.
-Cannot be used in conjunction with <code>--ip</code>.
+IP 发现可选项: 如果设置 IP 地址，master/slave 将会尝试绑定这个 IP 地址。
+不能与 <code>--ip</code> 一起使用.
   </td>
 </tr>
 <tr>
@@ -107,7 +96,7 @@ Cannot be used in conjunction with <code>--ip</code>.
     --port=VALUE
   </td>
   <td>
-Port to listen on.
+监听端口
   </td>
 </tr>
 <tr>
@@ -115,7 +104,7 @@ Port to listen on.
     --[no-]version
   </td>
   <td>
-Show version and exit. (default: false)
+显示版本并退出 (默认: false)
   </td>
 </tr>
 <tr>
@@ -123,7 +112,7 @@ Show version and exit. (default: false)
     --hooks=VALUE
   </td>
   <td>
-A comma-separated list of hook modules to be installed inside master/slave.
+  一个由逗号分隔的 hook 模块列表将被安装到 master/slave。
   </td>
 </tr>
 <tr>
@@ -131,11 +120,9 @@ A comma-separated list of hook modules to be installed inside master/slave.
     --hostname=VALUE
   </td>
   <td>
-The hostname the slave node should report, or that the master
-should advertise in ZooKeeper.
-If left unset, the hostname is resolved from the IP address
-that the master/slave binds to; unless the user explicitly prevents
-that, using <code>--no-hostname_lookup</code>, in which case the IP itself
+  slave 节点报告或 master 节点在 ZooKeeper 里广播的 hostname.
+  如果不做设置，hostname 将解析为 master/slave 绑定的 IP 地址。
+  除非用户已经使用 <code>--no-hostname_lookup</code> 明确禁止了此功能, in which case the IP itself
 is used.
   </td>
 </tr>
@@ -144,10 +131,9 @@ is used.
     --[no-]hostname_lookup
   </td>
   <td>
-Whether we should execute a lookup to find out the server's hostname,
-if not explicitly set (via, e.g., <code>--hostname</code>).
-True by default; if set to <code>false</code> it will cause Mesos
-to use the IP address, unless the hostname is explicitly set. (default: true)
+  当没有明确指定 hostname 时(例如 <code>--hostname</code>)，是否查询找出服务器的 hostname。
+  默认值是 true; 如果设置为 <code>false</code> Mesos 将会使用 IP 地址信息，除非 hostname 被明确指出了。
+  (默认值: true)
   </td>
 </tr>
 <tr>
@@ -198,36 +184,80 @@ Example:
 </tr>
 </table>
 
+*masters 和 slaves 同时支持以下这些日志选项* 更多日志信息，请访问 [http://mesos.apache.org/documentation/latest/logging/](http://mesos.apache.org/documentation/latest/logging/)
 
-
-                 标志位                                 解释
-        --external_log_file=VALUE  Specified the externally managed log file. This file will be exposed in the webui and HTTP api. This is useful when using stderr logging as the log file is otherwise unknown to Mesos.
-        --firewall_rules=VALUE     该值是终端防火墙的规则（rules），可以为JSON 类型的 rules 或包含 JSON
-                                   类型 rules 的文件。文件路径可以为
-                                   file:///path/to/file 或者 /path/to/file。
-                                   规则的格式请参考文件 flags.proto 中的防火墙信息。
-                                   例如：
-                                       {
-                                         "disabled_endpoints" : {
-                                            "paths" : [
-                                               "/files/browse.json",
-                                               "/slave(0)/stats.json",
-                                            ]
-                                        }
-                                    }
-        --[no-]help                输出帮助信息 (默认:否)
-        --[no-]initialize_driver_logging	是否初始化 scheduler 和 executor driver 的
-                                           logging 机制（默认：是）
-        --ip=VALUE                 监听的 IP 地址
-        --log_dir=VALUE            输出日志文件的位置（无默认值，不指定就不生成日志文件。这个参数不影响输
-                                   出到 stderr 的日志）
-        --logbufsecs=VALUE         缓冲日志的时长（秒数）默认：0秒
-        --loggin_level=VALUE       输出日志的起始级别，包括 'INFO', 'WARNING', 'ERROR'。如果使用了
-                                   quiet 标记，只会影响到输出到 log_dir 的日志的级别（默认：INFO）
-        --port=VALUE               监听端口（master默认5050，slave默认5051）
-        --[no-]quiet               禁用输出日志到 sterr （默认:否）
-        --[no-]version             显示版本并退出 （默认：否）
-
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th width="30%">
+        Flag
+      </th>
+      <th>
+        Explanation
+      </th>
+    </tr>
+  </thead>
+<tr>
+  <td>
+    --[no-]quiet
+  </td>
+  <td>
+禁用输出日志到 sterr （默认:false）
+  </td>
+</tr>
+<tr>
+  <td>
+    --log_dir=VALUE
+  </td>
+  <td>
+  输出日志文件的位置。默认方式下，不生成日志文件。这个参数不影响输出到 stderr 的日志。
+  如果特别指定了，就可以通过 Mesos webUI 看到这个日志文件。
+<b>注意</b>: 第三方日志信息 (比如，ZooKeeper) 将只能写入到 stderr!
+  </td>
+</tr>
+<tr>
+  <td>
+    --logbufsecs=VALUE
+  </td>
+  <td>
+缓冲日志的时长（秒数）默认：0秒
+  </td>
+</tr>
+<tr>
+  <td>
+    --logging_level=VALUE
+  </td>
+  <td>
+  输出日志的起始级别，包括 <code>INFO</code>, <code>WARNING</code>, <code>ERROR</code>。如果使用了<code>--quiet</code> 标记，只会影响到输出到 <code>--log_dir</code> 的日志的级别（默认：INFO）
+  </td>
+</tr>
+<tr>
+  <td>
+    --[no-]initialize_driver_logging
+  </td>
+  <td>
+  master/slave 是否为 Mesos scheduler 和 executor driver 初始化 Google logging.
+  scheduler/executor drivers 将分别记录日志，不会写入 master/slave 的日志中。
+<p/>
+如果使用的是 HTTP scheduler/executor APIs，这个选项将无效。
+（默认：true）
+  </td>
+</tr>
+<tr>
+  <td>
+    --external_log_file=VALUE
+  </td>
+  <td>
+  定位外部管理的日志文件位置。Mesos 不会直接写入这个文件，仅会通过 WebUI 和 HTTP API 将其
+  暴露出来。这个仅用于混合外部日志机制来记录日志到 stderr 的情况。比如，syslog 或 journald。
+<p/>
+当通过 <code>--quiet</code> 指定后，这个选项将无效。
+<p/>
+此选项在 WebUI 的优先级高于 <code>--log_dir</code> . 但即使这个选项被指定了，日志任然会被
+写入到 <code>--log_dir</code>。
+  </td>
+</tr>
+</table>
 
 
 ##Master 配置选项
