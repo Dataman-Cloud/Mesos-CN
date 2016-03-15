@@ -6,6 +6,7 @@
        * [Mesos 演示的相关视频和PPT](OverView/Mesos-video.md)
     * 运行Mesos
        * [Mesos 配置](document/runing-Mesos/Configuration.md)
+       * [HTTP Endpoints](endpoints/index.md)
        * [Mesos Containerizer](document/runing-Mesos/Mesos-Containerizer.md)
        * [Docker Containerizer](document/runing-Mesos/Docker-Containerizer.md)
        * [External Containerizer](document/runing-Mesos/External-Containerizer.md)
