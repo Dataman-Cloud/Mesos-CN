@@ -23,7 +23,7 @@ mesos master 和 slave 可以通过命令行参数或环境变量来传递一系
         Flag
       </th>
       <th>
-        Explanation
+        说明
       </th>
     </tr>
   </thead>
@@ -193,7 +193,7 @@ Example:
         Flag
       </th>
       <th>
-        Explanation
+        说明
       </th>
     </tr>
   </thead>
@@ -262,17 +262,481 @@ Example:
 
 ##Master 配置选项
 
-*必选标志位*
+*必选参数*
 
-              标志位                                    解释   
-        --quorum=VALUE              当使用 'replicated_log' 为基础的注册时副本仲裁数量的多少。必须将该值设定为大多数 masters 比如， quorum > ( masters 总量)/2。注意：如果 master 是运行于一个单实例模式则不需要设定（non-HA）。
-        --work_dir=VALUE            注册表中的持久性信息的存放路径
-        --zk=VALUE                  zookeeper URL（用于选举 master 的 leader）为以下之一：
-                                    zk://host1:port1,host2:port2,.../path
-                                    zk://username:password@host1:port1,host2:port2,.../path
-                                    file:///path/to/file
-                                    注意：如果 master 在单机模式下运行就不需要该设置(non-HA)。
-*可选标志位*
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th width="30%">
+        Flag
+      </th>
+      <th>
+        说明
+      </th>
+    </tr>
+  </thead>
+<tr>
+  <td>
+    --quorum=VALUE
+  </td>
+  <td>
+  使用基于 replicated-Log 的注册表时，复制的个数。
+  此值需要设置为masters总数量的一半以上，也就是：<code>quorum > (number of masters)/2</code>。
+  注意：单机模式下不需要设置此参数。（非HA模式）
+  </td>
+</tr>
+<tr>
+  <td>
+    --work_dir=VALUE
+  </td>
+  <td>
+  Registry 中持久化信息存储的位置。（如：<code>/var/lib/mesos/master</code>）
+  </td>
+</tr>
+<tr>
+  <td>
+    --zk=VALUE
+  </td>
+  <td>
+  ZooKeeper 的 URL地址 （用于在masters中做领导选举）可能是下面所列形式中的一种：
+<pre><code>zk://host1:port1,host2:port2,.../path
+zk://username:password@host1:port1,host2:port2,.../path
+file:///path/to/file (where file contains one of the above)</code></pre>
+<b>注意</b>: 单机模式下不需要设置此参数。（非HA模式）.
+  </td>
+</tr>
+</table>
+
+*可选参数*
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th width="30%">
+        Flag
+      </th>
+      <th>
+        说明
+      </th>
+    </tr>
+  </thead>
+<tr>
+  <td>
+    --acls=VALUE
+  </td>
+  <td>
+  此参数用于认证。一般是 JSON 格式的 ACLs 的字符串或者文件。
+  路径一般是这样的格式：<code>file:///path/to/file</code> 或 <code>/path/to/file</code>
+<p/>
+  注意：如果参数 <code>--authorizers</code> 的值与 <code>local</code> 的不相同，ACLs 的内容将被忽略。
+<p/>
+  在 authorizer.proto 中查看 ACLs protobuf 参考格式。
+<p/>
+举例:
+<pre><code>{
+  "register_frameworks": [
+    {
+      "principals": { "type": "ANY" },
+      "roles": { "values": ["a"] }
+    }
+  ],
+  "run_tasks": [
+    {
+      "principals": { "values": ["a", "b"] },
+      "users": { "values": ["c"] }
+    }
+  ],
+  "teardown_frameworks": [
+    {
+      "principals": { "values": ["a", "b"] },
+      "framework_principals": { "values": ["c"] }
+    }
+  ],
+  "set_quotas": [
+    {
+      "principals": { "values": ["a"] },
+      "roles": { "values": ["a", "b"] }
+    }
+  ],
+  "remove_quotas": [
+    {
+      "principals": { "values": ["a"] },
+      "quota_principals": { "values": ["a"] }
+    }
+  ]
+}</code></pre>
+  </td>
+</tr>
+<tr>
+  <td>
+    --allocation_interval=VALUE
+  </td>
+  <td>
+  （批次）执行分配（allocations）的间隔时间。（如：500ms,1秒……）
+  默认值：1秒
+  </td>
+</tr>
+<tr>
+  <td>
+    --allocator=VALUE
+  </td>
+  <td>
+  分配器，用于给框架分配资源。默认使用 <code>HierarchicalDRF</code> 分配器，也可以通过
+  <code>--modules</code> 模块来选择其他的分配器。
+  （默认值：HierarchicalDRF）
+  </td>
+</tr>
+<tr>
+  <td>
+    --[no-]authenticate
+  </td>
+  <td>
+  如果是 <code>true</code>，则只有认证过的框架可以注册。
+  如果是 <code>false</code>，则未认证的框架也可以注册。（默认：false）
+  </td>
+</tr>
+<tr>
+  <td>
+    --[no-]authenticate_http
+  </td>
+  <td>
+  如果是 <code>true</code>，则只有支持认证机制的已认证的 HTTP endpoints 请求被允许访问。
+  如果是 <code>false</code>，则未认证的 HTTP endpoint 请求也会被允许访问。
+  （默认：false）
+  </td>
+</tr>
+<tr>
+  <td>
+    --[no-]authenticate_slaves
+  </td>
+  <td>
+  如果是 <code>true</code>，只有认证过的 slaves 才能注册。
+  如果是 <code>false</code>，未认证的 slaves 也可以注册。
+  （默认：false）
+  </td>
+</tr>
+<tr>
+  <td>
+    --authenticators=VALUE
+  </td>
+  <td>
+  框架或 slave 进行认证时使用的认证器。默认是 <code>crammd5</code>，也可以通过使用
+  <code>--modules</code> 更换其他认证模块。
+  （默认：crammd5）
+  </td>
+</tr>
+<tr>
+  <td>
+    --authorizers=VALUE
+  </td>
+  <td>
+  用于进行授权的 Authorizer。默认使用 <code>local</code>,也可以通过使用
+  <code>--modules</code> 替换成其他的 authorizer。
+<p/>
+  注意：如果参数 <code>--authorizers</code> 提供了一个与 <code>local</code> 不一样的值。
+  则通过<code>--acls</code> 设置的 ACLs 参数将被忽略。
+<p/>
+  目前并不支持多个 authorizers. （默认：local）
+  </td>
+</tr>
+<tr>
+  <td>
+    --cluster=VALUE
+  </td>
+  <td>
+  集群别名，会在 WebUI上显示。
+  </td>
+</tr>
+<tr>
+  <td>
+    --credentials=VALUE
+  </td>
+  <td>
+Either a path to a text file with a list of credentials,
+each line containing <code>principal</code> and <code>secret</code> separated by whitespace,
+or, a path to a JSON-formatted file containing credentials.
+Path could be of the form <code>file:///path/to/file</code> or <code>/path/to/file</code>.
+JSON file Example:
+<pre><code>{
+  "credentials": [
+    {
+      "principal": "sherman",
+      "secret": "kitesurf"
+    }
+  ]
+}</code></pre>
+Text file Example:
+<pre><code>username secret</code></pre>
+  </td>
+</tr>
+<tr>
+  <td>
+    --framework_sorter=VALUE
+  </td>
+  <td>
+Policy to use for allocating resources
+between a given user's frameworks. Options
+are the same as for user_allocator. (default: drf)
+  </td>
+</tr>
+<tr>
+  <td>
+    --http_authenticators=VALUE
+  </td>
+  <td>
+HTTP authenticator implementation to use when handling requests to
+authenticated endpoints. Use the default
+<code>basic</code>, or load an alternate HTTP
+authenticator module using <code>--modules</code>.
+<p/>
+Currently there is no support for multiple HTTP authenticators. (default: basic)
+  </td>
+</tr>
+<tr>
+  <td>
+    --[no-]log_auto_initialize
+  </td>
+  <td>
+Whether to automatically initialize the [replicated log](replicated-log-internals.md)
+used for the registry. If this is set to false, the log has to be manually
+initialized when used for the very first time. (default: true)
+  </td>
+</tr>
+<tr>
+  <td>
+    --max_completed_frameworks=VALUE
+  </td>
+  <td>
+Maximum number of completed frameworks to store in memory. (default: 50)
+  </td>
+</tr>
+<tr>
+  <td>
+    --max_completed_tasks_per_framework
+=VALUE
+  </td>
+  <td>
+Maximum number of completed tasks per framework to store in memory. (default: 1000)
+  </td>
+</tr>
+<tr>
+  <td>
+    --max_slave_ping_timeouts=VALUE
+  </td>
+  <td>
+The number of times a slave can fail to respond to a
+ping from the master. Slaves that do not respond within
+<code>max_slave_ping_timeouts</code> ping retries will be asked to shutdown.
+(default: 5)
+  </td>
+</tr>
+<tr>
+  <td>
+    --offer_timeout=VALUE
+  </td>
+  <td>
+Duration of time before an offer is rescinded from a framework.
+This helps fairness when running frameworks that hold on to offers,
+or frameworks that accidentally drop offers.
+If not set, offers do not timeout.
+  </td>
+</tr>
+<tr>
+  <td>
+    --rate_limits=VALUE
+  </td>
+  <td>
+The value could be a JSON-formatted string of rate limits
+or a file path containing the JSON-formatted rate limits used
+for framework rate limiting.
+Path could be of the form <code>file:///path/to/file</code>
+or <code>/path/to/file</code>.
+<p/>
+See the RateLimits protobuf in mesos.proto for the expected format.
+<p/>
+Example:
+<pre><code>{
+  "limits": [
+    {
+      "principal": "foo",
+      "qps": 55.5
+    },
+    {
+      "principal": "bar"
+    }
+  ],
+  "aggregate_default_qps": 33.3
+}</code></pre>
+  </td>
+</tr>
+<tr>
+  <td>
+    --recovery_slave_removal_limit=VALUE
+  </td>
+  <td>
+For failovers, limit on the percentage of slaves that can be removed
+from the registry *and* shutdown after the re-registration timeout
+elapses. If the limit is exceeded, the master will fail over rather
+than remove the slaves.
+This can be used to provide safety guarantees for production
+environments. Production environments may expect that across master
+failovers, at most a certain percentage of slaves will fail
+permanently (e.g. due to rack-level failures).
+Setting this limit would ensure that a human needs to get
+involved should an unexpected widespread failure of slaves occur
+in the cluster.
+Values: [0%-100%] (default: 100%)
+  </td>
+</tr>
+<tr>
+  <td>
+    --registry=VALUE
+  </td>
+  <td>
+Persistence strategy for the registry; available options are
+<code>replicated_log</code>, <code>in_memory</code> (for testing). (default: replicated_log)
+  </td>
+</tr>
+<tr>
+  <td>
+    --registry_fetch_timeout=VALUE
+  </td>
+  <td>
+Duration of time to wait in order to fetch data from the registry
+after which the operation is considered a failure. (default: 1mins)
+  </td>
+</tr>
+<tr>
+  <td>
+    --registry_store_timeout=VALUE
+  </td>
+  <td>
+Duration of time to wait in order to store data in the registry
+after which the operation is considered a failure. (default: 20secs)
+  </td>
+</tr>
+<tr>
+  <td>
+    --[no-]registry_strict
+  </td>
+  <td>
+Whether the master will take actions based on the persistent
+information stored in the Registry. Setting this to false means
+that the Registrar will never reject the admission, readmission,
+or removal of a slave. Consequently, <code>false</code> can be used to
+bootstrap the persistent state on a running cluster.
+<b>NOTE</b>: This flag is *experimental* and should not be used in
+production yet. (default: false)
+  </td>
+</tr>
+<tr>
+  <td>
+    --roles=VALUE
+  </td>
+  <td>
+A comma-separated list of the allocation roles that frameworks
+in this cluster may belong to. This flag is deprecated;
+if it is not specified, any role name can be used.
+  </td>
+</tr>
+<tr>
+  <td>
+    --[no-]root_submissions
+  </td>
+  <td>
+Can root submit frameworks? (default: true)
+  </td>
+</tr>
+<tr>
+  <td>
+    --slave_ping_timeout=VALUE
+  </td>
+  <td>
+The timeout within which each slave is expected to respond to a
+ping from the master. Slaves that do not respond within
+max_slave_ping_timeouts ping retries will be asked to shutdown.
+<b>NOTE</b>: The total ping timeout (<code>slave_ping_timeout</code> multiplied by
+<code>max_slave_ping_timeouts</code>) should be greater than the ZooKeeper
+session timeout to prevent useless re-registration attempts.
+(default: 15secs)
+  </td>
+</tr>
+<tr>
+  <td>
+    --slave_removal_rate_limit=VALUE
+  </td>
+  <td>
+The maximum rate (e.g., <code>1/10mins</code>, <code>2/3hrs</code>, etc) at which slaves
+will be removed from the master when they fail health checks.
+By default, slaves will be removed as soon as they fail the health
+checks. The value is of the form <code>(Number of slaves)/(Duration)</code>.
+  </td>
+</tr>
+<tr>
+  <td>
+    --slave_reregister_timeout=VALUE
+  </td>
+  <td>
+The timeout within which all slaves are expected to re-register
+when a new master is elected as the leader. Slaves that do not
+re-register within the timeout will be removed from the registry
+and will be shutdown if they attempt to communicate with master.
+<b>NOTE</b>: This value has to be at least 10mins. (default: 10mins)
+  </td>
+</tr>
+<tr>
+  <td>
+    --user_sorter=VALUE
+  </td>
+  <td>
+Policy to use for allocating resources
+between users. May be one of:
+  dominant_resource_fairness (drf) (default: drf)
+  </td>
+</tr>
+<tr>
+  <td>
+    --webui_dir=VALUE
+  </td>
+  <td>
+Directory path of the webui files/assets (default: /usr/local/share/mesos/webui)
+  </td>
+</tr>
+<tr>
+  <td>
+    --weights=VALUE
+  </td>
+  <td>
+A comma-separated list of role/weight pairs
+of the form <code>role=weight,role=weight</code>. Weights
+are used to indicate forms of priority. This flag is deprecated,
+and instead, after the Mesos master quorum is achieved, an operator
+can send an update weights request to do a batch configuration for weights.
+  </td>
+</tr>
+<tr>
+  <td>
+    --whitelist=VALUE
+  </td>
+  <td>
+Path to a file which contains a list of slaves (one per line) to
+advertise offers for. The file is watched, and periodically re-read to
+refresh the slave whitelist. By default there is no whitelist / all
+machines are accepted. Path could be of the form
+<code>file:///path/to/file</code> or <code>/path/to/file</code>.
+  </td>
+</tr>
+<tr>
+  <td>
+    --zk_session_timeout=VALUE
+  </td>
+  <td>
+ZooKeeper session timeout. (default: 10secs)
+  </td>
+</tr>
+</table>
+
+
 
               标志位                                    解释
         --acls=VALUE               JSON 格式的 ACL，请记住你也可以使用 file:///path/to/file 或者 /path/to/file 指定包含该列表的文件，格式请参考文件 mesos.proto 中的 ACLs protobuf 段落
