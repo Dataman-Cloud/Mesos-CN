@@ -452,11 +452,9 @@ file:///path/to/file (where file contains one of the above)</code></pre>
     --credentials=VALUE
   </td>
   <td>
-Either a path to a text file with a list of credentials,
-each line containing <code>principal</code> and <code>secret</code> separated by whitespace,
-or, a path to a JSON-formatted file containing credentials.
-Path could be of the form <code>file:///path/to/file</code> or <code>/path/to/file</code>.
-JSON file Example:
+  一个存取凭证的路径。这个路径可以指向一个内容为凭证列表的文本文件，在这个文件中每一行包括由空格隔开的<code>principal</code>和<code>secret</code>。也可以指向一个包含凭证信息的 JSON 格式文件。
+  路径的格式可以是：<code>file:///path/to/file</code> 或 <code>/path/to/file</code>
+JSON 文件举例:
 <pre><code>{
   "credentials": [
     {
@@ -465,7 +463,7 @@ JSON file Example:
     }
   ]
 }</code></pre>
-Text file Example:
+文本文件举例:
 <pre><code>username secret</code></pre>
   </td>
 </tr>
@@ -474,9 +472,8 @@ Text file Example:
     --framework_sorter=VALUE
   </td>
   <td>
-Policy to use for allocating resources
-between a given user's frameworks. Options
-are the same as for user_allocator. (default: drf)
+  给定 framework 之间的资源分配策略。选项与 user_allocator 相同。
+  （默认：drf）
   </td>
 </tr>
 <tr>
@@ -484,12 +481,10 @@ are the same as for user_allocator. (default: drf)
     --http_authenticators=VALUE
   </td>
   <td>
-HTTP authenticator implementation to use when handling requests to
-authenticated endpoints. Use the default
-<code>basic</code>, or load an alternate HTTP
-authenticator module using <code>--modules</code>.
+  HTTP 认证器用于处理已验证的 endpoints 的请求。默认值是 <code>basic</code>，或者通过
+  <code>--modules</code> 加载一个其他的 HTTP 认证器。
 <p/>
-Currently there is no support for multiple HTTP authenticators. (default: basic)
+目前不支持多种 HTTP 认证器。（默认：basic）
   </td>
 </tr>
 <tr>
