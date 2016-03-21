@@ -492,9 +492,8 @@ JSON 文件举例:
     --[no-]log_auto_initialize
   </td>
   <td>
-Whether to automatically initialize the [replicated log](replicated-log-internals.md)
-used for the registry. If this is set to false, the log has to be manually
-initialized when used for the very first time. (default: true)
+  是否自动初始化注册使用的 *replicated log* 。如果设置为否，日志将在每次使用时手动初始化。
+  （默认值：true）
   </td>
 </tr>
 <tr>
@@ -502,7 +501,7 @@ initialized when used for the very first time. (default: true)
     --max_completed_frameworks=VALUE
   </td>
   <td>
-Maximum number of completed frameworks to store in memory. (default: 50)
+  存储在内存中的完成框架的最大数量。（默认：50）
   </td>
 </tr>
 <tr>
@@ -511,7 +510,7 @@ Maximum number of completed frameworks to store in memory. (default: 50)
 =VALUE
   </td>
   <td>
-Maximum number of completed tasks per framework to store in memory. (default: 1000)
+  存储在内存的每个框架中已完成任务的最大数量。（默认：1000）
   </td>
 </tr>
 <tr>
@@ -519,10 +518,9 @@ Maximum number of completed tasks per framework to store in memory. (default: 10
     --max_slave_ping_timeouts=VALUE
   </td>
   <td>
-The number of times a slave can fail to respond to a
-ping from the master. Slaves that do not respond within
-<code>max_slave_ping_timeouts</code> ping retries will be asked to shutdown.
-(default: 5)
+  一个 slave 对于master的 ping 响应失败的最大次数。
+  如果 slaves 没有在 <code>max_slave_ping_timeouts</code> 之内响应，就会尝试关机。
+  （默认：5）
   </td>
 </tr>
 <tr>
@@ -530,10 +528,9 @@ ping from the master. Slaves that do not respond within
     --offer_timeout=VALUE
   </td>
   <td>
-Duration of time before an offer is rescinded from a framework.
-This helps fairness when running frameworks that hold on to offers,
-or frameworks that accidentally drop offers.
-If not set, offers do not timeout.
+  一个 offer 撤销的超时时间。
+  这可以让不同的 frameworks 提供的 offer 获得更公平的响应。
+  如果不设置， offers 没有超时限制。
   </td>
 </tr>
 <tr>
