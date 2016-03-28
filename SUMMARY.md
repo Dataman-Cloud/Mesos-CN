@@ -36,6 +36,7 @@
     * [在虚拟机中开发Marathon](document/Marathon/developing-vm.md)
     * [SSL模式与普通模式接入认证](document/Marathon/SSL and Basic Access Authentication.md)
     * [服务发现与负载均衡](document/Marathon/Service-Discovery.md)
+    * [Marathon 1.0.0版 Release Notes](document/Marathon/Marathon-release-notes.md)
 * Bmaboo 官方用户文档中文版
     * Bmaboo 文档
 * 最佳实践
