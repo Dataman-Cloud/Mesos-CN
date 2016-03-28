@@ -65,7 +65,7 @@ Marathon 会将这个信息传递给 Mesos。Mesos 则会将此信息用于服�
 
 ### WEB UI
 
-次版本的 Marathon 在 WEB UI 方面也有了很多改进。
+此版本的 Marathon 在 WEB UI 方面也有了很多改进。
 
 #### 应用和搜索
 
