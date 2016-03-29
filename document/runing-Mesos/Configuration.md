@@ -538,14 +538,10 @@ JSON 文件举例:
     --rate_limits=VALUE
   </td>
   <td>
-The value could be a JSON-formatted string of rate limits
-or a file path containing the JSON-formatted rate limits used
-for framework rate limiting.
-Path could be of the form <code>file:///path/to/file</code>
-or <code>/path/to/file</code>.
-<p/>
-See the RateLimits protobuf in mesos.proto for the expected format.
-<p/>
+  该值可以为一个 JSON 格式的速率限制或一个文件路径包含了被 framework 限速 所使用的 JSON 格式的速率限制。请记住你也可以是使用 file:///path/to/file 或 <code>/path/to/file</code> 参数值格式来将该 JSON 写入至一个文件。
+  <p/>
+  期望的格式请参考 mesos.proto 中的 RateLimits protobuf.
+  <p/>
 Example:
 <pre><code>{
   "limits": [
@@ -566,18 +562,10 @@ Example:
     --recovery_slave_removal_limit=VALUE
   </td>
   <td>
-For failovers, limit on the percentage of slaves that can be removed
-from the registry *and* shutdown after the re-registration timeout
-elapses. If the limit is exceeded, the master will fail over rather
-than remove the slaves.
-This can be used to provide safety guarantees for production
-environments. Production environments may expect that across master
-failovers, at most a certain percentage of slaves will fail
-permanently (e.g. due to rack-level failures).
-Setting this limit would ensure that a human needs to get
-involved should an unexpected widespread failure of slaves occur
-in the cluster.
-Values: [0%-100%] (default: 100%)
+  针对故障转移，限制上的百分比的 slaves 可以从注册中移除并关机在重新注册的超时时间到了之后。
+  如果该限制被突破， master 将实行故障转移而不是移除 slaves.
+  这可被用来针对生产环境提供安全保障。生产环境可能期望在 Master 故障转移过程中， 最多一定百分比的 slaves 将永久性的挂掉 (比如, 由于 rack-level 的故障)。
+  设定该限制可以保证一个人需要参与进来当在该集群中一个非预期的大范围的 slave 故障发生。值: [0%-100%] (默认: 100%)
   </td>
 </tr>
 <tr>
@@ -585,8 +573,8 @@ Values: [0%-100%] (default: 100%)
     --registry=VALUE
   </td>
   <td>
-Persistence strategy for the registry; available options are
-<code>replicated_log</code>, <code>in_memory</code> (for testing). (default: replicated_log)
+  注册表持久化策略。可用选项有 <code>replicated_log</code>,<code>in_memory</code>（用于测试）。
+  默认：replicated_log。
   </td>
 </tr>
 <tr>
@@ -594,8 +582,7 @@ Persistence strategy for the registry; available options are
     --registry_fetch_timeout=VALUE
   </td>
   <td>
-Duration of time to wait in order to fetch data from the registry
-after which the operation is considered a failure. (default: 1mins)
+  在操作被认为是一个失败后的为了从注册中提取数据的等待的时间间隔.(默认： 1mins)
   </td>
 </tr>
 <tr>
@@ -603,8 +590,7 @@ after which the operation is considered a failure. (default: 1mins)
     --registry_store_timeout=VALUE
   </td>
   <td>
-Duration of time to wait in order to store data in the registry
-after which the operation is considered a failure. (default: 20secs)
+  等待的时间周期为了当操作被认为一个失败的时候将数据存储入注册机。 (默认：20secs)
   </td>
 </tr>
 <tr>
@@ -612,13 +598,7 @@ after which the operation is considered a failure. (default: 20secs)
     --[no-]registry_strict
   </td>
   <td>
-Whether the master will take actions based on the persistent
-information stored in the Registry. Setting this to false means
-that the Registrar will never reject the admission, readmission,
-or removal of a slave. Consequently, <code>false</code> can be used to
-bootstrap the persistent state on a running cluster.
-<b>NOTE</b>: This flag is *experimental* and should not be used in
-production yet. (default: false)
+  无论 Master 是否将基于注册机中存储的持久信息来采取行动。设定改值为 false 意味着注册员将永远拒绝入列，出列和一个 slave 的移除。所以， <code>false</code> 可以用来在一个运行的集群上来引导持久化的状态。注意： 该标志位是 *experimental* 而且还不能在应用中使用.(默认: false)
   </td>
 </tr>
 <tr>
@@ -626,9 +606,7 @@ production yet. (default: false)
     --roles=VALUE
   </td>
   <td>
-A comma-separated list of the allocation roles that frameworks
-in this cluster may belong to. This flag is deprecated;
-if it is not specified, any role name can be used.
+  其 frameworks 在这个集群中可能归属于的用逗号分离的一系列指派的角色。
   </td>
 </tr>
 <tr>
@@ -636,7 +614,7 @@ if it is not specified, any role name can be used.
     --[no-]root_submissions
   </td>
   <td>
-Can root submit frameworks? (default: true)
+  root 是否可以提交 frameworks? (默认: true)
   </td>
 </tr>
 <tr>
@@ -644,13 +622,7 @@ Can root submit frameworks? (default: true)
     --slave_ping_timeout=VALUE
   </td>
   <td>
-The timeout within which each slave is expected to respond to a
-ping from the master. Slaves that do not respond within
-max_slave_ping_timeouts ping retries will be asked to shutdown.
-<b>NOTE</b>: The total ping timeout (<code>slave_ping_timeout</code> multiplied by
-<code>max_slave_ping_timeouts</code>) should be greater than the ZooKeeper
-session timeout to prevent useless re-registration attempts.
-(default: 15secs)
+  在每个 slave 被期望从一个 master 回应一个 ping 值的超时时间。 Slaves 如果不是在 max_slave_ping_timeouts 回复，ping 从新尝试将被移除.  (默认: 15secs)
   </td>
 </tr>
 <tr>
@@ -658,10 +630,7 @@ session timeout to prevent useless re-registration attempts.
     --slave_removal_rate_limit=VALUE
   </td>
   <td>
-The maximum rate (e.g., <code>1/10mins</code>, <code>2/3hrs</code>, etc) at which slaves
-will be removed from the master when they fail health checks.
-By default, slaves will be removed as soon as they fail the health
-checks. The value is of the form <code>(Number of slaves)/(Duration)</code>.
+  最大的比例(e.g., <code>1/10mins</code>, <code>2/3hrs</code>, etc) 对于那个 slaves 将被从 master 中移除当他们遇到健康检测失败。默认的是 slave 将尽可能快的被移除当它们遇到健康监测失败。值为 <code>(Number of slaves)/(Duration)</code> 的模式。
   </td>
 </tr>
 <tr>
@@ -669,11 +638,8 @@ checks. The value is of the form <code>(Number of slaves)/(Duration)</code>.
     --slave_reregister_timeout=VALUE
   </td>
   <td>
-The timeout within which all slaves are expected to re-register
-when a new master is elected as the leader. Slaves that do not
-re-register within the timeout will be removed from the registry
-and will be shutdown if they attempt to communicate with master.
-<b>NOTE</b>: This value has to be at least 10mins. (default: 10mins)
+  在所有的 slaves 被期望重新注册当一个新的 master 被选举为 leader 的超时时间。 Slaves 其不会在此超时时间内被重新注册将被从注册中移除并将被关掉如果它们尝试去与 master 通信。
+  注意： 该值将被设置为最少 10mins. (默认: 10mins)
   </td>
 </tr>
 <tr>
@@ -681,9 +647,7 @@ and will be shutdown if they attempt to communicate with master.
     --user_sorter=VALUE
   </td>
   <td>
-Policy to use for allocating resources
-between users. May be one of:
-  dominant_resource_fairness (drf) (default: drf)
+  被用来在用户中分配资源的策略。可以为以下之一：dominant_resource_fairness (drf) (default: drf)
   </td>
 </tr>
 <tr>
@@ -691,7 +655,7 @@ between users. May be one of:
     --webui_dir=VALUE
   </td>
   <td>
-Directory path of the webui files/assets (default: /usr/local/share/mesos/webui)
+  管理页面的网页文件的目录，默认：/usr/local/share/mesos/webui
   </td>
 </tr>
 <tr>
@@ -699,11 +663,7 @@ Directory path of the webui files/assets (default: /usr/local/share/mesos/webui)
     --weights=VALUE
   </td>
   <td>
-A comma-separated list of role/weight pairs
-of the form <code>role=weight,role=weight</code>. Weights
-are used to indicate forms of priority. This flag is deprecated,
-and instead, after the Mesos master quorum is achieved, an operator
-can send an update weights request to do a batch configuration for weights.
+  逗号分割的角色/权重列表，成对表单 <code>role=weight,role=weight</code>。 weights是用来表达优先级。
   </td>
 </tr>
 <tr>
@@ -711,11 +671,9 @@ can send an update weights request to do a batch configuration for weights.
     --whitelist=VALUE
   </td>
   <td>
-Path to a file which contains a list of slaves (one per line) to
-advertise offers for. The file is watched, and periodically re-read to
-refresh the slave whitelist. By default there is no whitelist / all
-machines are accepted. Path could be of the form
-<code>file:///path/to/file</code> or <code>/path/to/file</code>.
+  一个 文件名器包含一系列的 slaves （每行一个）来通告 offers.该文件被观测，并周期性的重读取来刷新 slave 白名单。 默认的这里没有白名单/所有机器被接收. (默认: None)
+  文件路径可以是这样的形式：
+<code>file:///path/to/file</code> 或 <code>/path/to/file</code>.
   </td>
 </tr>
 <tr>
@@ -723,144 +681,763 @@ machines are accepted. Path could be of the form
     --zk_session_timeout=VALUE
   </td>
   <td>
-ZooKeeper session timeout. (default: 10secs)
+zookeeper 的 session 超时时长。 (默认: 10secs)
+  </td>
+</tr>
+</table>
+
+*通过 `--with-network-isolator` 配置时可用的标记*
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th width="30%">
+        Flag
+      </th>
+      <th>
+        说明
+      </th>
+    </tr>
+  </thead>
+<tr>
+  <td>
+    --max_executors_per_slave=VALUE
+  </td>
+  <td>
+  每个 Slave 上最大允许的执行器数量。网络监控和隔离机制强行限制每个执行器使用的端口资源，所以每个 slave 上只能跑一定数量的执行器。
+  </td>
+</tr>
+</table>
+
+## Slave 选项
+
+*必选项*
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th width="30%">
+        Flag
+      </th>
+      <th>
+        说明
+      </th>
+    </tr>
+  </thead>
+<tr>
+  <td>
+    --master=VALUE
+  </td>
+  <td>
+  可能是其中的一种：
+  <code>host:port</code>
+  <code>zk://host1:port1,host2:port2,.../path</code>
+  <code>zk://username:password@host1:port1,host2:port2,.../path</code>
+  <code>file:///path/to/file</code> (包含以上中的一个)
+  </td>
+</tr>
+</table>
+
+*可选项*
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th width="30%">
+        Flag
+      </th>
+      <th>
+        Explanation
+      </th>
+    </tr>
+  </thead>
+<tr>
+  <td>
+    --appc_store_dir=VALUE
+  </td>
+  <td>
+Directory the appc provisioner will store images in.
+(default: /tmp/mesos/store/appc)
+  </td>
+</tr>
+<tr>
+  <td>
+    --attributes=VALUE
+  </td>
+  <td>
+Attributes of the slave machine, in the form:
+<code>rack:2</code> or <code>rack:2;u:1</code>
+  </td>
+</tr>
+<tr>
+  <td>
+    --authenticatee=VALUE
+  </td>
+  <td>
+Authenticatee implementation to use when authenticating against the
+master. Use the default <code>crammd5</code>, or
+load an alternate authenticatee module using <code>--modules</code>. (default: crammd5)
+  </td>
+</tr>
+<tr>
+  <td>
+    --[no]-cgroups_cpu_enable_pids_and_tids_count
+  </td>
+  <td>
+Cgroups feature flag to enable counting of processes and threads
+inside a container. (default: false)
+  </td>
+</tr>
+<tr>
+  <td>
+    --[no]-cgroups_enable_cfs
+  </td>
+  <td>
+Cgroups feature flag to enable hard limits on CPU resources
+via the CFS bandwidth limiting subfeature. (default: false)
+  </td>
+</tr>
+<tr>
+  <td>
+    --cgroups_hierarchy=VALUE
+  </td>
+  <td>
+The path to the cgroups hierarchy root. (default: /sys/fs/cgroup)
+  </td>
+</tr>
+<tr>
+  <td>
+    --[no]-cgroups_limit_swap
+  </td>
+  <td>
+Cgroups feature flag to enable memory limits on both memory and
+swap instead of just memory. (default: false)
+  </td>
+</tr>
+<tr>
+  <td>
+    --cgroups_net_cls_primary_handle
+  </td>
+  <td>
+A non-zero, 16-bit handle of the form `0xAAAA`. This will be used as
+the primary handle for the net_cls cgroup.
+  </td>
+</tr>
+<tr>
+  <td>
+    --cgroups_net_cls_secondary_handles
+  </td>
+  <td>
+A range of the form 0xAAAA,0xBBBB, specifying the valid secondary
+handles that can be used with the primary handle. This will take
+effect only when the <code>--cgroups_net_cls_primary_handle</code> is set.
+  </td>
+</tr>
+<tr>
+  <td>
+    --cgroups_root=VALUE
+  </td>
+  <td>
+Name of the root cgroup. (default: mesos)
+  </td>
+</tr>
+<tr>
+  <td>
+    --container_disk_watch_interval=VALUE
+  </td>
+  <td>
+The interval between disk quota checks for containers. This flag is
+used for the <code>posix/disk</code> isolator. (default: 15secs)
+  </td>
+</tr>
+<tr>
+  <td>
+    --container_logger=VALUE
+  </td>
+  <td>
+The name of the container logger to use for logging container
+(i.e., executor and task) stdout and stderr. The default
+container logger writes to <code>stdout</code> and <code>stderr</code> files
+in the sandbox directory.
+  </td>
+</tr>
+<tr>
+  <td>
+    --containerizer_path=VALUE
+  </td>
+  <td>
+The path to the external containerizer executable used when
+external isolation is activated (<code>--isolation=external</code>).
+  </td>
+</tr>
+<tr>
+  <td>
+    --containerizers=VALUE
+  </td>
+  <td>
+Comma-separated list of containerizer implementations
+to compose in order to provide containerization.
+Available options are <code>mesos</code>, <code>external</code>, and
+<code>docker</code> (on Linux). The order the containerizers
+are specified is the order they are tried.
+(default: mesos)
+  </td>
+</tr>
+<tr>
+  <td>
+    --credential=VALUE
+  </td>
+  <td>
+Either a path to a text with a single line
+containing <code>principal</code> and <code>secret</code> separated by whitespace.
+Or a path containing the JSON-formatted information used for one credential.
+Path could be of the form <code>file:///path/to/file</code> or <code>/path/to/file</code>.
+Example:
+<pre><code>{
+  "principal": "username",
+  "secret": "secret"
+}</code></pre>
+  </td>
+</tr>
+<tr>
+  <td>
+    --default_container_image=VALUE
+  </td>
+  <td>
+The default container image to use if not specified by a task,
+when using external containerizer.
+  </td>
+</tr>
+<tr>
+  <td>
+    --default_container_info=VALUE
+  </td>
+  <td>
+JSON-formatted ContainerInfo that will be included into
+any ExecutorInfo that does not specify a ContainerInfo.
+<p/>
+See the ContainerInfo protobuf in mesos.proto for
+the expected format.
+<p/>
+Example:
+<pre><code>{
+  "type": "MESOS",
+  "volumes": [
+    {
+      "host_path": "./.private/tmp",
+      "container_path": "/tmp",
+      "mode": "RW"
+    }
+  ]
+}</code></pre>
+  </td>
+</tr>
+<tr>
+  <td>
+    --default_role=VALUE
+  </td>
+  <td>
+Any resources in the <code>--resources</code> flag that
+omit a role, as well as any resources that
+are not present in <code>--resources</code> but that are
+automatically detected, will be assigned to
+this role. (default: * )
+  </td>
+</tr>
+<tr>
+  <td>
+    --disk_watch_interval=VALUE
+  </td>
+  <td>
+Periodic time interval (e.g., 10secs, 2mins, etc)
+to check the overall disk usage managed by the slave.
+This drives the garbage collection of archived
+information and sandboxes. (default: 1mins)
+  </td>
+</tr>
+<tr>
+  <td>
+    --docker=VALUE
+  </td>
+  <td>
+The absolute path to the docker executable for docker
+containerizer.
+(default: docker)
+  </td>
+</tr>
+<tr>
+  <td>
+    --[no-]docker_kill_orphans
+  </td>
+  <td>
+Enable docker containerizer to kill orphaned containers.
+You should consider setting this to false when you launch multiple
+slaves in the same OS, to avoid one of the DockerContainerizer
+removing docker tasks launched by other slaves.
+(default: true)
+  </td>
+</tr>
+<tr>
+  <td>
+    --docker_mesos_image=VALUE
+  </td>
+  <td>
+The docker image used to launch this mesos slave instance.
+If an image is specified, the docker containerizer assumes the slave
+is running in a docker container, and launches executors with
+docker containers in order to recover them when the slave restarts and
+recovers.
+  </td>
+</tr>
+<tr>
+  <td>
+    --docker_registry=VALUE
+  </td>
+  <td>
+The default url for pulling Docker images. It could either be a Docker
+registry server url (i.e: <code>https://registry.docker.io</code>), or a local
+path (i.e: <code>/tmp/docker/images</code>) in which Docker image archives
+(result of <code>docker save</code>) are stored. (default: https://registry-1.docker.io)
+  </td>
+</tr>
+<tr>
+  <td>
+    --docker_remove_delay=VALUE
+  </td>
+  <td>
+The amount of time to wait before removing docker containers
+(e.g., <code>3days</code>, <code>2weeks</code>, etc).
+(default: 6hrs)
+  </td>
+</tr>
+<tr>
+  <td>
+    --docker_socket=VALUE
+  </td>
+  <td>
+The UNIX socket path to be mounted into the docker executor container
+to provide docker CLI access to the docker daemon. This must be the
+path used by the slave's docker image.
+(default: /var/run/docker.sock)
+  </td>
+</tr>
+<tr>
+  <td>
+    --docker_stop_timeout=VALUE
+  </td>
+  <td>
+The time as a duration for docker to wait after stopping an instance
+before it kills that instance. (default: 0ns)
+  </td>
+</tr>
+<tr>
+  <td>
+    --docker_store_dir=VALUE
+  </td>
+  <td>
+Directory the Docker provisioner will store images in (default: /tmp/mesos/store/docker)
+  </td>
+</tr>
+<tr>
+  <td>
+    --[no-]enforce_container_disk_quota
+  </td>
+  <td>
+Whether to enable disk quota enforcement for containers. This flag
+is used for the <code>posix/disk</code> isolator. (default: false)
+  </td>
+</tr>
+<tr>
+  <td>
+    --executor_environment_variables=VALUE
+  </td>
+  <td>
+JSON object representing the environment variables that should be
+passed to the executor, and thus subsequently task(s). By default the
+executor will inherit the slave's environment variables.
+Example:
+<pre><code>{
+  "PATH": "/bin:/usr/bin",
+  "LD_LIBRARY_PATH": "/usr/local/lib"
+}</code></pre>
+  </td>
+</tr>
+<tr>
+  <td>
+    --executor_registration_timeout=VALUE
+  </td>
+  <td>
+Amount of time to wait for an executor
+to register with the slave before considering it hung and
+shutting it down (e.g., 60secs, 3mins, etc) (default: 1mins)
+  </td>
+</tr>
+<tr>
+  <td>
+    --executor_shutdown_grace_period=VALUE
+  </td>
+  <td>
+Amount of time to wait for an executor
+to shut down (e.g., 60secs, 3mins, etc) (default: 5secs)
+  </td>
+</tr>
+<tr>
+  <td>
+    --fetcher_cache_dir=VALUE
+  </td>
+  <td>
+Parent directory for fetcher cache directories
+(one subdirectory per slave). (default: /tmp/mesos/fetch)
+  </td>
+</tr>
+<tr>
+  <td>
+    --fetcher_cache_size=VALUE
+  </td>
+  <td>
+Size of the fetcher cache in Bytes. (default: 2GB)
+  </td>
+</tr>
+<tr>
+  <td>
+    --frameworks_home=VALUE
+  </td>
+  <td>
+Directory path prepended to relative executor URIs (default: )
+  </td>
+</tr>
+<tr>
+  <td>
+    --gc_delay=VALUE
+  </td>
+  <td>
+Maximum amount of time to wait before cleaning up
+executor directories (e.g., 3days, 2weeks, etc).
+Note that this delay may be shorter depending on
+the available disk usage. (default: 1weeks)
+  </td>
+</tr>
+<tr>
+  <td>
+    <a name="gc_disk_headroom"></a>
+    --gc_disk_headroom=VALUE
+  </td>
+  <td>
+Adjust disk headroom used to calculate maximum executor
+directory age. Age is calculated by:
+<code>gc_delay * max(0.0, (1.0 - gc_disk_headroom - disk usage))</code>
+every <code>--disk_watch_interval</code> duration. <code>gc_disk_headroom</code> must
+be a value between 0.0 and 1.0 (default: 0.1)
+  </td>
+</tr>
+<tr>
+  <td>
+    --hadoop_home=VALUE
+  </td>
+  <td>
+Path to find Hadoop installed (for
+fetching framework executors from HDFS)
+(no default, look for <code>HADOOP_HOME</code> in
+environment or find hadoop on <code>PATH</code>) (default: )
+  </td>
+</tr>
+<tr>
+  <td>
+    --image_providers=VALUE
+  </td>
+  <td>
+Comma-separated list of supported image providers,
+e.g., <code>APPC,DOCKER</code>.
+  </td>
+</tr>
+<tr>
+  <td>
+    --image_provisioner_backend=VALUE
+  </td>
+  <td>
+Strategy for provisioning container rootfs from images,
+e.g., <code>bind</code>, <code>copy</code>. (default: copy)
+  </td>
+</tr>
+<tr>
+  <td>
+    --isolation=VALUE
+  </td>
+  <td>
+Isolation mechanisms to use, e.g., <code>posix/cpu,posix/mem</code>, or
+<code>cgroups/cpu,cgroups/mem</code>, or network/port_mapping
+(configure with flag: <code>--with-network-isolator</code> to enable),
+or <code>external</code>, or load an alternate isolator module using
+the <code>--modules</code> flag. Note that this flag is only relevant
+for the Mesos Containerizer. (default: posix/cpu,posix/mem)
+  </td>
+</tr>
+<tr>
+  <td>
+    --launcher=VALUE
+  </td>
+  <td>
+The launcher to be used for Mesos containerizer. It could either be
+<code>linux</code> or <code>posix</code>. The Linux launcher is required for cgroups
+isolation and for any isolators that require Linux namespaces such as
+network, pid, etc. If unspecified, the slave will choose the Linux
+launcher if it's running as root on Linux.
+  </td>
+</tr>
+<tr>
+  <td>
+    --launcher_dir=VALUE
+  </td>
+  <td>
+Directory path of Mesos binaries. Mesos would find health-check,
+fetcher, containerizer and executor binary files under this
+directory. (default: /usr/local/libexec/mesos)
+  </td>
+</tr>
+<tr>
+  <td>
+    --oversubscribed_resources_interval=VALUE
+  </td>
+  <td>
+The slave periodically updates the master with the current estimation
+about the total amount of oversubscribed resources that are allocated
+and available. The interval between updates is controlled by this flag.
+(default: 15secs)
+  </td>
+</tr>
+<tr>
+  <td>
+    --perf_duration=VALUE
+  </td>
+  <td>
+Duration of a perf stat sample. The duration must be less
+than the <code>perf_interval</code>. (default: 10secs)
+  </td>
+</tr>
+<tr>
+  <td>
+    --perf_events=VALUE
+  </td>
+  <td>
+List of command-separated perf events to sample for each container
+when using the perf_event isolator. Default is none.
+Run command <code>perf list</code> to see all events. Event names are
+sanitized by downcasing and replacing hyphens with underscores
+when reported in the PerfStatistics protobuf, e.g., <code>cpu-cycles</code>
+becomes <code>cpu_cycles</code>; see the PerfStatistics protobuf for all names.
+  </td>
+</tr>
+<tr>
+  <td>
+    --perf_interval=VALUE
+  </td>
+  <td>
+Interval between the start of perf stat samples. Perf samples are
+obtained periodically according to <code>perf_interval</code> and the most
+recently obtained sample is returned rather than sampling on
+demand. For this reason, <code>perf_interval</code> is independent of the
+resource monitoring interval. (default: 60secs)
+  </td>
+</tr>
+<tr>
+  <td>
+    --qos_controller=VALUE
+  </td>
+  <td>
+The name of the QoS Controller to use for oversubscription.
+  </td>
+</tr>
+<tr>
+  <td>
+    --qos_correction_interval_min=VALUE
+  </td>
+  <td>
+The slave polls and carries out QoS corrections from the QoS
+Controller based on its observed performance of running tasks.
+The smallest interval between these corrections is controlled by
+this flag. (default: 0secs)
+  </td>
+</tr>
+<tr>
+  <td>
+    --recover=VALUE
+  </td>
+  <td>
+Whether to recover status updates and reconnect with old executors.
+Valid values for <code>recover</code> are
+reconnect: Reconnect with any old live executors.
+cleanup  : Kill any old live executors and exit.
+           Use this option when doing an incompatible slave
+           or executor upgrade!). (default: reconnect)
+  </td>
+</tr>
+<tr>
+  <td>
+    --recovery_timeout=VALUE
+  </td>
+  <td>
+Amount of time allotted for the slave to recover. If the slave takes
+longer than recovery_timeout to recover, any executors that are
+waiting to reconnect to the slave will self-terminate.
+(default: 15mins)
+  </td>
+</tr>
+<tr>
+  <td>
+    --registration_backoff_factor=VALUE
+  </td>
+  <td>
+Slave initially picks a random amount of time between <code>[0, b]</code>, where
+<code>b = registration_backoff_factor</code>, to (re-)register with a new master.
+Subsequent retries are exponentially backed off based on this
+interval (e.g., 1st retry uses a random value between <code>[0, b * 2^1]</code>,
+2nd retry between <code>[0, b * 2^2]</code>, 3rd retry between <code>[0, b * 2^3]</code>,
+etc) up to a maximum of 1mins (default: 1secs)
+  </td>
+</tr>
+<tr>
+  <td>
+    --resource_estimator=VALUE
+  </td>
+  <td>
+The name of the resource estimator to use for oversubscription.
+  </td>
+</tr>
+<tr>
+  <td>
+    --resources=VALUE
+  </td>
+  <td>
+Total consumable resources per slave. Can be provided in JSON format
+or as a semicolon-delimited list of key:value pairs, with the role
+optionally specified.
+<p/>
+As a key:value list:
+<code>name(role):value;name:value...</code>
+<p/>
+To use JSON, pass a JSON-formatted string or use
+<code>--resources=filepath</code> to specify the resources via a file containing
+a JSON-formatted string. 'filepath' can be of the form
+<code>file:///path/to/file</code> or <code>/path/to/file</code>.
+<p/>
+Example JSON:
+<pre><code>[
+  {
+    "name": "cpus",
+    "type": "SCALAR",
+    "scalar": {
+      "value": 24
+    }
+  },
+  {
+    "name": "mem",
+    "type": "SCALAR",
+    "scalar": {
+      "value": 24576
+    }
+  }
+]</code></pre>
+  </td>
+</tr>
+<tr>
+  <td>
+    --[no-]revocable_cpu_low_priority
+  </td>
+  <td>
+Run containers with revocable CPU at a lower priority than
+normal containers (non-revocable cpu). Currently only
+supported by the cgroups/cpu isolator. (default: true)
+  </td>
+</tr>
+<tr>
+  <td>
+    --sandbox_directory=VALUE
+  </td>
+  <td>
+The absolute path for the directory in the container where the
+sandbox is mapped to.
+(default: /mnt/mesos/sandbox)
+  </td>
+</tr>
+<tr>
+  <td>
+    --slave_subsystems=VALUE
+  </td>
+  <td>
+List of comma-separated cgroup subsystems to run the slave binary
+in, e.g., <code>memory,cpuacct</code>. The default is none.
+Present functionality is intended for resource monitoring and
+no cgroup limits are set, they are inherited from the root mesos
+cgroup.
+  </td>
+</tr>
+<tr>
+  <td>
+    --[no-]strict
+  </td>
+  <td>
+If <code>strict=true</code>, any and all recovery errors are considered fatal.
+If <code>strict=false</code>, any expected errors (e.g., slave cannot recover
+information about an executor, because the slave died right before
+the executor registered.) during recovery are ignored and as much
+state as possible is recovered.
+(default: true)
+  </td>
+</tr>
+<tr>
+  <td>
+    --[no-]switch_user
+  </td>
+  <td>
+If set to <code>true</code>, the slave will attempt to run tasks as
+the <code>user</code> who submitted them (as defined in <code>FrameworkInfo</code>)
+(this requires <code>setuid</code> permission and that the given <code>user</code>
+exists on the slave).
+If the user does not exist, an error occurs and the task will fail.
+If set to <code>false</code>, tasks will be run as the same user as the Mesos
+slave process.
+<b>NOTE</b>: This feature is not yet supported on Windows slave, and
+therefore the flag currently does not exist on that platform. (default: true)
+  </td>
+</tr>
+<tr>
+  <td>
+    --[no-]systemd_enable_support
+  </td>
+  <td>
+Top level control of systemd support. When enabled, features such as
+executor life-time extension are enabled unless there is an explicit
+flag to disable these (see other flags). This should be enabled when
+the agent is launched as a systemd unit.
+(default: true)
+  </td>
+</tr>
+<tr>
+  <td>
+    --systemd_runtime_directory=VALUE
+  </td>
+  <td>
+The path to the systemd system run time directory.
+(default: /run/systemd/system)
+  </td>
+</tr>
+<tr>
+  <td>
+    --work_dir=VALUE
+  </td>
+  <td>
+Directory path to place framework work directories
+(default: /tmp/mesos)
   </td>
 </tr>
 </table>
 
 
 
-              标志位                                    解释
-        --acls=VALUE               JSON 格式的 ACL，请记住你也可以使用 file:///path/to/file 或者 /path/to/file 指定包含该列表的文件，格式请参考文件 mesos.proto 中的 ACLs protobuf 段落
-                                   JSON文件例子：
-                                   {
-                                        "register_frameworks": [
-                                        {
-                                    "principals": { "type": "ANY" },
-                                    "roles": { "values": ["a"] }
-                                    }
-                                        ],
-                                    "run_tasks": [
-                                        {
-                                    "principals": { "values": ["a", "b"] },
-                                    "users": { "values": ["c"] }
-                                        }
-                                    ],
-                                "shutdown_frameworks": [
-                                    {
-                                    "principals": { "values": ["a", "b"] },
-                                    "framework_principals": {  "values":                           ["c"]}
-                                            }
-                                        ]
-                                    }
-    --allocation_interval=VALUE 两次资源分配（批量）之间的等待时长 （500ms,1sec等）。（默认值：1secs）
-    --allocator=VALUE           指定被框架（Framework）使用的资源分配器，默认使用 HierarchicalDRF 分配器。通过 --modules 参数可以加载其他类型的分配器模块。(默认：HierarchicalDRF)
-    --[no-]authenticate         如果身份验证设置为 'true'，只允许经过身份验证的框架注册。如果设置为 'false'，未经身份验证的框架也允许被注册。(默认：false)
-    --[no-]authenticate_slaves  如果设置为 'true'， 只有通过身份验证的 slave 才允许被注册；如果设置为 'false' 未经身份验证的 slave 也允许被注册。(默认：false)
-    --authenticators=VALUE      框架或 slave 进行身份验证时使用的验证器，默认为 crammd5。也可以使用 --modules 来加载其他验证器模块。(默认:crammd5)
-    --cluster=VALUE             具有可读性的集群名称，在 webui 上显示。
-    --credentials=VALUE         包含 credential 列表的文件路径。文件格式即可以是普通文本，也可以是 JSON 格式。如果是普通文本，每行包含由空格分割的 principal 和  secret。文件路径格式必须为 file:///path/to/file 或 /path/to/file。
-                                JSON 文件样例：
-                                {
-                                    "credentials": [
-                                    {
-                                        "principal": "sherman",
-                                        "secret": "kitesurf"
-                                    }
-                                        ]
-                                }
-                                文本文件样例：
-                                username secret
-    --framework_sorter=VALUE    (default: drf) 用于一个给定用户的架构之间分配资源的策略。该选项和 user_allocator 选项相同。 (默认： drf)
-    --hooks=VALUE               安装在 master 内的钩子模块（hook module）列表，名子以逗号进行分隔
-    --hostname=VALUE            该 master 在 zookeeper 里登记的主机名。如果没有设置，将从绑定的IP地址进行解析。
-    --[no-]log_auto_initialize  是否通过使用该注册来自动初始化复制的 log .如果被设定为 false ， log 将会在最初使用的时候被手动初始化。(默认： true)
-    --max_slave_ping_timeouts=VALUE	 master 尝试 ping slave 的最高连续失败次数，超过这个限制的 slave 将被移除。（默认：5）
-    --modules                   需要加载的模块列表，它们可以被内部的子系统调用。使用 —modules=filepath  指定包含模块列表的文件（JSON格式）。可以使用 file:///path/to/file 或者 /path/to/file 来指定文件，或者直接用 —modules=“{...}” 参数指定模块列表。
-                                JSON 格式文件举例:
-                                {
-                                     "libraries": [
-                                          {
-                                            "file": "/path/to/libfoo.so",
-                                            "modules": [
-                                              {
-                                               "name": "org_apache_mesos_bar",
-                                               "parameters": [
-                                                    {
-                                                       "key": "X",
-                                                       "value": "Y"
-                                                     }
-                                                             ]
-                                                },
-                                                         {
-                                                            "name": "org_apache_mesos_baz"
-                                                          }
-                                                      ]
-                                              },
-                                              {
-                                                 "name": "qux",
-                                                 "modules": [
-                                                       {
-                                                          "name": "org_apache_mesos_norf"
-                                                       }
-                                                            ]
-                                              }
-                                            ]
-                                          }
-     --offer_timeout=VALUE    offer 从一个 framework 中被回收之前的时间间隔。 其保证了公平性当运行中的 frameworks 留住 offers, 或 frameworks 意外的丢弃 offers。
-     --rate_limits=VALUE     该值可以为一个 JSON 格式的速率限制或一个文件路径包含了被 framework 限速 所使用的 JSON 格式的速率限制。请记住你也可以是使用 file:///path/to/file 或 /path/to/file 参数值格式来将该 JSON 写入至一个文件。
-                             期望的格式请参考 mesos.proto 中的 RateLimits protobuf.
-                             例子：
-                             {
-                               "limits": [
-                                    {
-                                      "principal": "foo",
-                                      "qps": 55.5
-                                    },
-                                    {
-                                      "principal": "bar"
-                                    }
-                                        ],
-                                      "aggregate_default_qps": 33.3
-                              }
-     --recovery_slave_removal_limit=VALUE     针对故障转移，限制上的百分比的 slaves 可以从注册中移除并关机在重新注册的超时时间到了之后。 如果该限制被突破， master 将实行故障转移而不是移除 slaves.这可被用来针对生产环境提供安全保障。生产环境可能期望在 Master 故障转移过程中， 最多一定百分比的 slaves 将永久性的挂掉 (比如, 由于 rack-level 的故障)。设定该限制可以保证一个人需要参与进来当在该集群中一个非预期的大范围的 slave 故障发生。值: [0%-100%] (默认: 100%)
-    --registry=VALUE          注册表持久化策略。可用选项有 'replicated_log','in_memory'（用于测试）。默认：replicated_log。
-    --registry_fetch_timeout=VALUE 在操作被认为是一个失败后的为了从注册中提取数据的等待的时间间隔.(默认： 1mins)
-    --registry_store_timeout=VALUE 等待的时间周期为了当操作被认为一个失败的时候将数据存储入注册机。 (默认：5secs)
-    --[no-]registry_strict    无论 Master 是否将基于注册机中存储的持久信息来采取行动。设定改值为 false 意味着注册员将永远拒绝入列，出列和一个 slave 的移除。所以， 'false' 可以用来在一个运行的集群上来引导持久化的状态。注意： 该标志位是 *experimental* 而且还不能在应用中使用.(默认: false)
-    --roles=VALUE             其 frameworks 在这个集群中可能归属于的用逗号分离的一系列指派的角色。
-    --[no-]root_submissions   root 是否可以提交 frameworks? (默认: true)
-    --slave_ping_timeout=VALUE	在每个 slave 被期望从一个 master 回应一个 ping 值的超时时间。 Slaves 如果不是在  `max_slave_ping_timeouts` 回复，ping 从新尝试将被移除.  (默认: 15secs)
-    --slave_removal_rate_limit=VALUE	最大的比例(e.g., 1/10mins, 2/3hrs, etc) 对于那个 slaves 将被从 master 中移除当他们遇到健康检测失败。默认的是 slave 将尽可能快的被移除当它们遇到健康监测失败。值为 'Number of slaves'/'Duration' 的模式。
-    --slave_reregister_timeout=VALUE	在所有的 slaves被期望重新注册当一个新的 master 被选举为 leader的超时时间。 Slaves 其不会在此超时时间内被重新注册将被从注册中移除并将被关掉如果它们尝试去与 master 通信。注意： 该值将被设置为最少 10mins. (默认: 10mins)
-    --user_sorter=VALUE	     被用来在用户中分配资源的策略。可以为以下之一：dominant_resource_fairness (drf) (default: drf)
-    --webui_dir=VALUE        管理页面的网页文件的目录，默认：/usr/local/share/mesos/webui
-    --weights=VALUE          逗号分割的角色/权重列表，成对表单 'role=weight,role=weight'。 weights是用来表达优先级。
-    --whitelist=VALUE         一个 文件名器包含一系列的 slaves （每行一个）来通告 offers.该文件被观测，并周期性的重读取来刷新 slave 白名单。 默认的这里没有白名单/所有机器被接收. (默认: None)
-                                例子：
-                                file:///etc/mesos/slave_whitelist
-    --zk_session_timeout=VALUE  zookeeper 的 session 超时时长。
-
-*使用 ‘–with-network-isolator’ 配置时允许使用的参数*
-
-    --max_executors_per_slave=VALUE	每个 Slave 上最大允许的执行器数量。网络监控和隔离机制强行限制每个执行器使用的端口资源，所以每个 slave 上智能跑一定数量的执行器。这个标志位是用来避免框架接收了某些资源 offer，执行的时候却发现该 slave 上端口已经被分配完毕。
 
 
-## Slave 选项
-
-*必选项*
-
-    --master=VALUE       slave 连接到 master 的 URL，有三种连接方式：
-                         1. master 的主机名或者 IP 地址，如果是多个地址可以用逗号隔开，例如：
-                               --master=localhost:5050
-                               --master=10.0.0.5:5050,10.0.0.6:5050
-                         2. zookeeper 或仲裁 主机名/ip +端口  master 注册地址
-                               --master=zk://host1:port1,host2:port2,.../path
-                               --master=zk://username:password@host1:port1,host2:port2,.../path
-                         一个文件对应的一个路径包含以上选项的任意一个。你也可以使用 file:///path/to/file 语句来从一个包含以上任意一个选项的文件中读取参数
 
 
-*可选项*
 
     --attributes=VALUE    机器的属性：rack:2或者rack:2;u:1
     --authenticatee=VALUE 用于主节点身份验证，默认crammd5，或者用—modules加载备用模块。默认：crammd5。
