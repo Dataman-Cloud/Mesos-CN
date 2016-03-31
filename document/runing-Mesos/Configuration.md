@@ -747,7 +747,7 @@ zookeeper 的 session 超时时长。 (默认: 10secs)
         Flag
       </th>
       <th>
-        Explanation
+        说明
       </th>
     </tr>
   </thead>
@@ -756,8 +756,8 @@ zookeeper 的 session 超时时长。 (默认: 10secs)
     --appc_store_dir=VALUE
   </td>
   <td>
-Directory the appc provisioner will store images in.
-(default: /tmp/mesos/store/appc)
+  appc 提供者存储镜像的目录
+(默认: /tmp/mesos/store/appc)
   </td>
 </tr>
 <tr>
@@ -765,8 +765,8 @@ Directory the appc provisioner will store images in.
     --attributes=VALUE
   </td>
   <td>
-Attributes of the slave machine, in the form:
-<code>rack:2</code> or <code>rack:2;u:1</code>
+  slave 机器的属性,格式为：
+  <code>rack:2</code> 或者<code>rack:2;u:1</code>
   </td>
 </tr>
 <tr>
@@ -774,9 +774,7 @@ Attributes of the slave machine, in the form:
     --authenticatee=VALUE
   </td>
   <td>
-Authenticatee implementation to use when authenticating against the
-master. Use the default <code>crammd5</code>, or
-load an alternate authenticatee module using <code>--modules</code>. (default: crammd5)
+  用于主节点身份验证，默认crammd5，或者用<code>-—modules加载备用模块</code>。（默认：crammd5）
   </td>
 </tr>
 <tr>
@@ -784,8 +782,7 @@ load an alternate authenticatee module using <code>--modules</code>. (default: c
     --[no]-cgroups_cpu_enable_pids_and_tids_count
   </td>
   <td>
-Cgroups feature flag to enable counting of processes and threads
-inside a container. (default: false)
+  Cgroups 的功能标记，可以统计容器内的进程和线程的数量。（默认：false）
   </td>
 </tr>
 <tr>
@@ -793,8 +790,7 @@ inside a container. (default: false)
     --[no]-cgroups_enable_cfs
   </td>
   <td>
-Cgroups feature flag to enable hard limits on CPU resources
-via the CFS bandwidth limiting subfeature. (default: false)
+  Cgroups 的功能标记，通过限制CFS带宽来限制CPU资源. (默认: defult)
   </td>
 </tr>
 <tr>
@@ -802,7 +798,7 @@ via the CFS bandwidth limiting subfeature. (default: false)
     --cgroups_hierarchy=VALUE
   </td>
   <td>
-The path to the cgroups hierarchy root. (default: /sys/fs/cgroup)
+  cgroups的根路径位置. 默认: /sys/fs/cgroup
   </td>
 </tr>
 <tr>
@@ -810,8 +806,7 @@ The path to the cgroups hierarchy root. (default: /sys/fs/cgroup)
     --[no]-cgroups_limit_swap
   </td>
   <td>
-Cgroups feature flag to enable memory limits on both memory and
-swap instead of just memory. (default: false)
+  Cgroups 的功能标记，可以对内存和swap进行限制，而不仅限制内存。（默认: false）
   </td>
 </tr>
 <tr>
@@ -819,8 +814,7 @@ swap instead of just memory. (default: false)
     --cgroups_net_cls_primary_handle
   </td>
   <td>
-A non-zero, 16-bit handle of the form `0xAAAA`. This will be used as
-the primary handle for the net_cls cgroup.
+  一个非零，16位的句柄。形式类似于：`0xAAAA`. 这将作为 net_cls cgroup 的主句柄来使用。
   </td>
 </tr>
 <tr>
@@ -828,9 +822,8 @@ the primary handle for the net_cls cgroup.
     --cgroups_net_cls_secondary_handles
   </td>
   <td>
-A range of the form 0xAAAA,0xBBBB, specifying the valid secondary
-handles that can be used with the primary handle. This will take
-effect only when the <code>--cgroups_net_cls_primary_handle</code> is set.
+  一系列的类似 0xAAAA,0xBBBB 形式的次要句柄，将与主句柄配合使用。只有在设置了
+  <code>--cgroups_net_cls_primary_handle</code> 之后，才会生效。
   </td>
 </tr>
 <tr>
