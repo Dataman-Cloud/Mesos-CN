@@ -831,7 +831,7 @@ zookeeper 的 session 超时时长。 (默认: 10secs)
     --cgroups_root=VALUE
   </td>
   <td>
-Name of the root cgroup. (default: mesos)
+  根cgroup的命名. 默认: mesos
   </td>
 </tr>
 <tr>
@@ -839,8 +839,7 @@ Name of the root cgroup. (default: mesos)
     --container_disk_watch_interval=VALUE
   </td>
   <td>
-The interval between disk quota checks for containers. This flag is
-used for the <code>posix/disk</code> isolator. (default: 15secs)
+  用于查询容器中磁盘配额的时间间隔. 被用于<code>posix/disk</code>的时间间隔, 默认: 15秒
   </td>
 </tr>
 <tr>
@@ -848,10 +847,8 @@ used for the <code>posix/disk</code> isolator. (default: 15secs)
     --container_logger=VALUE
   </td>
   <td>
-The name of the container logger to use for logging container
-(i.e., executor and task) stdout and stderr. The default
-container logger writes to <code>stdout</code> and <code>stderr</code> files
-in the sandbox directory.
+  容器日志记录器的名称，日志记录器用来记录容器（如：执行器，任务）的标准输出和错误日志。
+  默认的日志记录器将会写入到沙盒目录中的 <code>stdout</code> 和 <code>stderr</code>。
   </td>
 </tr>
 <tr>
@@ -859,8 +856,7 @@ in the sandbox directory.
     --containerizer_path=VALUE
   </td>
   <td>
-The path to the external containerizer executable used when
-external isolation is activated (<code>--isolation=external</code>).
+  当外部隔离机制被激活时(<code>--isolation=external</code>), 外部容器被执行的路径
   </td>
 </tr>
 <tr>
@@ -868,12 +864,9 @@ external isolation is activated (<code>--isolation=external</code>).
     --containerizers=VALUE
   </td>
   <td>
-Comma-separated list of containerizer implementations
-to compose in order to provide containerization.
-Available options are <code>mesos</code>, <code>external</code>, and
-<code>docker</code> (on Linux). The order the containerizers
-are specified is the order they are tried.
-(default: mesos)
+  由逗号分隔的容器化实现方式列表。可选项有 <code>mesos</code>, <code>external</code>, and
+  <code>docker</code> (on Linux). 排列的顺序就是容器化过程中尝试的顺序。
+  （默认：mesos）
   </td>
 </tr>
 <tr>
@@ -881,11 +874,8 @@ are specified is the order they are tried.
     --credential=VALUE
   </td>
   <td>
-Either a path to a text with a single line
-containing <code>principal</code> and <code>secret</code> separated by whitespace.
-Or a path containing the JSON-formatted information used for one credential.
-Path could be of the form <code>file:///path/to/file</code> or <code>/path/to/file</code>.
-Example:
+  一行包含<code>principal</code>和<code>secret</code>由空格隔开的文本路径. 或是包含一条凭证的JSON格式文件的路径. 路径的格式是<code>file://path/to/file</code> 或 <code>/path/to/file</code>.
+  例如:
 <pre><code>{
   "principal": "username",
   "secret": "secret"
@@ -897,8 +887,8 @@ Example:
     --default_container_image=VALUE
   </td>
   <td>
-The default container image to use if not specified by a task,
-when using external containerizer.
+  当使用外部容器化器时，在任务没有特别指定的情况下所使用的默认容器镜像。
+  没有在一个 task 上指定 ，则使用默认的容器镜像。
   </td>
 </tr>
 <tr>
@@ -906,13 +896,12 @@ when using external containerizer.
     --default_container_info=VALUE
   </td>
   <td>
-JSON-formatted ContainerInfo that will be included into
-any ExecutorInfo that does not specify a ContainerInfo.
+  JSON格式的 CONTAINERINFO 将包含到任何没有指定 ContainerInfo 的 ExecutorInfo 中。
 <p/>
 See the ContainerInfo protobuf in mesos.proto for
 the expected format.
 <p/>
-Example:
+例如:
 <pre><code>{
   "type": "MESOS",
   "volumes": [
@@ -930,11 +919,7 @@ Example:
     --default_role=VALUE
   </td>
   <td>
-Any resources in the <code>--resources</code> flag that
-omit a role, as well as any resources that
-are not present in <code>--resources</code> but that are
-automatically detected, will be assigned to
-this role. (default: * )
+  任何用 <code>--resources </code>标志位将忽略一个 role ，以及在 --resources 标记位中出现，但被自动检测到的资源。都将使用默认的这个 role。
   </td>
 </tr>
 <tr>
@@ -942,10 +927,8 @@ this role. (default: * )
     --disk_watch_interval=VALUE
   </td>
   <td>
-Periodic time interval (e.g., 10secs, 2mins, etc)
-to check the overall disk usage managed by the slave.
-This drives the garbage collection of archived
-information and sandboxes. (default: 1mins)
+  周期性时间间隔(例如 10 S ,2 MIN 等)检查slave管理的硬盘使用情况。
+  这个会对存档信息和沙盒做垃圾回收。(默认: 1mins)
   </td>
 </tr>
 <tr>
@@ -953,9 +936,7 @@ information and sandboxes. (default: 1mins)
     --docker=VALUE
   </td>
   <td>
-The absolute path to the docker executable for docker
-containerizer.
-(default: docker)
+  docker容器化的可执行文件的绝对路径。( 默认: docker )
   </td>
 </tr>
 <tr>
@@ -963,11 +944,7 @@ containerizer.
     --[no-]docker_kill_orphans
   </td>
   <td>
-Enable docker containerizer to kill orphaned containers.
-You should consider setting this to false when you launch multiple
-slaves in the same OS, to avoid one of the DockerContainerizer
-removing docker tasks launched by other slaves.
-(default: true)
+  允许 docker kill 掉 orphaned containers 。当你相同的 OS 中启动多个 slave，你应该考虑将此值设为 false 。 以规避 DockerContainerizer 中的一个实例移除被其他 slaves 所启用的 docker 任务。然而，你还应该确保为 slave 启用　checkpoint，这样相同 slave id 可以被重用 。否则当 slave 重启后，docker 任务不会被清除掉。( 默认为　true ) 。
   </td>
 </tr>
 <tr>
@@ -975,11 +952,7 @@ removing docker tasks launched by other slaves.
     --docker_mesos_image=VALUE
   </td>
   <td>
-The docker image used to launch this mesos slave instance.
-If an image is specified, the docker containerizer assumes the slave
-is running in a docker container, and launches executors with
-docker containers in order to recover them when the slave restarts and
-recovers.
+  docker 镜像用于启动这个 mesos slave 实例。如果一个镜像被指定，docker containerizer 假定 slave 运行在 docker 容器中，并当 slave 重启和恢复时启动 executor 来恢复他们。
   </td>
 </tr>
 <tr>
@@ -987,10 +960,8 @@ recovers.
     --docker_registry=VALUE
   </td>
   <td>
-The default url for pulling Docker images. It could either be a Docker
-registry server url (i.e: <code>https://registry.docker.io</code>), or a local
-path (i.e: <code>/tmp/docker/images</code>) in which Docker image archives
-(result of <code>docker save</code>) are stored. (default: https://registry-1.docker.io)
+  一个下拉 Docker 镜像的默认 url. 可以是一个 Docker registry 服务的 URL（例如：<code>https://registry.docker.io</code>），也可以是 一个包含Docker存档的本地路径（例如：<code>/tmp/docker/images</code>）
+  （默认：https://registry-1.docker.io ）
   </td>
 </tr>
 <tr>
@@ -998,9 +969,7 @@ path (i.e: <code>/tmp/docker/images</code>) in which Docker image archives
     --docker_remove_delay=VALUE
   </td>
   <td>
-The amount of time to wait before removing docker containers
-(e.g., <code>3days</code>, <code>2weeks</code>, etc).
-(default: 6hrs)
+  移除 docker 前等待的时间 （ 如 3 天，2 周 等）。默认为 6 小时。
   </td>
 </tr>
 <tr>
@@ -1008,10 +977,8 @@ The amount of time to wait before removing docker containers
     --docker_socket=VALUE
   </td>
   <td>
-The UNIX socket path to be mounted into the docker executor container
-to provide docker CLI access to the docker daemon. This must be the
-path used by the slave's docker image.
-(default: /var/run/docker.sock)
+  一个安装在 Docker executor 容器内部的 UNIX 套接字路径。用来提供通过 CLI 访问 docker daemon 的能力。
+  这个必须是 slave docker 镜像用的路径。（默认：/var/run/docker.sock）
   </td>
 </tr>
 <tr>
@@ -1019,8 +986,7 @@ path used by the slave's docker image.
     --docker_stop_timeout=VALUE
   </td>
   <td>
-The time as a duration for docker to wait after stopping an instance
-before it kills that instance. (default: 0ns)
+  杀死实例后，在停止它之前 docker  需要等待的间隔时间 （ 默认： 0 Secs ）。
   </td>
 </tr>
 <tr>
@@ -1028,7 +994,7 @@ before it kills that instance. (default: 0ns)
     --docker_store_dir=VALUE
   </td>
   <td>
-Directory the Docker provisioner will store images in (default: /tmp/mesos/store/docker)
+  Docker provisioner 用来存储镜像的目录。（默认：/tmp/mesos/store/docker）
   </td>
 </tr>
 <tr>
@@ -1036,8 +1002,7 @@ Directory the Docker provisioner will store images in (default: /tmp/mesos/store
     --[no-]enforce_container_disk_quota
   </td>
   <td>
-Whether to enable disk quota enforcement for containers. This flag
-is used for the <code>posix/disk</code> isolator. (default: false)
+  否为容器启用磁盘限额。这个标记位用来为 <code>posix/disk</code>  隔离。 （ 默认: false ）。
   </td>
 </tr>
 <tr>
@@ -1045,10 +1010,9 @@ is used for the <code>posix/disk</code> isolator. (default: false)
     --executor_environment_variables=VALUE
   </td>
   <td>
-JSON object representing the environment variables that should be
-passed to the executor, and thus subsequently task(s). By default the
-executor will inherit the slave's environment variables.
-Example:
+  使用 JSON 对象格式的环境变量。会通过 executor 来传递之后的 task。
+  默认情况下，executor 会继承 slave 的环境变量。
+  例如:
 <pre><code>{
   "PATH": "/bin:/usr/bin",
   "LD_LIBRARY_PATH": "/usr/local/lib"
@@ -1060,9 +1024,7 @@ Example:
     --executor_registration_timeout=VALUE
   </td>
   <td>
-Amount of time to wait for an executor
-to register with the slave before considering it hung and
-shutting it down (e.g., 60secs, 3mins, etc) (default: 1mins)
+  executor 挂起或者关闭前，等待其注册 slave 的时间。（ 例如，60 S，3 mins 等 ）。默认为 1 MIN 。
   </td>
 </tr>
 <tr>
@@ -1070,8 +1032,7 @@ shutting it down (e.g., 60secs, 3mins, etc) (default: 1mins)
     --executor_shutdown_grace_period=VALUE
   </td>
   <td>
-Amount of time to wait for an executor
-to shut down (e.g., 60secs, 3mins, etc) (default: 5secs)
+  等待 executor 关闭的时间。( 例如, 60 S, 3 mins 等 )。默认为 5 S 。
   </td>
 </tr>
 <tr>
@@ -1079,8 +1040,8 @@ to shut down (e.g., 60secs, 3mins, etc) (default: 5secs)
     --fetcher_cache_dir=VALUE
   </td>
   <td>
-Parent directory for fetcher cache directories
-(one subdirectory per slave). (default: /tmp/mesos/fetch)
+  fetcher cache 的父目录。（每一个slave有一个子目录）。
+  （默认：/tmp/mesos/fetch）
   </td>
 </tr>
 <tr>
@@ -1088,7 +1049,7 @@ Parent directory for fetcher cache directories
     --fetcher_cache_size=VALUE
   </td>
   <td>
-Size of the fetcher cache in Bytes. (default: 2GB)
+  以字节为单位的 fetcher cache 大小。( 默认: 2 GB )
   </td>
 </tr>
 <tr>
@@ -1096,7 +1057,7 @@ Size of the fetcher cache in Bytes. (default: 2GB)
     --frameworks_home=VALUE
   </td>
   <td>
-Directory path prepended to relative executor URIs (default: )
+  相对于 executor 的路径前缀的 URI 。
   </td>
 </tr>
 <tr>
@@ -1104,10 +1065,8 @@ Directory path prepended to relative executor URIs (default: )
     --gc_delay=VALUE
   </td>
   <td>
-Maximum amount of time to wait before cleaning up
-executor directories (e.g., 3days, 2weeks, etc).
-Note that this delay may be shorter depending on
-the available disk usage. (default: 1weeks)
+  清理 executor 目录的延迟时间（ 例如，3 天 或 2 周 等）。
+  注意，根据实际可用磁盘的情况，这个值可能会小些（ 默认：1 周 ）。
   </td>
 </tr>
 <tr>
@@ -1128,10 +1087,8 @@ be a value between 0.0 and 1.0 (default: 0.1)
     --hadoop_home=VALUE
   </td>
   <td>
-Path to find Hadoop installed (for
-fetching framework executors from HDFS)
-(no default, look for <code>HADOOP_HOME</code> in
-environment or find hadoop on <code>PATH</code>) (default: )
+  Hadoop 的安装路径。（用于从 HDFS 提取框架 executors ）
+  （没有默认项，在环境中查找<code>HADOOP_HOME</code>，或者在<code>PATH</code> 查询 hadoop）
   </td>
 </tr>
 <tr>
@@ -1139,8 +1096,7 @@ environment or find hadoop on <code>PATH</code>) (default: )
     --image_providers=VALUE
   </td>
   <td>
-Comma-separated list of supported image providers,
-e.g., <code>APPC,DOCKER</code>.
+  由逗号分割的支持的镜像供应商列表。如：<code>APPC,DOCKER</code>.
   </td>
 </tr>
 <tr>
@@ -1148,8 +1104,8 @@ e.g., <code>APPC,DOCKER</code>.
     --image_provisioner_backend=VALUE
   </td>
   <td>
-Strategy for provisioning container rootfs from images,
-e.g., <code>bind</code>, <code>copy</code>. (default: copy)
+  从镜像中提取容器 rootfs 的策略。
+  如：<code>bind</code>, <code>copy</code>. (默认: copy)
   </td>
 </tr>
 <tr>
@@ -1157,12 +1113,10 @@ e.g., <code>bind</code>, <code>copy</code>. (default: copy)
     --isolation=VALUE
   </td>
   <td>
-Isolation mechanisms to use, e.g., <code>posix/cpu,posix/mem</code>, or
-<code>cgroups/cpu,cgroups/mem</code>, or network/port_mapping
-(configure with flag: <code>--with-network-isolator</code> to enable),
-or <code>external</code>, or load an alternate isolator module using
-the <code>--modules</code> flag. Note that this flag is only relevant
-for the Mesos Containerizer. (default: posix/cpu,posix/mem)
+  所采用的隔离机制，如：<code>posix/cpu,posix/mem</code> 或 <code>cgroups/cpu,cgroups/mem</code>
+  或 network/port_mapping（通过 <code>--with-network-isolator</code> 标记来开启）
+  或 <code>external</code> 或者通过code>--modules</code>标记替换成另一个隔离模块。
+  注意：这个标记仅用于 Mesos 容器化器。（默认：posix/cpu,posix/mem）
   </td>
 </tr>
 <tr>
@@ -1170,11 +1124,9 @@ for the Mesos Containerizer. (default: posix/cpu,posix/mem)
     --launcher=VALUE
   </td>
   <td>
-The launcher to be used for Mesos containerizer. It could either be
-<code>linux</code> or <code>posix</code>. The Linux launcher is required for cgroups
-isolation and for any isolators that require Linux namespaces such as
-network, pid, etc. If unspecified, the slave will choose the Linux
-launcher if it's running as root on Linux.
+  Mesos 容器化器所使用的启动器。可以是 <code>linux</code> 或 <code>posix</code>。
+  Linux 启动器需要cgroups隔离机制。每个隔离器需要 Linux 的 namespaces 如 网络，pid,等。
+  如果没有特别指定，slave 将选择一个作为root运行的 Linux 启动器。
   </td>
 </tr>
 <tr>
@@ -1182,9 +1134,8 @@ launcher if it's running as root on Linux.
     --launcher_dir=VALUE
   </td>
   <td>
-Directory path of Mesos binaries. Mesos would find health-check,
-fetcher, containerizer and executor binary files under this
-directory. (default: /usr/local/libexec/mesos)
+  Mesos 二进制目录路径。 Mesos 可以在这个目录下找到 健康检查，fetcher，容器化器，executor
+  的二进制文件。（ 默认： /usr/local/lib/mesos ）。
   </td>
 </tr>
 <tr>
@@ -1192,10 +1143,9 @@ directory. (default: /usr/local/libexec/mesos)
     --oversubscribed_resources_interval=VALUE
   </td>
   <td>
-The slave periodically updates the master with the current estimation
-about the total amount of oversubscribed resources that are allocated
-and available. The interval between updates is controlled by this flag.
-(default: 15secs)
+  Slave 会定期向 master 更新自己有效的，可以分配的资源。
+  更新的间隔时间是由这个 flag 控制的。
+  （ 默认：15 S ）。
   </td>
 </tr>
 <tr>
@@ -1203,8 +1153,7 @@ and available. The interval between updates is controlled by this flag.
     --perf_duration=VALUE
   </td>
   <td>
-Duration of a perf stat sample. The duration must be less
-than the <code>perf_interval</code>. (default: 10secs)
+  一个 perf stat 例子的执行周期。持续时间必须比 perf_interval 少。（默认： 10 secs）
   </td>
 </tr>
 <tr>
@@ -1212,12 +1161,7 @@ than the <code>perf_interval</code>. (default: 10secs)
     --perf_events=VALUE
   </td>
   <td>
-List of command-separated perf events to sample for each container
-when using the perf_event isolator. Default is none.
-Run command <code>perf list</code> to see all events. Event names are
-sanitized by downcasing and replacing hyphens with underscores
-when reported in the PerfStatistics protobuf, e.g., <code>cpu-cycles</code>
-becomes <code>cpu_cycles</code>; see the PerfStatistics protobuf for all names.
+  一系列命令分离的 perf 事件当使用 perf_event 分离器时候来精简每个容器。默认为 None。运行 <code> perf list </code>命令查看所有事件。当在 PerfStatistics protobuf 中被通告时候事件名称将被悲观性的消除并使用下划线代替连字符。 例如，<code>cpu-cycles</code> 变为 <code>cpu_cycles</code>。在 PerfStatistics protobuf 中可以看到所有名字。
   </td>
 </tr>
 <tr>
@@ -1237,7 +1181,7 @@ resource monitoring interval. (default: 60secs)
     --qos_controller=VALUE
   </td>
   <td>
-The name of the QoS Controller to use for oversubscription.
+  Qos 控制器的名称被用来超额订阅。
   </td>
 </tr>
 <tr>
@@ -1245,10 +1189,7 @@ The name of the QoS Controller to use for oversubscription.
     --qos_correction_interval_min=VALUE
   </td>
   <td>
-The slave polls and carries out QoS corrections from the QoS
-Controller based on its observed performance of running tasks.
-The smallest interval between these corrections is controlled by
-this flag. (default: 0secs)
+  slave 从 Qos 控制器投票和执行 QoS 的更正基于其已运行 tasks 的观察到的性能 这些校正之间的最小间隔有此标记位指定。 （ 默认： 0 secs ）。
   </td>
 </tr>
 <tr>
@@ -1256,12 +1197,12 @@ this flag. (default: 0secs)
     --recover=VALUE
   </td>
   <td>
-Whether to recover status updates and reconnect with old executors.
-Valid values for <code>recover</code> are
-reconnect: Reconnect with any old live executors.
-cleanup  : Kill any old live executors and exit.
-           Use this option when doing an incompatible slave
-           or executor upgrade!). (default: reconnect)
+  是否恢复更新状态并与老的 executors 重新连接。
+  <code>recover</code> 可用的值有：
+  reconnect：与老的还存活的 executors 重新连接。
+  cleanup：杀掉所有的老的还存活的 executors 并退出。
+  当 slave 不兼容 或 executor 更新时，使用这个选项。
+  （默认：reconnect）
   </td>
 </tr>
 <tr>
@@ -1269,10 +1210,7 @@ cleanup  : Kill any old live executors and exit.
     --recovery_timeout=VALUE
   </td>
   <td>
-Amount of time allotted for the slave to recover. If the slave takes
-longer than recovery_timeout to recover, any executors that are
-waiting to reconnect to the slave will self-terminate.
-(default: 15mins)
+  分配给 slave 恢复的时间。如果　slave 恢复所用的时间超过 recovery_timeout，将会被终止。( 默认：15 min )
   </td>
 </tr>
 <tr>
@@ -1293,7 +1231,7 @@ etc) up to a maximum of 1mins (default: 1secs)
     --resource_estimator=VALUE
   </td>
   <td>
-The name of the resource estimator to use for oversubscription.
+  用于 过度订阅 的 资源评估者 的名称。
   </td>
 </tr>
 <tr>
@@ -1301,11 +1239,10 @@ The name of the resource estimator to use for oversubscription.
     --resources=VALUE
   </td>
   <td>
-Total consumable resources per slave. Can be provided in JSON format
-or as a semicolon-delimited list of key:value pairs, with the role
-optionally specified.
+  每个 slave 总的可消耗资源。可以用 JSON 格式提供，也可以是使用分号隔开的 key:value
+  键值对列表，配合指定角色选项。
 <p/>
-As a key:value list:
+key:value 列表:
 <code>name(role):value;name:value...</code>
 <p/>
 To use JSON, pass a JSON-formatted string or use
@@ -1337,9 +1274,7 @@ Example JSON:
     --[no-]revocable_cpu_low_priority
   </td>
   <td>
-Run containers with revocable CPU at a lower priority than
-normal containers (non-revocable cpu). Currently only
-supported by the cgroups/cpu isolator. (default: true)
+  通过 revocable CPU 以相对低的优先级运行 containers 。 目前只支持 cgroups/cpu isolator 。( 默认: true )
   </td>
 </tr>
 <tr>
@@ -1347,9 +1282,8 @@ supported by the cgroups/cpu isolator. (default: true)
     --sandbox_directory=VALUE
   </td>
   <td>
-The absolute path for the directory in the container where the
-sandbox is mapped to.
-(default: /mnt/mesos/sandbox)
+  沙盒被映射到容器中的绝对目录路径。
+(默认: /mnt/mesos/sandbox)
   </td>
 </tr>
 <tr>
@@ -1357,11 +1291,7 @@ sandbox is mapped to.
     --slave_subsystems=VALUE
   </td>
   <td>
-List of comma-separated cgroup subsystems to run the slave binary
-in, e.g., <code>memory,cpuacct</code>. The default is none.
-Present functionality is intended for resource monitoring and
-no cgroup limits are set, they are inherited from the root mesos
-cgroup.
+  一系列的逗号分隔的 cgroup 子系统来从二进制运行slave。例如，<code>memory,cpuacct</code> 。默认为 none 。此功能用于资源的监视以及 no cgroup 下限制设置，它们从 root mesos cgroup 继承而来。
   </td>
 </tr>
 <tr>
@@ -1369,12 +1299,7 @@ cgroup.
     --[no-]strict
   </td>
   <td>
-If <code>strict=true</code>, any and all recovery errors are considered fatal.
-If <code>strict=false</code>, any expected errors (e.g., slave cannot recover
-information about an executor, because the slave died right before
-the executor registered.) during recovery are ignored and as much
-state as possible is recovered.
-(default: true)
+  如果 <code>strict=true</code>，任何以及所有错误恢复都被认为是致命的。反之，恢复期间，任何预期的错误都会被忽略。 ( 默认： true )
   </td>
 </tr>
 <tr>
@@ -1382,6 +1307,7 @@ state as possible is recovered.
     --[no-]switch_user
   </td>
   <td>
+  是否用提交它们的用户来运行 tasks 而不是使用运行 slave 的用户. ( 需要 setuid 权限)。 ( 默认: true )
 If set to <code>true</code>, the slave will attempt to run tasks as
 the <code>user</code> who submitted them (as defined in <code>FrameworkInfo</code>)
 (this requires <code>setuid</code> permission and that the given <code>user</code>
@@ -1398,11 +1324,10 @@ therefore the flag currently does not exist on that platform. (default: true)
     --[no-]systemd_enable_support
   </td>
   <td>
-Top level control of systemd support. When enabled, features such as
-executor life-time extension are enabled unless there is an explicit
-flag to disable these (see other flags). This should be enabled when
-the agent is launched as a systemd unit.
-(default: true)
+  系统支持的最高级控制。当设置为 enabled，像 executor life-time 延期这样的功能都会设置为
+  enabled，除非有一个明确的 flag 设置其为 disable。这个会在 agent 作为 systemd unit 发布
+  时设置为 enabled。
+  （默认：true）
   </td>
 </tr>
 <tr>
@@ -1410,8 +1335,8 @@ the agent is launched as a systemd unit.
     --systemd_runtime_directory=VALUE
   </td>
   <td>
-The path to the systemd system run time directory.
-(default: /run/systemd/system)
+  systemd 系统运行时目录路径。
+  （默认：/run/systemd/system）
   </td>
 </tr>
 <tr>
@@ -1419,131 +1344,12 @@ The path to the systemd system run time directory.
     --work_dir=VALUE
   </td>
   <td>
-Directory path to place framework work directories
-(default: /tmp/mesos)
+framework 工作目录的路径。( 默认: /tmp/mesos )
   </td>
 </tr>
 </table>
 
-
-
-
-
-
-
-
-    --attributes=VALUE    机器的属性：rack:2或者rack:2;u:1
-    --authenticatee=VALUE 用于主节点身份验证，默认crammd5，或者用—modules加载备用模块。默认：crammd5。
-    --[no-]cgroups_enable_cfs 通过限制CFS带宽来限制CPU资源. 默认: defult
-    --cgroups_hierarchy=VALUE cgroups的根路径位置. 默认: /sys/fs/cgroup
-    --[no-]cgroups_limit_swap 用于内存和swap的限制, 默认: false, 只限制内存
-    --cgroups_root=VALUE      根cgroup的命名. 默认: mesos
-    --container_disk_watch_interval=VALUE 用于查询容器中磁盘配额的时间间隔. 被用于posix/disk的时间间隔, 默认: 15秒
-    --containerizer_path=VALUE 当外部隔离机制被激活时(--isolation=external), 外部容器被执行的路径
-    --containerizers=VALUE    用逗号把一组容器隔开, 以达到对容器的实现. 包括mesos, external, docker在Linux中. 默认: mesos
-    --credential=VALUE        一行包含"principal"和"secret"由空格隔开的文本路径. 或是包含一条凭证的JSON格式文件的路径. 路径的格式是file://path/to/file. 也可以使用路径 file:///path/to/file, 从文件中读取值 。
-                             JSON 文件例子:
-                             ```
-                             {
-                               "principal": "username",
-                               "secret": "secret"
-                             }
-                             ```
-    --default_container_image=VALUE  当使用外部 containerizer 时，如果没有在一个 task 上指定 ，则使用默认的容器镜像。
-    --default_container_info=VALUE  JSON格式的 CONTAINERINFO 将包含到任何没有指定 ContainerInfo 的 ExecutorInfo 中。
-                                    例如：
-                                   {
-                                   "type": "MESOS",
-                                   "volumes": [
-                                     {
-                                       "host_path": "./.private/tmp",
-                                       "container_path": "/tmp",
-                                       "mode": "RW"
-                                     }
-                                   ]
-                                 }                      
-    --default_role=VALUE         任何用 --resources 标志位将忽略一个 role ，以及在 --resources 标记位中出现，但被自动检测到的资源。都将使用默认的这个 role。
-    --disk_watch_interval=VALUE 周期性时间间隔(例如 10 S ,2 MIN 等)检查硬盘的使用情况。默认是 1 MIN 。
-    --docker=VALUE docker       容器化的可执行文件的绝对路径。( 默认: docker )
-    --docker_remove_delay=VALUE 移除 docker 前等待的时间 （ 如 3 天，2 周 等）。默认为 6 小时。
-    --[no-]docker_kill_orphans  允许 docker kill 掉 orphaned containers 。当你相同的 OS 中启动多个 slave，你应该考虑将此值设为 false 。 以规避 DockerContainerizer 中的一个实例移除被其他 slaves 所启用的 docker 任务。然而，你还应该确保为 slave 启用　checkpoint，这样相同 slave id 可以被重用 。否则当 slave 重启后，docker 任务不会被清除掉。( 默认为　true ) 。
-    --docker_sock=VALUE         被挂载到 docker executor 以提供访问 docker daemon 的 docker CLI  的 UNIX socket 路径。它必须是用于使用 slave 的 docker 镜像的路径 （ 默认： /var/run/docker.sock ）。
-    --docker_mesos_image=VALUE  docker 镜像用于启动这个 mesos slave 实例。如果一个镜像被指定，docker containerizer 假定 slave 运行在 docker 容器中，并当 slave 重启和恢复时启动 executor 来恢复他们。
-    --docker_sandbox_directory=VALUE 描述沙盒在容器中被映射到的绝对路径。（ 默认：  /mnt/mesos/sandbox ）。
-    --docker_stop_timeout=VALUE 杀死实例后，在停止它之前 docker  需要等待的间隔时间 （ 默认： 0 Secs ）。
-    --[no-]enforce_container_disk_quota 是否为容器启用磁盘限额。这个标记位用来为 ' posix/disk ' 隔离。 （ 默认: false ）。
-    --executor_environment_variables     JSON 对象展示必须要传递到 executor 和接下来的 task(s) 中的环境变量。默认情况下 executor 将继承 slave 的环境变量。例如：
-                                        ```
-                                        {
-                                          "PATH": "/bin:/usr/bin",
-                                          "LD_LIBRARY_PATH": "/usr/local/lib"
-                                        }
-                                        ```
-    --executor_registration_timeout=VALUE  executor 挂起或者关闭前，等待其注册 slave 的时间。（ 例如，60 S，3 mins 等 ）。默认为 1 MIN 。
-    --executor_shutdown_grace_period=VALUE 等待 executor 关闭的时间。( 例如, 60 S, 3 mins 等 )。默认为 5 S 。
-    --frameworks_home=VALUE                相对于 executor 的路径前缀的 URI 。
-    --gc_delay=VALUE                       清理 executor 目录的延迟时间（ 例如，3 天 或 2 周 等）。注意，根据实际可用磁盘的情况，这个值可能会小些（ 默认：1 周 ）。
-    --gc_disk_headroom = VALUE             用于调整 executor 目录的最大磁盘空间。计算方法为 gc_delay * max(0.0, (1.0 - gc_disk_headroom - disk usage)) 每个 --disk_watch_interval 期间，gc_disk_headroom 都必须在 0.0 到 1.0 之间。（ 默认：0.1 ）。
-    --hadoop_home=VALUE                    Hadoop 的安装路径。
-    --hooks=VALUE                          以逗号分隔的需要在 master 内部被安装的一系列钩子模块
-    --hostname=VALUE                       slave 的 主机名 。
-    --isolation = VALUE                    隔离机制的使用。 例如  ' posix/cpu,posix/mem ', ' cgroups/cpu,cgroups/mem '  或者 network/port_mapping 及 'external' 或者使用 ***--modules*** 标记位来代替隔离模块。注意，这个标记位只用于 Mesos Containerizer （ 默认：posix/cpu, posix/mem ）。
-    --launcher_dir=VALUE                   Mesos 二进制目录路径 （ 默认： /usr/local/lib/mesos ）。
-    --modules=VALUE                        待加载的模块列表，并提供给内部的子系统。你也可以使用 file:///path/to/file 或者 /path/to/file 参数值格式从一个文件中读取值。使用 ***--modules="{...}"*** 指定模块内嵌的列表。
-                                           JSON 文件例子：
-                                           ```
-                                           {
-                                             "libraries": [
-                                               {
-                                                 "file": "/path/to/libfoo.so",
-                                                 "modules": [
-                                                   {
-                                                     "name": "org_apache_mesos_bar",
-                                                     "parameters": [
-                                                       {
-                                                         "key": "X",
-                                                         "value": "Y"
-                                                       }
-                                                     ]
-                                                   },
-                                                   {
-                                                     "name": "org_apache_mesos_baz"
-                                                   }
-                                                 ]
-                                               },
-                                               {
-                                                 "name": "qux",
-                                                 "modules": [
-                                                   {
-                                                     "name": "org_apache_mesos_norf"
-                                                   }
-                                                 ]
-                                               }
-                                             ]
-                                           }
-                                           ```
-    --oversubscribed_resources_interval=VALUE  Slave 会定期向 master 更新自己有效的，可以分配的资源。（ 默认：15 S ）。
-    --perf_duration=VALUE          一个 perf stat 例子的执行周期。持续时间必须比 perf_interval 少。默认为 10 S。
-    --perf_events=VALUE            一系列命令分离的 perf 事件当使用 perf_event 分离器时候来精简每个容器。默认为 None。运行 ' perf list ' 命令查看所有事件。当在 PerfStatistics protobuf 中被通告时候事件名称将被悲观性的消除并使用下划线代替连字符。 例如，cpu-cycles 变为 cpu_cycles。在 PerfStatistics protobuf 中可以看到所有名字。
-    --perf_interval = VALUE        多个 perf stat 例子启动间的时间间隔。Perf 示例基于 perf_interval 周期性的被获取并且最近获取的例子将返回而不是按需简化。基于此原因，perf_interval 为独立的资源监控时间间隔。（ 默认： 1 mins ）。
-    --qos_controller=VALUE         Qos 控制器的名称被用来超额订阅。
-    --qos_correction_interval_min=VALUE  slave 从 Qos 控制器投票和执行 QoS 的更正基于其已运行 tasks 的观察到的性能 这些校正之间的最小间隔有此标记位指定。 （ 默认： 0 secs ）。
-    --recover = VALUE                 是否要恢复状态更新以及重新连接 旧的 executor 。" recover " 为有效值。                                             reconnect : 重新连接任何活着的 旧的 executor。
-                                      cleanup : 杀死并退出所有活着的 old exetuor 。当你要做一个不兼容的 slave　活着 executor 升级时，可以用这个选项。注意：当 slave 没有设置 checkpointed 时，recovery 不能执行，并且  该 slave 作为一个新的 slave 注册到 master。 ( 默认： reconnect )
-    --recovery_timeout=VALUE         分配给 slave 恢复的时间。如果　slave 恢复所用的时间超过 recovery_timeout，将会被终止。( 默认：15 min )
-    --registration_backoff_factor=VALUE slave 最初挑选一个随机的时间段[0,B],其中 b = registration_backoff_factor ,( 重新注册 )注册到一个新的 master。 后续重试都基于此时间段成倍扩大 ，最多为 1 mins。( 默认: 1 secs )
-    --resource_estimator=VALUE       用于 过度订阅 的 资源评估者 的名称。
-    --resource_monitoring_interval=VALUE  executor 资源使用监视周期。（ 例如，10 secs , 1 min 等 ）.( 默认： 1secs )。
-    --resources=VALUE                每个 slave 总的可消耗资源。格式：***name(role):value;name(role):value...***。
-    --[no-]revocable_cpu_low_priority 通过 revocable CPU 以相对低的优先级运行 containers 。 目前只支持 cgroups/cpu isolator 。( 默认: true )
-    --slave_subsystems=VALUE         一系列的逗号分隔的 cgroup 子系统来从二进制运行slave。例如，***memory*** , ***cpuacct*** 。默认为 none 。此功能用于资源的监视以及 no cgroup 下限制设置，它们从 root mesos cgroup 继承而来。
-    --[no-]strict                    如果 strict    = true，任何以及所有错误恢复都被认为是致命的。反之，恢复期间，任何预期的错误都会被忽略。 ( 默认： true )
-    --[no-]switch_user               是否用提交它们的用户来运行 tasks 而不是使用运行 slave 的用户. ( 需要 setuid 权限)。 ( 默认: true )
-    --fetcher_cache_size=VALUE      以字节为单位的 fetcher cache 大小。( 默认: 2 GB )
-    --fetcher_cache_dir=VALUE       fetcher cache 的父目录。默认在工作目录中，所以一切都可以在测试环境中保存或删除。然而，典型的生产方案使用的是单独的 缓存卷 。首先，它不意味着需要被备份。其次，要避免沙盒目录和缓存目录以不可预知的方式通过共享空间相互干扰。因此建议，明确设置缓存目录。 ( 默认: /tmp/mesos/fetch )
-    --work_dir=VALUE                framework 工作目录的路径。( 默认: /tmp/mesos )
-
-#####当配置了 ' –with-network-isolator ', 以下标记位才会生效：
+##### 当配置了 ' –with-network-isolator ', 以下标记位才会生效：
 
     --ephemeral_ports_per_container=VALUE   有网络隔离器分配临时端口给一个容器。此端口号必须是 2 的倍数。( 默认: 1024 )
     --eth0_name = VALUE             公网接口的名称 ( 如 eth0 )。如果没有指定，网络隔离器会尝试基于主机的默认网关来猜测它。
