@@ -342,11 +342,11 @@ HAProxy服务发现较客户端发现拥有多种优势：
 
 haproxy-external-frontend.ctmpl.jinja用于描述HTTP与HTTPS前端。其中包含多套Jinja宏，用于为域名匹配定义ACL规则并将后端与这些规则相绑定：
 
-
+```
 	{% macro hosts(environment, domain_prefix='') -%}
   	# {{ environment }} hosts
   	acl host_{{ environment }}:test-server  hdr_dom(host) -i -m str {{ domain_prefix }}mesos-test.domain.com
-    {%- endmacro %}
+{%- endmacro %}
 
 	{% macro bind(service, environment) -%}
   	use_backend cluster_{{ environment }}:{{ service }} if host_{{ environment }}:{{ service }}
@@ -379,9 +379,11 @@ haproxy-external-frontend.ctmpl.jinja用于描述HTTP与HTTPS前端。其中包�
 
   	# Production bindings
   	{{ bind('test-server', 'production') }}
+```
 
 最后，还有haproxy-backends.ctmpl.jinja文件。它会列出之前章节中提到的全部可用服务。所有后端都可以进行手动调整，因为用户可能需要满足运行状态检查或者负载均衡方面的特殊要求：
 
+```
 	{% macro backends(environment) -%}
 
 	##
@@ -398,6 +400,7 @@ haproxy-external-frontend.ctmpl.jinja用于描述HTTP与HTTPS前端。其中包�
 
 	{{ backends('production') }}
 	{{ backends('staging') }}
+```
 
 内部负载均衡配置文件要稍稍简单一点，其只需要将连接路由至内部可访问服务：
 
