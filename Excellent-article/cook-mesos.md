@@ -346,7 +346,7 @@ haproxy-external-frontend.ctmpl.jinja用于描述HTTP与HTTPS前端。其中包�
 	{% macro hosts(environment, domain_prefix='') -%}
   	# {{ environment }} hosts
   	acl host_{{ environment }}:test-server  hdr_dom(host) -i -m str {{ domain_prefix }}mesos-test.domain.com
-	{%- endmacro %}
+    {%- endmacro %}
 
 	{% macro bind(service, environment) -%}
   	use_backend cluster_{{ environment }}:{{ service }} if host_{{ environment }}:{{ service }}
