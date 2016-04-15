@@ -24,7 +24,7 @@ Master 使用 Resource Offers 实现跨应用细粒度资源共享，如 cpu、�
 4. 最后，Master 发送这些 Tasks 给 Slave1。然后，Slave1还有1个CPU和1 GB内存没有使用，所以分配模块可以把这些资源提供给 Framework2
 
 **当 Tasks 完成和有新的空闲资源时，Resource Offer 会不断重复这一个过程。**
-当 Mesos 提供的廋接口允许其来扩展和允许 frameworks 相对独立的参与进来，一个问题将会出现： 一个 framwork 的限制如何被满足在不被 Mesos 对这些限制所知晓的情况下？ 例如， 一个 framework 如何得到数据本地化在不被 Mesos所知晓哪个节点存储着被该 framwork 所需要的数据？Mesos 通过简单的寄予 frameworks 能够拒绝 offers 的能力来回答了这个问题。 一个 framework 将拒绝 不满足其限制要求的 offers 并接受满足其限制要求的 offers. 特殊情况下，我们找到一个简单的策略 delay scheduling， 在该 frameworks 等待 一个限制时间来获取存储输入数据的节点， 并生成接近的优化过得数据点。
+当 Mesos 提供的瘦接口允许其来扩展和允许 frameworks 相对独立的参与进来，一个问题将会出现： 一个 framwork 的限制如何被满足在不被 Mesos 对这些限制所知晓的情况下？ 例如， 一个 framework 如何得到数据本地化在不被 Mesos所知晓哪个节点存储着被该 framwork 所需要的数据？Mesos 通过简单的寄予 frameworks 能够拒绝 offers 的能力来回答了这个问题。 一个 framework 将拒绝 不满足其限制要求的 offers 并接受满足其限制要求的 offers. 特殊情况下，我们找到一个简单的策略 delay scheduling， 在该 frameworks 等待 一个限制时间来获取存储输入数据的节点， 并生成接近的优化过得数据点。
 
 你也可以从这里了解更多的 Mesos 架构：[Mesos技术文档](http://mesos.berkeley.edu/mesos_tech_report.pdf)
 
