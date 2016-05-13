@@ -328,9 +328,7 @@ HAProxy服务发现较客户端发现拥有多种优势：
   	option forwardfor
   	option httpchk GET /ping
   	balance roundrobin
-	{%- for host, ip in master_nodes.iteritems() %}
-  	server {{ host }} {{ ip }}:8080 check inter 10s
-	{% endfor -%}
+
 
 	backend cluster:chronos
   	option forwardfor
