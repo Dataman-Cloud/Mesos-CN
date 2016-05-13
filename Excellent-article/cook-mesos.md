@@ -309,6 +309,7 @@ HAProxy服务发现较客户端发现拥有多种优势：
 这套模板允许我们配置HAProxy，从而指定每台设备通过接入localhost:<well-known-port>以访问每项Consul已知服务，最终解决服务发现问题。
 在haproxy-wellknown-services.ctmpl.jinja当中，我们可以指定多种静态管理服务，例如Marathon、Consul以及Chronos，这是因为它们较易于发现。它们会在设备配置过程中由systemd/upstart/etc启动。举例来说，以下代码片段允许来自集群内任意设备的请求通过联系localhost:18080 轻松访问Marathon实例，而localhost:14400 与localhost:18500 则分别对应Chronos与Consul（在本示例中，集来自配置管理软件）：
 
+```
     frontend internal_http_in:marathon
     bind :18080
     use_backend cluster:marathon
@@ -338,6 +339,7 @@ HAProxy服务发现较客户端发现拥有多种优势：
     {%- for host, ip in master_nodes.iteritems() %}
     server {{ host }} {{ ip }}:4400 check inter 10s
     {% endfor -%}
+```
 
 haproxy-external-frontend.ctmpl.jinja用于描述HTTP与HTTPS前端。其中包含多套Jinja宏，用于为域名匹配定义ACL规则并将后端与这些规则相绑定：
 
