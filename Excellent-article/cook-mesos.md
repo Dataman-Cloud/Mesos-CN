@@ -310,38 +310,36 @@ HAProxy服务发现较客户端发现拥有多种优势：
 在haproxy-wellknown-services.ctmpl.jinja当中，我们可以指定多种静态管理服务，例如Marathon、Consul以及Chronos，这是因为它们较易于发现。它们会在设备配置过程中由systemd/upstart/etc启动。举例来说，以下代码片段允许来自集群内任意设备的请求通过联系localhost:18080 轻松访问Marathon实例，而localhost:14400 与localhost:18500 则分别对应Chronos与Consul（在本示例中，集来自配置管理软件）：
 
 
-```
-	frontend internal_http_in:marathon
-  	bind :18080
-  	use_backend cluster:marathon
+    frontend internal_http_in:marathon
+    bind :18080
+    use_backend cluster:marathon
 
-	frontend internal_http_in:chronos
-  	bind :14400
-  	use_backend cluster:chronos
+    frontend internal_http_in:chronos
+    bind :14400
+    use_backend cluster:chronos
 
-	listen internal_http_in:consul
-  	bind :18500
-  	timeout client 600000
-  	timeout server 600000
-  	server local 127.0.0.1:8500
+    listen internal_http_in:consul
+    bind :18500
+    timeout client 600000
+    timeout server 600000
+    server local 127.0.0.1:8500
 
-	backend cluster:marathon
-  	option forwardfor
-  	option httpchk GET /ping
-  	balance roundrobin
-	{%- for host, ip in master_nodes.iteritems() %}
-  	server {{ host }} {{ ip }}:8080 check inter 10s
-	{% endfor -%}
+    backend cluster:marathon
+    option forwardfor
+    option httpchk GET /ping
+    balance roundrobin
+    {%- for host, ip in master_nodes.iteritems() %}
+    server {{ host }} {{ ip }}:8080 check inter 10s
+    {% endfor -%}
 
-	backend cluster:chronos
-  	option forwardfor
-  	option httpchk GET /ping
-  	balance roundrobin
-	{%- for host, ip in master_nodes.iteritems() %}
-  	server {{ host }} {{ ip }}:4400 check inter 10s
-	{% endfor -%}
-	
-```
+    backend cluster:chronos
+    option forwardfor
+    option httpchk GET /ping
+    balance roundrobin
+    {%- for host, ip in master_nodes.iteritems() %}
+    server {{ host }} {{ ip }}:4400 check inter 10s
+    {% endfor -%}
+
 
 haproxy-external-frontend.ctmpl.jinja用于描述HTTP与HTTPS前端。其中包含多套Jinja宏，用于为域名匹配定义ACL规则并将后端与这些规则相绑定：
 
