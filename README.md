@@ -7,7 +7,7 @@ Mesos 中文文档是最初由[数人云](http://www.shurenyun.com/)  CTO 肖德
 * [Mesos 交流社区](http://open.shurenyun.com/topic/Mesos)
 * [Mesos 微信群](community/weixin.md)
 
-## 丰富文档内容，期待爱好者一起参与
+## 丰富文档内容，期待爱好者一起参与 
 
 为了给广大 Mesos 爱好者提供更丰富的文档内容和实践，Mesos 中文文档会整合翻译 Mesos 及其周边组件的介绍，知识分享，使用说明以及最佳实践等资源，期待大家能够一起参与进来，提出意见或者参与贡献，所有内容贡献者均可署名并且有相应的打赏。
 
